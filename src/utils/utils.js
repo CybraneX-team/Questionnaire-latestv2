@@ -1,3 +1,18 @@
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 export const formatTimeStamp = (timestamp) => {
   const year = timestamp.substring(0, 4);
   const month = timestamp.substring(4, 6);
@@ -17,7 +32,15 @@ export const formatTimeStamp = (timestamp) => {
     millisecond
   );
 
-  const formattedDate = date.toLocaleString();
+  let hours = date.getHours() % 12;
+  hours = hours ? hours : 12;
+  let minutes = date.getMinutes();
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  let ampm = hours >= 12 ? "PM" : "AM";
+
+  const formattedDate = `${date.getDate()} ${
+    months[date.getMonth()]
+  }, ${date.getFullYear()}  ${hours}:${minutes} ${ampm}`;
 
   return formattedDate;
 };

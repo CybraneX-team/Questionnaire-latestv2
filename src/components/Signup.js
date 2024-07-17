@@ -150,6 +150,7 @@ const App = () => {
       let res = await signup(username, password, cPassword, orgKey);
       if (res.message == "OK") {
         localStorage.setItem("jwt", res.token);
+        localStorage.setItem("collapse", true);
         jwtStore.dispatch({
           type: "jwt",
           payload: res.token,
@@ -191,16 +192,16 @@ const App = () => {
           <form onSubmit={handleSubmit}>
             <Label>Username</Label>
             <CustomTextField
-        placeholder="Username"
-        variant="outlined"
-        fullWidth
-        onChange={(e) => {
-          setUsername(e.target.value);
-        }}
-        type="text"
-        className="custom-placeholder"
-        inputProps={{ style: { textIndent: '6px' } }} 
-      />
+              placeholder="Username"
+              variant="outlined"
+              fullWidth
+              onChange={(e) => {
+                setUsername(e.target.value);
+              }}
+              type="text"
+              className="custom-placeholder"
+              inputProps={{ style: { textIndent: "6px" } }}
+            />
             <Label>Password</Label>
             <CustomTextField
               placeholder="Password"
@@ -211,7 +212,7 @@ const App = () => {
               }}
               type="password"
               className="custom-placeholder"
-        inputProps={{ style: { textIndent: '6px' } }} 
+              inputProps={{ style: { textIndent: "6px" } }}
             />
             <Label>Confirm Password</Label>
             <CustomTextField
@@ -223,7 +224,7 @@ const App = () => {
               }}
               type="password"
               className="custom-placeholder"
-        inputProps={{ style: { textIndent: '6px' } }} 
+              inputProps={{ style: { textIndent: "6px" } }}
             />
             <Label>Access Key</Label>
             <CustomTextField
@@ -235,7 +236,7 @@ const App = () => {
               }}
               type="key"
               className="custom-placeholder"
-        inputProps={{ style: { textIndent: '6px' } }} 
+              inputProps={{ style: { textIndent: "6px" } }}
             />
             <SignupLink href="/" underline="hover">
               Already Registered? Login here

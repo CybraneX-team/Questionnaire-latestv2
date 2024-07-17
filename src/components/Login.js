@@ -158,6 +158,7 @@ const Login = () => {
       let res = await login(username, password, "testorgkey");
       if (res.message === "OK") {
         localStorage.setItem("jwt", res.token);
+        localStorage.setItem("collapse", true);
         jwtStore.dispatch({
           type: "jwt",
           payload: res.token,
@@ -205,9 +206,9 @@ const Login = () => {
               onChange={(e) => {
                 setUsername(e.target.value);
               }}
-              type="text" 
+              type="text"
               className="custom-placeholder"
-        inputProps={{ style: { textIndent: '6px' } }} 
+              inputProps={{ style: { textIndent: "6px" } }}
             />
             <Label>Password</Label>
             <CustomTextField
@@ -219,7 +220,7 @@ const Login = () => {
               }}
               type="password"
               className="custom-placeholder"
-        inputProps={{ style: { textIndent: '6px' } }} 
+              inputProps={{ style: { textIndent: "6px" } }}
             />
             <SignupLink href="/signup" underline="hover">
               New user? Signup here

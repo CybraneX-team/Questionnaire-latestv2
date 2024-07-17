@@ -30,7 +30,7 @@ import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
 import ScaleQuestion from "./ScaleQuestion";
 import TextQuestion from "./TextQuestion";
 import GridQuestion from "./GridQuestion";
-import { getQByQID, saveAnswer } from "../api";
+import { getQByQID, saveAndNext, saveAnswer } from "../api";
 import {
   jwtStore,
   gridStore,
@@ -134,7 +134,7 @@ const Questionnaire = () => {
     if (currentQuestion > 0) {
       setcurrentQuestion(currentQuestion - 1);
       loadReferencesForQuestion(currentQuestion - 1);
-      setCurrentSection(currentSection - 1);
+      //    setCurrentSection(currentSection - 1);
     }
   };
 
@@ -527,12 +527,22 @@ const Questionnaire = () => {
     }
   }, [jwt]);
 
+  useEffect(() => {
+    console.log("Questions: ", questions);
+  }, [questions]);
+
   answerStore.subscribe(() => {
     setAnswerObject(answerStore.getState());
   });
 
   const save = async (payload) => {
     let res = await saveAnswer(searchParams.get("id"), jwt, payload);
+    // let res2 = await saveAndNext(jwt, {
+    //   position: currentQuestion,
+    //   qid: searchParams.get("id"),
+    //   data: answerObject,
+    // });
+    // console.log(res2);
     if (res.status === "ok") {
       gridStore.dispatch({
         type: "grid",

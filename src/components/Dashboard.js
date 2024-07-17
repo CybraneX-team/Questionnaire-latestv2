@@ -5,6 +5,10 @@ import {
   Button,
   Typography,
   LinearProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Collapse,
 } from "@mui/material";
 import "./Dashboard.css";
 import { Add as AddIcon } from "@mui/icons-material";
@@ -20,6 +24,29 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [jwt, setJwt] = useState(jwtStore.getState());
   const [questionnare, setQues] = useState([]);
+  const [collapseOpen, setCollapseOpen] = useState(() => {
+    const savedCollapse = localStorage.getItem("collapse");
+    return savedCollapse === "true" || false;
+  });
+
+  const handleToggleCollapse = () => {
+    setCollapseOpen(!collapseOpen);
+    localStorage.setItem("collapse", !collapseOpen);
+  };
+
+  useEffect(() => {
+    if (!collapseOpen) {
+      localStorage.setItem("collapse", "false");
+    } else {
+      localStorage.setItem("collapse", "true");
+    }
+  }, [collapseOpen]);
+
+  // useEffect(() => {
+  //   if (localStorage.getItem("collapse") && !collapseOpen) {
+  //     localStorage.setItem("collapse", 0);
+  //   }
+  // }, [collapseOpen]);
 
   const CustomCard = styled(Card)(({ theme }) => ({
     borderRadius: "2rem",
@@ -139,6 +166,7 @@ const Dashboard = () => {
 
   function handleLogout() {
     localStorage.removeItem("jwt");
+    localStorage.removeItem("collapse");
     navigate("/");
   }
 
@@ -172,6 +200,43 @@ const Dashboard = () => {
 
   return (
     <div style={{ padding: "32px", fontFamily: "DM Sans" }}>
+      <button
+        className=" top-8 left-10 bg-dashred text-white p-2 rounded-lg mb-2 ml-2"
+        style={{
+          backgroundColor: "#4D6F74",
+          color: "#FFF",
+          fontFamily: "DM Sans",
+        }}
+        onClick={handleToggleCollapse}
+      >
+        {collapseOpen ? "Close" : "Info"}
+      </button>
+      <Collapse in={collapseOpen} className=" ">
+        <DashboardTitle
+          variant="h5"
+          style={{
+            color: "#4D4556",
+            fontWeight: "bold",
+            marginBottom: "20px",
+            marginLeft: "10px",
+          }}
+        >
+          Introduction to SIMs
+        </DashboardTitle>
+        <Typography variant="subtitle1" className=" pl-2 pr-48 pb-5">
+          The questions here are tuned for larger organisations in the private
+          sector, or a significant project run within a for-profit environment.
+          Depending on your answers, you will typically be asked 50-80
+          questions, taking 90-120 minutes start to finish. Within the app, you
+          can add references from Google or PDF documents that you upload, to
+          save you time. If you need to leave part-way, e.g. to conduct
+          additional research, your progress is automatically saved so you can
+          continue on another session. You can create a report at the end that
+          can be edited and used to guide your organisation’s decision-making
+          process. To find out more, click here.
+        </Typography>
+      </Collapse>
+
       <DashboardTitle
         variant="h5"
         style={{
