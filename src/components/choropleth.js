@@ -3,7 +3,7 @@ import { Chart, registerables } from "chart.js";
 import { ChoroplethController, GeoFeature } from "chartjs-chart-geo";
 import { feature } from "topojson-client";
 import "chartjs-chart-geo";
-import { NAC } from "./countries";
+import { EEC, ESE, LAC, MENA, NAC, Oceania, SA, SSA, WNS } from "./countries";
 import { answerStore } from "../redux/store";
 
 Chart.register(...registerables, ChoroplethController, GeoFeature);
@@ -55,20 +55,159 @@ function ChoroplethMap() {
 
         const unsubscribe = answerStore.subscribe(() => {
           const state = answerStore.getState();
+          console.log(state);
           if (chart) {
-            let idx = chart.data.labels.indexOf("India");
-            chart.data.datasets[0].data[idx].value = 5;
-            chart.update();
             for (let obj in state) {
               if (obj === "NAC") {
-                for (let i = 0; i < 3; i++) {
-                  console.log("Country list");
-                  console.log(NAC[i]);
+                for (let i = 0; i < NAC.length; i++) {
                   let index = chart.data.labels.indexOf(NAC[i]);
-                  console.log(index);
-
+                  let option = state["NAC"];
                   if (index !== -1) {
-                    chart.data.datasets[0].data[index].value = 5;
+                    if (option == "Insignificant") {
+                      chart.data.datasets[0].data[index].value = 5;
+                    } else if (option == "Marginal") {
+                      chart.data.datasets[0].data[index].value = 10;
+                    } else if (option == "Significant") {
+                      chart.data.datasets[0].data[index].value = 15;
+                    } else if (option == "Dominant") {
+                      chart.data.datasets[0].data[index].value = 20;
+                    }
+                    chart.update();
+                  }
+                }
+              } else if (obj === "WNS") {
+                for (let i = 0; i < WNS.length; i++) {
+                  let index = chart.data.labels.indexOf(WNS[i]);
+                  let option = state["WNS"];
+                  if (index !== -1) {
+                    if (option == "Insignificant") {
+                      chart.data.datasets[0].data[index].value = 5;
+                    } else if (option == "Marginal") {
+                      chart.data.datasets[0].data[index].value = 10;
+                    } else if (option == "Significant") {
+                      chart.data.datasets[0].data[index].value = 15;
+                    } else if (option == "Dominant") {
+                      chart.data.datasets[0].data[index].value = 20;
+                    }
+                    chart.update();
+                  }
+                }
+              } else if (obj === "Oceania") {
+                for (let i = 0; i < Oceania.length; i++) {
+                  let index = chart.data.labels.indexOf(Oceania[i]);
+                  let option = state["Oceania"];
+                  if (index !== -1) {
+                    if (option == "Insignificant") {
+                      chart.data.datasets[0].data[index].value = 5;
+                    } else if (option == "Marginal") {
+                      chart.data.datasets[0].data[index].value = 10;
+                    } else if (option == "Significant") {
+                      chart.data.datasets[0].data[index].value = 15;
+                    } else if (option == "Dominant") {
+                      chart.data.datasets[0].data[index].value = 20;
+                    }
+                    chart.update();
+                  }
+                }
+              } else if (obj === "SSA") {
+                for (let i = 0; i < SSA.length; i++) {
+                  let index = chart.data.labels.indexOf(SSA[i]);
+                  let option = state["SSA"];
+                  if (index !== -1) {
+                    if (option == "Insignificant") {
+                      chart.data.datasets[0].data[index].value = 5;
+                    } else if (option == "Marginal") {
+                      chart.data.datasets[0].data[index].value = 10;
+                    } else if (option == "Significant") {
+                      chart.data.datasets[0].data[index].value = 15;
+                    } else if (option == "Dominant") {
+                      chart.data.datasets[0].data[index].value = 20;
+                    }
+                    chart.update();
+                  }
+                }
+              } else if (obj === "LAC") {
+                for (let i = 0; i < LAC.length; i++) {
+                  let index = chart.data.labels.indexOf(LAC[i]);
+                  let option = state["LAC"];
+                  if (index !== -1) {
+                    if (option == "Insignificant") {
+                      chart.data.datasets[0].data[index].value = 5;
+                    } else if (option == "Marginal") {
+                      chart.data.datasets[0].data[index].value = 10;
+                    } else if (option == "Significant") {
+                      chart.data.datasets[0].data[index].value = 15;
+                    } else if (option == "Dominant") {
+                      chart.data.datasets[0].data[index].value = 20;
+                    }
+                    chart.update();
+                  }
+                }
+              } else if (obj === "SA") {
+                for (let i = 0; i < SA.length; i++) {
+                  let index = chart.data.labels.indexOf(SA[i]);
+                  let option = state["SA"];
+                  if (index !== -1) {
+                    if (option == "Insignificant") {
+                      chart.data.datasets[0].data[index].value = 5;
+                    } else if (option == "Marginal") {
+                      chart.data.datasets[0].data[index].value = 10;
+                    } else if (option == "Significant") {
+                      chart.data.datasets[0].data[index].value = 15;
+                    } else if (option == "Dominant") {
+                      chart.data.datasets[0].data[index].value = 20;
+                    }
+                    chart.update();
+                  }
+                }
+              } else if (obj === "ESE") {
+                for (let i = 0; i < ESE.length; i++) {
+                  let index = chart.data.labels.indexOf(ESE[i]);
+                  let option = state["ESE"];
+                  if (index !== -1) {
+                    if (option == "Insignificant") {
+                      chart.data.datasets[0].data[index].value = 5;
+                    } else if (option == "Marginal") {
+                      chart.data.datasets[0].data[index].value = 10;
+                    } else if (option == "Significant") {
+                      chart.data.datasets[0].data[index].value = 15;
+                    } else if (option == "Dominant") {
+                      chart.data.datasets[0].data[index].value = 20;
+                    }
+                    chart.update();
+                  }
+                }
+              } else if (obj === "MENA") {
+                for (let i = 0; i < MENA.length; i++) {
+                  let index = chart.data.labels.indexOf(MENA[i]);
+                  let option = state["MENA"];
+                  if (index !== -1) {
+                    if (option == "Insignificant") {
+                      chart.data.datasets[0].data[index].value = 5;
+                    } else if (option == "Marginal") {
+                      chart.data.datasets[0].data[index].value = 10;
+                    } else if (option == "Significant") {
+                      chart.data.datasets[0].data[index].value = 15;
+                    } else if (option == "Dominant") {
+                      chart.data.datasets[0].data[index].value = 20;
+                    }
+                    chart.update();
+                  }
+                }
+              } else if (obj === "EEC") {
+                for (let i = 0; i < EEC.length; i++) {
+                  let index = chart.data.labels.indexOf(EEC[i]);
+                  let option = state["EEC"];
+                  if (index !== -1) {
+                    if (option == "Insignificant") {
+                      chart.data.datasets[0].data[index].value = 5;
+                    } else if (option == "Marginal") {
+                      chart.data.datasets[0].data[index].value = 10;
+                    } else if (option == "Significant") {
+                      chart.data.datasets[0].data[index].value = 15;
+                    } else if (option == "Dominant") {
+                      chart.data.datasets[0].data[index].value = 20;
+                    }
                     chart.update();
                   }
                 }
