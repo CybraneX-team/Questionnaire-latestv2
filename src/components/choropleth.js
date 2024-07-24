@@ -1,13 +1,18 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { Chart, registerables } from "chart.js";
 import { ChoroplethController, GeoFeature } from "chartjs-chart-geo";
 import { feature } from "topojson-client";
 import "chartjs-chart-geo";
+import { NAC } from "./countries";
+import { answerStore } from "../redux/store";
 
 Chart.register(...registerables, ChoroplethController, GeoFeature);
 
 function ChoroplethMap() {
   const chartRef = useRef(null);
+  // const [chart, setChart] = useState(null);
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
     const ctx = chartRef.current.getContext("2d");
@@ -26,7 +31,7 @@ function ChoroplethMap() {
                 label: "Countries",
                 data: countries.map((d) => ({
                   feature: d,
-                  value: Math.random() * 100,
+                  value: 0,
                 })),
               },
             ],
@@ -48,6 +53,31 @@ function ChoroplethMap() {
           },
         });
 
+        const unsubscribe = answerStore.subscribe(() => {
+          const state = answerStore.getState();
+          if (chart) {
+            let idx = chart.data.labels.indexOf("India");
+            chart.data.datasets[0].data[idx].value = 5;
+            chart.update();
+            for (let obj in state) {
+              if (obj === "NAC") {
+                for (let i = 0; i < 3; i++) {
+                  console.log("Country list");
+                  console.log(NAC[i]);
+                  let index = chart.data.labels.indexOf(NAC[i]);
+                  console.log(index);
+
+                  if (index !== -1) {
+                    chart.data.datasets[0].data[index].value = 5;
+                    chart.update();
+                  }
+                }
+              }
+            }
+          }
+        });
+
+        //  setChart(chart);
         return () => {
           chart.destroy();
         };

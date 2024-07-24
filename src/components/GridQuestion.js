@@ -76,7 +76,7 @@ const GridQuestion = () => {
       type: "answer_object",
       payload: { ...selectedOption, [item.name]: selected },
     });
-    console.log({ ...selectedOption, [item.name]: selected });
+    console.log(item.name);
   };
 
   const getCellBackgroundColor = (item, option) => {
@@ -99,44 +99,6 @@ const GridQuestion = () => {
     });
     return () => unsubscribe();
   }, [options]);
-
-  const mapData = {
-    datasets: [
-      {
-        label: "Population Density",
-        data: [
-          { feature: "USA", value: 35 },
-          { feature: "Canada", value: 4 },
-          { feature: "Mexico", value: 66 },
-        ],
-        backgroundColor: (context) => "rgba(255, 99, 132, 0.6)",
-      },
-    ],
-  };
-
-  const mapOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        display: true,
-      },
-    },
-    scales: {
-      projection: {
-        axis: "x",
-        projection: "equalEarth",
-      },
-    },
-    plugins: {
-      legend: {
-        display: false,
-      },
-      colorScale: {
-        display: true,
-        position: "bottom",
-      },
-    },
-  };
 
   return (
     <Box sx={formStyles.container}>
