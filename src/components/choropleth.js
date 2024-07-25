@@ -4,15 +4,15 @@ import { ChoroplethController, GeoFeature } from "chartjs-chart-geo";
 import { feature } from "topojson-client";
 import "chartjs-chart-geo";
 import { EEC, ESE, LAC, MENA, NAC, Oceania, SA, SSA, WNS } from "./countries";
-import { answerStore } from "../redux/store";
+import { answerStore, gridStore } from "../redux/store";
 
 Chart.register(...registerables, ChoroplethController, GeoFeature);
 
 function ChoroplethMap() {
   const chartRef = useRef(null);
-  // const [chart, setChart] = useState(null);
+  const [map, setMap] = useState(false);
 
-  useEffect(() => {}, []);
+  // const [chart, setChart] = useState(null);
 
   useEffect(() => {
     const ctx = chartRef.current.getContext("2d");
@@ -55,7 +55,6 @@ function ChoroplethMap() {
 
         const unsubscribe = answerStore.subscribe(() => {
           const state = answerStore.getState();
-          console.log(state);
           if (chart) {
             for (let obj in state) {
               if (obj === "NAC") {
@@ -72,9 +71,9 @@ function ChoroplethMap() {
                     } else if (option == "Dominant") {
                       chart.data.datasets[0].data[index].value = 20;
                     }
-                    chart.update();
                   }
                 }
+                chart.update();
               } else if (obj === "WNS") {
                 for (let i = 0; i < WNS.length; i++) {
                   let index = chart.data.labels.indexOf(WNS[i]);
@@ -89,9 +88,9 @@ function ChoroplethMap() {
                     } else if (option == "Dominant") {
                       chart.data.datasets[0].data[index].value = 20;
                     }
-                    chart.update();
                   }
                 }
+                chart.update();
               } else if (obj === "Oceania") {
                 for (let i = 0; i < Oceania.length; i++) {
                   let index = chart.data.labels.indexOf(Oceania[i]);
@@ -106,9 +105,9 @@ function ChoroplethMap() {
                     } else if (option == "Dominant") {
                       chart.data.datasets[0].data[index].value = 20;
                     }
-                    chart.update();
                   }
                 }
+                chart.update();
               } else if (obj === "SSA") {
                 for (let i = 0; i < SSA.length; i++) {
                   let index = chart.data.labels.indexOf(SSA[i]);
@@ -123,9 +122,9 @@ function ChoroplethMap() {
                     } else if (option == "Dominant") {
                       chart.data.datasets[0].data[index].value = 20;
                     }
-                    chart.update();
                   }
                 }
+                chart.update();
               } else if (obj === "LAC") {
                 for (let i = 0; i < LAC.length; i++) {
                   let index = chart.data.labels.indexOf(LAC[i]);
@@ -140,9 +139,9 @@ function ChoroplethMap() {
                     } else if (option == "Dominant") {
                       chart.data.datasets[0].data[index].value = 20;
                     }
-                    chart.update();
                   }
                 }
+                chart.update();
               } else if (obj === "SA") {
                 for (let i = 0; i < SA.length; i++) {
                   let index = chart.data.labels.indexOf(SA[i]);
@@ -157,9 +156,9 @@ function ChoroplethMap() {
                     } else if (option == "Dominant") {
                       chart.data.datasets[0].data[index].value = 20;
                     }
-                    chart.update();
                   }
                 }
+                chart.update();
               } else if (obj === "ESE") {
                 for (let i = 0; i < ESE.length; i++) {
                   let index = chart.data.labels.indexOf(ESE[i]);
@@ -174,9 +173,9 @@ function ChoroplethMap() {
                     } else if (option == "Dominant") {
                       chart.data.datasets[0].data[index].value = 20;
                     }
-                    chart.update();
                   }
                 }
+                chart.update();
               } else if (obj === "MENA") {
                 for (let i = 0; i < MENA.length; i++) {
                   let index = chart.data.labels.indexOf(MENA[i]);
@@ -191,9 +190,9 @@ function ChoroplethMap() {
                     } else if (option == "Dominant") {
                       chart.data.datasets[0].data[index].value = 20;
                     }
-                    chart.update();
                   }
                 }
+                chart.update();
               } else if (obj === "EEC") {
                 for (let i = 0; i < EEC.length; i++) {
                   let index = chart.data.labels.indexOf(EEC[i]);
@@ -208,9 +207,9 @@ function ChoroplethMap() {
                     } else if (option == "Dominant") {
                       chart.data.datasets[0].data[index].value = 20;
                     }
-                    chart.update();
                   }
                 }
+                chart.update();
               }
             }
           }

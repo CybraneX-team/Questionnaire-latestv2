@@ -158,12 +158,12 @@ const Questionnaire = () => {
       navigate("/");
     } else {
       setSubmitted(true);
-      window.open(
-        `/report?id=${searchParams.get("id")}`,
-        "_blank",
-        "rel=noopener noreferrer"
-      );
-      navigate("/chart");
+      // window.open(
+      //   `/report?id=${searchParams.get("id")}`,
+      //   "_blank",
+      //   "rel=noopener noreferrer"
+      // );
+      navigate("/report");
     }
   };
 

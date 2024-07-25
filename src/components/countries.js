@@ -7,7 +7,7 @@ export const NAC = [
   "Barbados",
   "Cuba",
   "Dominica",
-  "Dominican Republic",
+  "Dominican Rep.",
   "Grenada",
   "Haiti",
   "Jamaica",
@@ -15,12 +15,17 @@ export const NAC = [
   "Saint Lucia",
   "Saint Vincent and the Grenadines",
   "Trinidad and Tobago",
+  "Greenland",
 ];
 
 export const WNS = [
   "Austria",
   "Belgium",
   "France",
+  "Spain",
+  "Portugal",
+  "Czechia",
+  "Italy",
   "Germany",
   "Ireland",
   "Sweden",
@@ -172,14 +177,14 @@ export const ESE = [
   "Bulgaria",
   "Czech Republic",
   "Hungary",
-
   "Poland",
   "Romania",
-
+  "Masedonia",
   "Slovakia",
-
+  "Lithuania",
+  "Estonia",
   "Albania",
-  "Bosnia and Herzegovina",
+  "Bosnia and Herz.",
   "Croatia",
   "Greece",
   "Kosovo",
@@ -194,6 +199,7 @@ export const MENA = [
   "Egypt",
   "Libya",
   "Morocco",
+  "W. Sahara",
   "Sudan",
   "Tunisia",
   "Bahrain",
@@ -217,6 +223,8 @@ export const MENA = [
 export const EEC = [
   "Belarus",
   "Russia",
+  "Latvia",
+  "Denmark",
   "Ukraine",
   "Moldova",
   "Armenia",
