@@ -48,7 +48,7 @@ const TextQuestion = ({ question }) => {
             padding: "0.5rem",
             borderRadius: "0.25rem",
             borderColor: "#FDFBFA",
-            backgroundColor: "#B1FFE8",
+            backgroundColor: "#e5fffc",
           },
           classes: {
             notchedOutline: 'custom-notched-outline'

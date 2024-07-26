@@ -61,25 +61,75 @@ const Dashboard = () => {
     fontFamily: "DM Sans",
   }));
 
-  const CustomButton = styled(Button)(({ theme }) => ({
-    backgroundColor: "#4D6F74",
-    color: "#FFF",
-    "&:hover": {
-      backgroundColor: "#3D5F64",
-    },
-    borderRadius: "8px",
-    height: "35px",
-    fontSize: "14px",
-    padding: "0 16px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    minWidth: "auto",
-    margin: "0",
+  // const CustomButton = styled(Button)(({ theme }) => ({
+  //   backgroundColor: "#4D6F74",
+  //   color: "#FFF",
+  //   "&:hover": {
+  //     backgroundColor: "#3D5F64",
+  //   },
+  //   borderRadius: "8px",
+  //   height: "35px",
+  //   fontSize: "14px",
+  //   padding: "0 16px",
+  //   display: "flex",
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  //   minWidth: "auto",
+  //   margin: "0",
+  //   marginRight: "18px",
+  //   fontFamily: "DM Sans",
+  //   textTransform: "none",
+  // }));
+
+  const CustomButton = styled('button')({
+    background: '#3d5f64',
+    color: 'white',
+    fontFamily: 'inherit',
+    padding: '0.35em',
+    paddingLeft: '1.2em',
+    fontSize: '14px',
+    fontWeight: 500,
     marginRight: "18px",
-    fontFamily: "DM Sans",
-    textTransform: "none",
-  }));
+    borderRadius: '0.9em',
+    border: 'none',
+    letterSpacing: '0.05em',
+    display: 'flex',
+    alignItems: 'center',
+    boxShadow: 'inset 0 0 1.6em -0.6em #714da6',
+    overflow: 'hidden',
+    position: 'relative',
+    height: "35px",
+    paddingRight: '3.3em',
+    cursor: 'pointer',
+    '.icon': {
+      background: 'white',
+      marginLeft: '1em',
+      position: 'absolute',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '2.2em',
+      width: '2.2em',
+      borderRadius: '0.7em',
+      boxShadow: '0.1em 0.1em 0.6em 0.2em #3d5f64',
+      right: '0.3em',
+      transition: 'all 0.3s',
+    },
+    '&:hover .icon': {
+      width: 'calc(100% - 0.6em)',
+    },
+    '.icon svg': {
+      width: '1.1em',
+      transition: 'transform 0.3s',
+      color: '#3d5f64',
+    },
+    '&:hover .icon svg': {
+      transform: 'translateX(0.1em)',
+    },
+    '&:active .icon': {
+      transform: 'scale(0.95)',
+    },
+  });
 
   const CustomIconButton = styled(Button)(({ theme }) => ({
     backgroundColor: "#4D6F74",
@@ -248,7 +298,7 @@ const Dashboard = () => {
       >
         Dashboard
       </DashboardTitle>
-      <button
+      {/* <button
         className="absolute right-10 top-8 bg-dashred text-white p-2 rounded-lg"
         style={{
           backgroundColor: "#4D6F74",
@@ -258,6 +308,14 @@ const Dashboard = () => {
         onClick={handleLogout}
       >
         Logout
+      </button> */}
+      <button className="Btn" onClick={handleLogout}>
+        <div className="sign">
+          <svg viewBox="0 0 512 512">
+            <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path>
+          </svg>
+        </div>
+        <div className="text">Logout</div>
       </button>
       <div
         style={{
@@ -314,7 +372,7 @@ const Dashboard = () => {
                   gap: "8px",
                 }}
               >
-                <CustomButton
+                {/* <CustomButton
                   size="small"
                   style={{
                     marginLeft: "40px",
@@ -335,6 +393,37 @@ const Dashboard = () => {
                     alt="Print"
                     style={{ marginLeft: "5px", width: "15px", height: "15px" }}
                   />
+                </CustomButton> */}
+                <CustomButton
+                  size="small"
+                  style={{
+                    marginLeft: "40px",
+                    bottom: "-25px",
+                    fontFamily: "DM Sans",
+                  }}
+                  onClick={() => {
+                    qStore.dispatch({
+                      type: "questionnaire",
+                      payload: card,
+                    });
+                    navigate(`/questionnare?id=${card.qid}`);
+                  }}
+                >
+                  Continue
+                  <div className="icon">
+                    <svg
+                      height="24"
+                      width="24"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M0 0h24v24H0z" fill="none"></path>
+                      <path
+                        d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+                        fill="currentColor"
+                      ></path>
+                    </svg>
+                  </div>
                 </CustomButton>
                 <CustomIconButton size="small" style={{ bottom: "-25px" }}>
                   <img
@@ -354,7 +443,7 @@ const Dashboard = () => {
             justifyContent: "flex-start",
           }}
         >
-          <NewCard style={{ width: "500px" }}>
+          <NewCard style={{ width: "250px", height: "160px" }}>
             <CardContent
               style={{
                 display: "flex",
@@ -366,25 +455,49 @@ const Dashboard = () => {
               <Typography
                 variant="h6"
                 color="primary"
-                style={{ color: "#35483F", marginRight: "5px" }}
+                style={{ color: "#35483F", marginRight: "10px", marginLeft: "10px" }}
               >
                 Create New
               </Typography>
-              <CreateNewButton
+              {/* <CreateNewButton
                 style={{ width: "30px", height: "30px" }}
                 onClick={() => {
                   handleNew();
                 }}
               >
                 <AddIcon fontSize="small" style={{ color: "white" }} />
-              </CreateNewButton>
+              </CreateNewButton> */}
+
+              <button
+                className="group cursor-pointer outline-none hover:rotate-90 duration-300"
+                title="Add New"
+                onClick={() => {
+                  handleNew();
+                }}
+              >
+                <svg
+                  className="stroke-teal-500 fill-none group-hover:fill-teal-700 group-active:stroke-teal-200 group-active:fill-teal-600 group-active:duration-0 duration-300"
+                  viewBox="0 0 24 24"
+                  height="50px"
+                  width="50px"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-width="1.5"
+                    d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z"
+                  ></path>
+                  <path stroke-width="1.5" d="M8 12H16"></path>
+                  <path stroke-width="1.5" d="M12 16V8"></path>
+                </svg>
+              </button>
+
             </CardContent>
             <Typography
               variant="body2"
               style={{
-                marginTop: "-10px",
+                // marginTop: "10px",
                 color: "#35483F",
-                marginLeft: "15px",
+                marginLeft: "30px",
               }}
             >
               Start a new Questionnaire
