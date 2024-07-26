@@ -1,12 +1,12 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Chart, registerables } from "chart.js";
-import { ChoroplethController, GeoFeature } from "chartjs-chart-geo";
+import { ChoroplethController, GeoFeature, ProjectionScale, ColorScale } from "chartjs-chart-geo";
 import { feature } from "topojson-client";
 import "chartjs-chart-geo";
 import { EEC, ESE, LAC, MENA, NAC, Oceania, SA, SSA, WNS } from "./countries";
 import { answerStore, gridStore } from "../redux/store";
 
-Chart.register(...registerables, ChoroplethController, GeoFeature);
+Chart.register(...registerables, ChoroplethController, GeoFeature, ProjectionScale, ColorScale);
 
 function ChoroplethMap() {
   const chartRef = useRef(null);
@@ -45,11 +45,19 @@ function ChoroplethMap() {
               },
             },
             scales: {
-              projection: {
-                axis: "x",
-                projection: "equalEarth",
-              },
+              xy: {
+                type: 'projection',
+                projection: 'equalEarth'
+              }
             },
+            color: {
+              type: 'color',
+              quantize: 5,
+              legend: {
+                position: 'bottom-right',
+                align: 'bottom'
+              }
+            }
           },
         });
 
