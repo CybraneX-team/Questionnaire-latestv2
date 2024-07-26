@@ -146,7 +146,6 @@ const App = () => {
     ) {
       handleError("All fields are mandatory");
     } else {
-      console.log(`${username} ${password}`);
       let res = await signup(username, password, cPassword, orgKey);
       if (res.message == "OK") {
         localStorage.setItem("jwt", res.token);

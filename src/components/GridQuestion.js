@@ -25,7 +25,6 @@
 // } from "chartjs-chart-geo";
 // import ChoroplethMap from "./choropleth";
 
-
 // const formStyles = {
 //   container: {
 //     marginTop: "-40px",
@@ -237,7 +236,6 @@
 
 // export default GridQuestion;
 
-
 import React, { useEffect, useState } from "react";
 import {
   Table,
@@ -258,10 +256,11 @@ import {
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import { answerStore, gridStore, solnStore } from "../redux/store";
+import { answerStore, gridStore, qTitleStore, solnStore } from "../redux/store";
 import ChoroplethMap from "./choropleth";
 import * as CountryData from "./countries"; // Adjust the import path as needed
-import CountryDropdown from './CountryDropdown';
+import CountryDropdown from "./CountryDropdown";
+import { mapQuestions } from "../utils/utils";
 
 const formStyles = {
   container: {
@@ -300,11 +299,12 @@ const GridQuestion = () => {
   const [options, setOptions] = useState([]);
   const [columns, setColumns] = useState([]);
   const [selectedCountries, setSelectedCountries] = useState([]);
+  const [showMap, setShowMap] = useState(false);
 
   const formatCountryData = () => {
     return Object.entries(CountryData).map(([region, countries]) => ({
       region,
-      countries
+      countries,
     }));
   };
 
@@ -314,7 +314,6 @@ const GridQuestion = () => {
       type: "answer_object",
       payload: { ...selectedOption, [item.name]: selected },
     });
-    console.log(item.name);
   };
 
   const getCellBackgroundColor = (item, option) => {
@@ -323,16 +322,16 @@ const GridQuestion = () => {
 
   const handleCountrySelect = (event) => {
     const value = event.target.value;
-    setSelectedCountries(
-      typeof value === 'string' ? value.split(',') : value,
-    );
+    setSelectedCountries(typeof value === "string" ? value.split(",") : value);
   };
 
   const handleRegionSelect = (region, countries) => {
     setSelectedCountries((prev) => {
-      const isRegionFullySelected = countries.every(country => prev.includes(country));
+      const isRegionFullySelected = countries.every((country) =>
+        prev.includes(country)
+      );
       if (isRegionFullySelected) {
-        return prev.filter(country => !countries.includes(country));
+        return prev.filter((country) => !countries.includes(country));
       } else {
         return [...new Set([...prev, ...countries])];
       }
@@ -340,7 +339,7 @@ const GridQuestion = () => {
   };
 
   const isRegionSelected = (countries) => {
-    return countries.every(country => selectedCountries.includes(country));
+    return countries.every((country) => selectedCountries.includes(country));
   };
 
   // const CountryDropdown = () => (
@@ -392,10 +391,17 @@ const GridQuestion = () => {
     return () => unsubscribe();
   }, [options]);
 
-  solnStore.subscribe(() => {
-    let state = solnStore.getState();
-    setSelectedOption({ ...selectedOption, ...state });
-    console.log(selectedOption);
+  useEffect(() => {
+    solnStore.subscribe(() => {
+      let state = solnStore.getState();
+      setSelectedOption({ ...selectedOption, ...state });
+    });
+
+    const unsubscribe = qTitleStore.subscribe(() => {
+      if (mapQuestions.includes(qTitleStore.getState())) {
+        setShowMap(true);
+      }
+    });
   });
 
   return (
@@ -532,7 +538,7 @@ const GridQuestion = () => {
           </Table>
         </Box>
       </Paper>
-      <ChoroplethMap />
+      {showMap ? <ChoroplethMap /> : <></>}
     </Box>
   );
 };

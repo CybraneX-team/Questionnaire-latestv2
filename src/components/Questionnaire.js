@@ -37,6 +37,8 @@ import {
   answerStore,
   solnStore,
   scoreStore,
+  qTitleStore,
+  mapStore,
 } from "../redux/store";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Document, Page, pdfjs } from "react-pdf";
@@ -46,15 +48,15 @@ import InfoIcon from "@mui/icons-material/Info";
 import CheckboxGridQuestion from "./CheckboxGrid";
 import CommonComponent from "./CommonComponent";
 import { fontSize, lineHeight, style, textAlign } from "@mui/system";
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
+import Box from "@mui/material/Box";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+import TableSortLabel from "@mui/material/TableSortLabel";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -102,6 +104,12 @@ const Questionnaire = () => {
   const [isReferenceTableInView, setIsReferenceTableInView] = useState(true);
   const referenceTableRef = useRef(null);
 
+  //Debugging
+  useEffect(() => {
+    const unsubscribe = mapStore.subscribe(() => {
+      console.log(mapStore.getState());
+    });
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -110,7 +118,7 @@ const Questionnaire = () => {
       },
       {
         root: null,
-        rootMargin: '0px',
+        rootMargin: "0px",
         threshold: 0.1,
       }
     );
@@ -246,7 +254,7 @@ const Questionnaire = () => {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
       handleSearch(1);
     }
@@ -254,7 +262,7 @@ const Questionnaire = () => {
 
   const handleClear = () => {
     setSearchQuery("");
-  }
+  };
 
   const handleResultSelect = (index) => {
     const selected = [...selectedResults];
@@ -627,6 +635,10 @@ const Questionnaire = () => {
         type: "solution",
         payload: questions[currentQuestion].answers,
       });
+      qTitleStore.dispatch({
+        type: "Section",
+        payload: questions[currentQuestion].itemTitle,
+      });
       setCurrentQID(questions[currentQuestion].id);
       if (
         questions[currentQuestion].type === "GRID" ||
@@ -644,6 +656,7 @@ const Questionnaire = () => {
       let ques = questions[currentQuestion];
       if (ques.type === "SECTION_HEADER") {
         setCurrentSection(ques.itemTitle);
+
         setSectionDesc(ques.description);
         setcurrentQuestion(currentQuestion + 1);
       } else if (ques.type === "PAGE_BREAK") {
@@ -839,23 +852,40 @@ const Questionnaire = () => {
                       />
                       <label className="enter-label">Search</label>
                       <div className="btn-box">
-                        <button className="btn-search"
+                        <button
+                          className="btn-search"
                           onSubmit={(e) => {
                             e.preventDefault();
                             handleSearch(1);
                           }}
                           onClick={() => handleSearch(1)}
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="1em"
+                            viewBox="0 0 512 512"
+                          >
                             <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"></path>
-                            <circle id="svg-circle" cx="208" cy="208" r="144"></circle>
+                            <circle
+                              id="svg-circle"
+                              cx="208"
+                              cy="208"
+                              r="144"
+                            ></circle>
                           </svg>
                         </button>
                       </div>
                       <div className="btn-box-x">
                         <button className="btn-cleare" onClick={handleClear}>
-                          <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
-                            <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" id="cleare-line"></path>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="1em"
+                            viewBox="0 0 384 512"
+                          >
+                            <path
+                              d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+                              id="cleare-line"
+                            ></path>
                           </svg>
                         </button>
                       </div>
@@ -879,13 +909,23 @@ const Questionnaire = () => {
                           // checked={selectedResults.includes(index)}
                           // onChange={() => handleResultSelect(index)}
                           // />
-                          <label className="checkbox-container"
+                          <label
+                            className="checkbox-container"
                             checked={selectedResults.includes(index)}
                             onChange={() => handleResultSelect(index)}
                           >
                             <input type="checkbox" />
-                            <svg viewBox="0 0 64 64" height="1.5em" width="1.5em" marginRight="10px">
-                              <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" className="path"></path>
+                            <svg
+                              viewBox="0 0 64 64"
+                              height="1.5em"
+                              width="1.5em"
+                              marginRight="10px"
+                            >
+                              <path
+                                d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
+                                pathLength="575.0541381835938"
+                                className="path"
+                              ></path>
                             </svg>
                           </label>
                         }
@@ -1084,8 +1124,8 @@ const Questionnaire = () => {
                 style={{
                   maxWidth:
                     questions.length !== 0 &&
-                      (questions[currentQuestion].type === "GRID" ||
-                        questions[currentQuestion].type === "CHECKBOX_GRID")
+                    (questions[currentQuestion].type === "GRID" ||
+                      questions[currentQuestion].type === "CHECKBOX_GRID")
                       ? "90vw"
                       : "100%",
                 }}
@@ -1096,20 +1136,20 @@ const Questionnaire = () => {
                     {
                       options:
                         questions[currentQuestion].type === "MULTIPLE_CHOICE" ||
-                          questions[currentQuestion].type === "CHECKBOX"
+                        questions[currentQuestion].type === "CHECKBOX"
                           ? Object.keys(
-                            JSON.parse(questions[currentQuestion].choices)
-                          )
+                              JSON.parse(questions[currentQuestion].choices)
+                            )
                           : [],
                       minLabel:
                         questions[currentQuestion].type === "SCALE"
                           ? JSON.parse(questions[currentQuestion].bounds)[0]
-                            .label
+                              .label
                           : "",
                       maxLabel:
                         questions[currentQuestion].type === "SCALE"
                           ? JSON.parse(questions[currentQuestion].bounds)[1]
-                            .label
+                              .label
                           : "",
                       optionStyles: optionStyles,
                     }
@@ -1200,12 +1240,11 @@ const Questionnaire = () => {
               )} */}
 
               {isReferenceTableOpen && (
-
-                <Box sx={{ width: '100%' }} ref={referenceTableRef}>
+                <Box sx={{ width: "100%" }} ref={referenceTableRef}>
                   <Typography variant="h4" style={referenceTableHeaderStyles}>
                     References for this question
                   </Typography>
-                  <Paper sx={{ width: '100%', mb: 2 }}>
+                  <Paper sx={{ width: "100%", mb: 2 }}>
                     <TableContainer>
                       <Table
                         sx={{ minWidth: 800 }}
@@ -1227,21 +1266,28 @@ const Questionnaire = () => {
                               role="checkbox"
                               tabIndex={-1}
                               key={index}
-                              style={{ backgroundColor: index % 2 === 0 ? '#ffffff' : '#e5fffc' }}
+                              style={{
+                                backgroundColor:
+                                  index % 2 === 0 ? "#ffffff" : "#e5fffc",
+                              }}
                             >
                               <TableCell padding="checkbox">
                                 <Checkbox
                                   checked={selectedResults.includes(index)}
                                   onChange={() => handleResultSelect(index)}
                                   sx={{
-                                    color: '#1976d2',
-                                    '&.Mui-checked': {
-                                      color: '#1976d2',
+                                    color: "#1976d2",
+                                    "&.Mui-checked": {
+                                      color: "#1976d2",
                                     },
                                   }}
                                 />
                               </TableCell>
-                              <TableCell component="th" scope="row" padding="none">
+                              <TableCell
+                                component="th"
+                                scope="row"
+                                padding="none"
+                              >
                                 {reference.title}
                               </TableCell>
                               <TableCell>{reference.snippet}</TableCell>
@@ -1251,9 +1297,10 @@ const Questionnaire = () => {
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   style={{
-                                    color: 'blue',
-                                    textDecoration: 'none',
-                                  }}>
+                                    color: "blue",
+                                    textDecoration: "none",
+                                  }}
+                                >
                                   {reference.link}
                                 </a>
                               </TableCell>
@@ -1269,7 +1316,11 @@ const Questionnaire = () => {
               {!isReferenceTableInView && isReferenceTableOpen && (
                 <button
                   className="scroll-to-reference-button"
-                  onClick={() => referenceTableRef.current.scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() =>
+                    referenceTableRef.current.scrollIntoView({
+                      behavior: "smooth",
+                    })
+                  }
                 >
                   <div className="text">
                     <span>Back</span>
@@ -1282,7 +1333,10 @@ const Questionnaire = () => {
                     <span>Reference</span>
                   </div>
                   <svg width="20px" height="20px" viewBox="0 0 20 20">
-                    <path fill="#000" d="M14.989,9.491L6.071,0.537C5.725,0.189,5.133,0.187,4.783,0.534c-0.348,0.344-0.349,0.894-0.002,1.247l8.17,8.208L4.781,18.209c-0.347,0.349-0.346,0.897,0.002,1.242c0.181,0.178,0.416,0.267,0.652,0.267c0.235,0,0.472-0.089,0.654-0.267l8.927-8.971C15.342,10.153,15.342,9.817,14.989,9.491z"></path>
+                    <path
+                      fill="#000"
+                      d="M14.989,9.491L6.071,0.537C5.725,0.189,5.133,0.187,4.783,0.534c-0.348,0.344-0.349,0.894-0.002,1.247l8.17,8.208L4.781,18.209c-0.347,0.349-0.346,0.897,0.002,1.242c0.181,0.178,0.416,0.267,0.652,0.267c0.235,0,0.472-0.089,0.654-0.267l8.927-8.971C15.342,10.153,15.342,9.817,14.989,9.491z"
+                    ></path>
                   </svg>
                 </button>
               )}
@@ -1317,7 +1371,18 @@ const Questionnaire = () => {
                 >
                   <span className="label">Next</span>
                   <span className="icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"></path><path fill="currentColor" d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"></path></svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                    >
+                      <path fill="none" d="M0 0h24v24H0z"></path>
+                      <path
+                        fill="currentColor"
+                        d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+                      ></path>
+                    </svg>
                   </span>
                 </button>
               ) : (
@@ -1444,9 +1509,7 @@ const Questionnaire = () => {
               disabled={currentQuestion === 0}
               className="bg-white text-center w-48 rounded-2xl h-14 relative font-sans text-black text-xl font-semibold group"
             >
-              <div
-                className="bg-[#e5fffc] rounded-xl h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[184px] z-10 duration-500"
-              >
+              <div className="bg-[#e5fffc] rounded-xl h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[184px] z-10 duration-500">
                 <svg
                   width="25px"
                   height="25px"
@@ -1468,15 +1531,21 @@ const Questionnaire = () => {
             <div className="flex bg-[#e5fffc] w-fit px-0 py-0 shadow-box-up rounded-2xl dark:bg-box-dark dark:shadow-box-dark-out">
               <div className="dark:shadow-buttons-box-dark rounded-2xl w-full px-1.5 py-1.5 md:px-3 md:py-3">
                 <Tooltip title="Open Search">
-                  <a className="text-light-blue-light hover:text-black dark:text-gray-400 border-2 inline-flex items-center mr-4 last-of-type:mr-0 p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed  hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:border-2 active:shadow-button-flat-pressed font-medium rounded-full text-sm text-center dark:bg-button-curved-default-dark dark:shadow-button-curved-default-dark dark:hover:bg-button-curved-pressed-dark dark:hover:shadow-button-curved-pressed-dark dark:active:bg-button-curved-pressed-dark dark:active:shadow-button-curved-pressed-dark dark:focus:bg-button-curved-pressed-dark dark:focus:shadow-button-curved-pressed-dark dark:border-0" onClick={toggleSearchBar}>
+                  <a
+                    className="text-light-blue-light hover:text-black dark:text-gray-400 border-2 inline-flex items-center mr-4 last-of-type:mr-0 p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed  hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:border-2 active:shadow-button-flat-pressed font-medium rounded-full text-sm text-center dark:bg-button-curved-default-dark dark:shadow-button-curved-default-dark dark:hover:bg-button-curved-pressed-dark dark:hover:shadow-button-curved-pressed-dark dark:active:bg-button-curved-pressed-dark dark:active:shadow-button-curved-pressed-dark dark:focus:bg-button-curved-pressed-dark dark:focus:shadow-button-curved-pressed-dark dark:border-0"
+                    onClick={toggleSearchBar}
+                  >
                     <SearchIcon className="w-5 h-5" />
                   </a>
                 </Tooltip>
                 <Tooltip title="Upload PDF">
-                  <a className="text-light-blue-light hover:text-black dark:text-gray-400 border-2 inline-flex items-center mr-4 last-of-type:mr-0 p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:border-2 active:shadow-button-flat-pressed font-medium rounded-full text-sm text-center dark:bg-button-curved-default-dark dark:shadow-button-curved-default-dark dark:hover:bg-button-curved-pressed-dark dark:hover:shadow-button-curved-pressed-dark dark:active:bg-button-curved-pressed-dark dark:active:shadow-button-curved-pressed-dark dark:focus:bg-button-curved-pressed-dark dark:focus:shadow-button-curved-pressed-dark dark:border-0" onClick={() => {
-                    fileInputRef.current.click();
-                    togglePdfUpload();
-                  }}>
+                  <a
+                    className="text-light-blue-light hover:text-black dark:text-gray-400 border-2 inline-flex items-center mr-4 last-of-type:mr-0 p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:border-2 active:shadow-button-flat-pressed font-medium rounded-full text-sm text-center dark:bg-button-curved-default-dark dark:shadow-button-curved-default-dark dark:hover:bg-button-curved-pressed-dark dark:hover:shadow-button-curved-pressed-dark dark:active:bg-button-curved-pressed-dark dark:active:shadow-button-curved-pressed-dark dark:focus:bg-button-curved-pressed-dark dark:focus:shadow-button-curved-pressed-dark dark:border-0"
+                    onClick={() => {
+                      fileInputRef.current.click();
+                      togglePdfUpload();
+                    }}
+                  >
                     <UploadFileIcon className="w-5 h-5" />
                   </a>
                 </Tooltip>
@@ -1574,7 +1643,6 @@ const Questionnaire = () => {
                 </svg>
               </div>
             </button>
-
           </div>
           <input
             type="file"
@@ -1584,9 +1652,8 @@ const Questionnaire = () => {
             style={{ display: "none" }}
           />
         </>
-      )
-      }
-    </div >
+      )}
+    </div>
   );
 };
 

@@ -77,7 +77,6 @@ export const Oceania = [
 export const SSA = [
   "Benin",
   "Burkina Faso",
-  ,
   "Botswana",
   "Burundi",
   "Cape Verde",

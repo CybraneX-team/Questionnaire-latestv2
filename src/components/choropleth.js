@@ -1,16 +1,44 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Chart, registerables } from "chart.js";
-import { ChoroplethController, GeoFeature, ProjectionScale, ColorScale } from "chartjs-chart-geo";
+import {
+  ChoroplethController,
+  GeoFeature,
+  ProjectionScale,
+  ColorScale,
+} from "chartjs-chart-geo";
 import { feature } from "topojson-client";
 import "chartjs-chart-geo";
 import { EEC, ESE, LAC, MENA, NAC, Oceania, SA, SSA, WNS } from "./countries";
-import { answerStore, gridStore } from "../redux/store";
+import { answerStore, gridStore, mapStore, qTitleStore } from "../redux/store";
 
-Chart.register(...registerables, ChoroplethController, GeoFeature, ProjectionScale, ColorScale);
+Chart.register(
+  ...registerables,
+  ChoroplethController,
+  GeoFeature,
+  ProjectionScale,
+  ColorScale
+);
 
 function ChoroplethMap() {
   const chartRef = useRef(null);
   const [map, setMap] = useState(false);
+  const [question, setQuestion] = useState("");
+
+  useEffect(() => {
+    const unsubscribe = qTitleStore.subscribe(() => {
+      setQuestion(qTitleStore.getState());
+    });
+  }, []);
+
+  const updateState = (id, data) => {
+    mapStore.dispatch({
+      type: "UPDATE",
+      payload: {
+        id: qTitleStore.getState(),
+        data,
+      },
+    });
+  };
 
   // const [chart, setChart] = useState(null);
 
@@ -46,18 +74,26 @@ function ChoroplethMap() {
             },
             scales: {
               projection: {
-                axis: 'x',
-                projection: 'equalEarth' 
-              }
+                axis: "x",
+                projection: "equalEarth",
+              },
             },
             color: {
-              type: 'color',
+              type: "color",
               quantize: 5,
               legend: {
-                position: 'bottom-right',
-                align: 'bottom'
-              }
-            }
+                position: "bottom-right",
+                align: "bottom",
+              },
+            },
+          },
+        });
+
+        mapStore.dispatch({
+          type: "ADD",
+          payload: {
+            id: qTitleStore.getState(),
+            data: chart.data,
           },
         });
 
@@ -82,6 +118,7 @@ function ChoroplethMap() {
                   }
                 }
                 chart.update();
+                updateState(question, chart.data);
               } else if (obj === "WNS") {
                 for (let i = 0; i < WNS.length; i++) {
                   let index = chart.data.labels.indexOf(WNS[i]);
@@ -231,7 +268,7 @@ function ChoroplethMap() {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }, []);
+  }, [question]);
 
   return <canvas ref={chartRef} />;
 }

@@ -44,3 +44,8 @@ export const formatTimeStamp = (timestamp) => {
 
   return formattedDate;
 };
+
+export const mapQuestions = [
+  "Issuer's cost breakdown by geography",
+  "Issuer's revenue breakdown by geography",
+];
