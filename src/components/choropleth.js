@@ -89,14 +89,6 @@ function ChoroplethMap() {
           },
         });
 
-        mapStore.dispatch({
-          type: "ADD",
-          payload: {
-            id: qTitleStore.getState(),
-            data: chart.data,
-          },
-        });
-
         const unsubscribe = answerStore.subscribe(() => {
           const state = answerStore.getState();
           if (chart) {

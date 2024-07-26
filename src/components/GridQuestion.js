@@ -256,7 +256,13 @@ import {
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import { answerStore, gridStore, qTitleStore, solnStore } from "../redux/store";
+import {
+  answerStore,
+  gridStore,
+  mapStore,
+  qTitleStore,
+  solnStore,
+} from "../redux/store";
 import ChoroplethMap from "./choropleth";
 import * as CountryData from "./countries"; // Adjust the import path as needed
 import CountryDropdown from "./CountryDropdown";
@@ -403,6 +409,19 @@ const GridQuestion = () => {
       }
     });
   });
+
+  useEffect(() => {
+    let id = qTitleStore.getState();
+    if (id != "Geographical footprint") {
+      mapStore.dispatch({
+        type: "ADD",
+        payload: {
+          id,
+          data: {},
+        },
+      });
+    }
+  }, [qTitleStore.getState()]);
 
   return (
     <Box sx={formStyles.container}>
