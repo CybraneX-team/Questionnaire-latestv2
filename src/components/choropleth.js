@@ -45,9 +45,9 @@ function ChoroplethMap() {
               },
             },
             scales: {
-              xy: {
-                type: 'projection',
-                projection: 'equalEarth'
+              projection: {
+                axis: 'x',
+                projection: 'equalEarth' 
               }
             },
             color: {
