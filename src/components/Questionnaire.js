@@ -218,13 +218,11 @@ const Questionnaire = () => {
   const toggleSearchBar = () => {
     setIsSearchOpen(!isSearchOpen);
     setIsPdfOpen(false);
-    setIsReferenceTableOpen(false);
   };
 
   const togglePdfUpload = () => {
     setIsPdfOpen(!isPdfOpen);
     setIsSearchOpen(false);
-    setIsReferenceTableOpen(false);
   };
 
   const toggleReferenceTable = () => {
