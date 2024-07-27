@@ -72,7 +72,7 @@ const ChatBot = ({ isPdfOpen }) => {
         ))}
         <div ref={messagesEndRef} />
       </List>
-      <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#e5fffc', borderRadius: '20px', padding: '8px', marginBottom: '5px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#e5fffc', borderRadius: '20px', padding: '8px', marginBottom: '55px' }}>
         <TextField
           fullWidth
           variant="standard"

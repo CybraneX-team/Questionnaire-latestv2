@@ -528,7 +528,6 @@ const Questionnaire = () => {
   const searchContainerStyles = {
     backgroundColor: "white",
     color: "#A4A1A0",
-    padding: "20px",
     borderRadius: "20px",
     marginTop: "25px",
     width: "90%",
@@ -973,7 +972,10 @@ const Questionnaire = () => {
             )}
             {isPdfOpen && (
               <>
-                <div
+                <div style={searchContainerStyles}>
+                  <ChatBot isPdfOpen={isPdfOpen} />
+                </div>
+                {/* <div
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -1080,7 +1082,7 @@ const Questionnaire = () => {
                       ))}
                     </Document>
                   </div>
-                </div>
+                </div> */}
               </>
             )}
           </div>
