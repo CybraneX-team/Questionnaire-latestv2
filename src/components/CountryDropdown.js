@@ -7,7 +7,11 @@ import {
   Checkbox,
   ListSubheader,
   Typography,
+  Collapse,
+  IconButton,
 } from "@mui/material";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import * as CountryData from "./countries";
 
 const formatCountryData = () => {
@@ -25,21 +29,42 @@ const CountryDropdown = ({
   setSelectedRegions,
 }) => {
   const [open, setOpen] = useState(false);
+  const [expandedRegions, setExpandedRegions] = useState({});
 
-  const handleCountrySelect = (event, child) => {
-    event.preventDefault();
-    const value = child.props.value;
+  const handleCountrySelect = (event, country) => {
+    event.stopPropagation();
     setSelectedCountries((prev) => {
-      if (prev.includes(value)) {
-        return prev.filter((country) => country !== value);
+      if (prev.includes(country)) {
+        return prev.filter((c) => c !== country);
       } else {
-        return [...prev, value];
+        return [...prev, country];
       }
     });
   };
 
-  const handleRegionSelect = (region, countries) => {
-    setSelectedRegions([...selectedRegions, region]);
+  // const handleRegionSelect = (region, countries) => {
+  //   setSelectedRegions([...selectedRegions, region]);
+  //   setSelectedCountries((prev) => {
+  //     const isRegionFullySelected = countries.every((country) =>
+  //       prev.includes(country)
+  //     );
+  //     if (isRegionFullySelected) {
+  //       return prev.filter((country) => !countries.includes(country));
+  //     } else {
+  //       return [...new Set([...prev, ...countries])];
+  //     }
+  //   });
+  // };
+
+  const handleRegionSelect = (event, region, countries) => {
+    event.stopPropagation();
+    setSelectedRegions((prev) => {
+      if (prev.includes(region)) {
+        return prev.filter((r) => r !== region);
+      } else {
+        return [...prev, region];
+      }
+    });
     setSelectedCountries((prev) => {
       const isRegionFullySelected = countries.every((country) =>
         prev.includes(country)
@@ -56,6 +81,14 @@ const CountryDropdown = ({
     return countries.every((country) => selectedCountries.includes(country));
   };
 
+  const toggleRegion = (event, region) => {
+    event.stopPropagation();
+    setExpandedRegions(prev => ({
+      ...prev,
+      [region]: !prev[region]
+    }));
+  };
+
   return (
     <Select
       multiple
@@ -63,7 +96,7 @@ const CountryDropdown = ({
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
       value={selectedCountries}
-      onChange={handleCountrySelect}
+      onChange={() => { }}
       displayEmpty
       renderValue={(selected) => {
         if (selected.length === 0) {
@@ -92,7 +125,7 @@ const CountryDropdown = ({
       }}
       sx={{ width: "100%", marginBottom: 2 }}
     >
-      {formatCountryData().map(({ region, countries }) => [
+      {/* {formatCountryData().map(({ region, countries }) => [
         <ListSubheader key={region}>
           <MenuItem
             onClick={(event) => {
@@ -117,6 +150,43 @@ const CountryDropdown = ({
             {country}
           </MenuItem>
         )),
+      ])} */}
+
+      {formatCountryData().map(({ region, countries }) => [
+        <ListSubheader key={region}>
+          <MenuItem
+            onClick={(event) => handleRegionSelect(event, region, countries)}
+          >
+            <Checkbox
+              checked={isRegionSelected(countries)}
+              indeterminate={
+                selectedCountries.some((country) =>
+                  countries.includes(country)
+                ) && !isRegionSelected(countries)
+              }
+            />
+            {region}
+            <IconButton
+              onClick={(event) => toggleRegion(event, region)}
+              size="small"
+            >
+              {expandedRegions[region] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            </IconButton>
+          </MenuItem>
+        </ListSubheader>,
+        <Collapse in={expandedRegions[region]} key={`collapse-${region}`}>
+          {countries.map((country) => (
+            <MenuItem
+              key={country}
+              value={country}
+              style={{ paddingLeft: 32 }}
+              onClick={(event) => handleCountrySelect(event, country)}
+            >
+              <Checkbox checked={selectedCountries.includes(country)} />
+              {country}
+            </MenuItem>
+          ))}
+        </Collapse>
       ])}
     </Select>
   );
