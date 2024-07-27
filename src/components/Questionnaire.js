@@ -161,6 +161,7 @@ const Questionnaire = () => {
     save({
       answer_id: currentQID,
       answer_object: answerObject,
+      position: currentQuestion + 1,
     });
   };
 
@@ -190,6 +191,7 @@ const Questionnaire = () => {
     save({
       answer_id: currentQID,
       answer_object: answerObject,
+      position: currentQuestion + 1,
     });
   };
 
@@ -1626,11 +1628,12 @@ const Questionnaire = () => {
                 className="absolute w-full h-full bg-[#b1ffe8] rotate-45 group-hover:bottom-9 duration-500 bottom-12 right-0"
               ></span>
             </button> */}
-            <button className="cssbuttons-io-button"  onClick={handleSaveAndExit}>
+            <button
+              className="cssbuttons-io-button"
+              onClick={handleSaveAndExit}
+            >
               Close
-              <div className="icon">
-               X
-              </div>
+              <div className="icon">X</div>
             </button>
           </div>
           <input

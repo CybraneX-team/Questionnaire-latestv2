@@ -81,53 +81,53 @@ const Dashboard = () => {
   //   textTransform: "none",
   // }));
 
-  const CustomButton = styled('button')({
-    background: '#3d5f64',
-    color: 'white',
-    fontFamily: 'inherit',
-    padding: '0.35em',
-    paddingLeft: '1.2em',
-    fontSize: '14px',
+  const CustomButton = styled("button")({
+    background: "#3d5f64",
+    color: "white",
+    fontFamily: "inherit",
+    padding: "0.35em",
+    paddingLeft: "1.2em",
+    fontSize: "14px",
     fontWeight: 500,
     marginRight: "18px",
-    borderRadius: '0.9em',
-    border: 'none',
-    letterSpacing: '0.05em',
-    display: 'flex',
-    alignItems: 'center',
-    boxShadow: 'inset 0 0 1.6em -0.6em #714da6',
-    overflow: 'hidden',
-    position: 'relative',
+    borderRadius: "0.9em",
+    border: "none",
+    letterSpacing: "0.05em",
+    display: "flex",
+    alignItems: "center",
+    boxShadow: "inset 0 0 1.6em -0.6em #714da6",
+    overflow: "hidden",
+    position: "relative",
     height: "35px",
-    paddingRight: '3.3em',
-    cursor: 'pointer',
-    '.icon': {
-      background: 'white',
-      marginLeft: '1em',
-      position: 'absolute',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      height: '2.2em',
-      width: '2.2em',
-      borderRadius: '0.7em',
-      boxShadow: '0.1em 0.1em 0.6em 0.2em #3d5f64',
-      right: '0.3em',
-      transition: 'all 0.3s',
+    paddingRight: "3.3em",
+    cursor: "pointer",
+    ".icon": {
+      background: "white",
+      marginLeft: "1em",
+      position: "absolute",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      height: "2.2em",
+      width: "2.2em",
+      borderRadius: "0.7em",
+      boxShadow: "0.1em 0.1em 0.6em 0.2em #3d5f64",
+      right: "0.3em",
+      transition: "all 0.3s",
     },
-    '&:hover .icon': {
-      width: 'calc(100% - 0.6em)',
+    "&:hover .icon": {
+      width: "calc(100% - 0.6em)",
     },
-    '.icon svg': {
-      width: '1.1em',
-      transition: 'transform 0.3s',
-      color: '#3d5f64',
+    ".icon svg": {
+      width: "1.1em",
+      transition: "transform 0.3s",
+      color: "#3d5f64",
     },
-    '&:hover .icon svg': {
-      transform: 'translateX(0.1em)',
+    "&:hover .icon svg": {
+      transform: "translateX(0.1em)",
     },
-    '&:active .icon': {
-      transform: 'scale(0.95)',
+    "&:active .icon": {
+      transform: "scale(0.95)",
     },
   });
 
@@ -357,11 +357,12 @@ const Dashboard = () => {
                     color: "#35483F",
                   }}
                 >
-                  {card.progress}% Completed
+                  {(card.position / card.data.length).toFixed(1) * 100}%
+                  Completed
                 </Typography>
                 <CustomLinearProgress
                   variant="determinate"
-                  value={card.progress}
+                  value={(card.position / card.data.length).toFixed(1) * 100}
                   style={{ marginBottom: "16px" }}
                 />
               </CardContent>
@@ -455,7 +456,11 @@ const Dashboard = () => {
               <Typography
                 variant="h6"
                 color="primary"
-                style={{ color: "#35483F", marginRight: "10px", marginLeft: "10px" }}
+                style={{
+                  color: "#35483F",
+                  marginRight: "10px",
+                  marginLeft: "10px",
+                }}
               >
                 Create New
               </Typography>
@@ -490,7 +495,6 @@ const Dashboard = () => {
                   <path stroke-width="1.5" d="M12 16V8"></path>
                 </svg>
               </button>
-
             </CardContent>
             <Typography
               variant="body2"
