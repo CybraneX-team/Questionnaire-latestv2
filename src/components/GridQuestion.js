@@ -305,6 +305,7 @@ const GridQuestion = () => {
   const [options, setOptions] = useState([]);
   const [columns, setColumns] = useState([]);
   const [selectedCountries, setSelectedCountries] = useState([]);
+  const [selectedRegions, setSelectedRegions] = useState([]);
   const [showMap, setShowMap] = useState(false);
 
   const formatCountryData = () => {
@@ -344,47 +345,19 @@ const GridQuestion = () => {
     });
   };
 
-  const isRegionSelected = (countries) => {
-    return countries.every((country) => selectedCountries.includes(country));
-  };
-
-  // const CountryDropdown = () => (
-  //   <Select
-  //     multiple
-  //     value={selectedCountries}
-  //     onChange={handleCountrySelect}
-  //     renderValue={(selected) => (
-  //       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-  //         {selected.map((value) => (
-  //           <Chip key={value} label={value} />
-  //         ))}
-  //       </Box>
-  //     )}
-  //     sx={{ width: '100%', marginBottom: 2 }}
-  //   >
-  //     {formatCountryData().map(({ region, countries }) => [
-  //       <ListSubheader key={region}>
-  //         <MenuItem>
-  //           <Checkbox
-  //             checked={isRegionSelected(countries)}
-  //             indeterminate={
-  //               selectedCountries.some(country => countries.includes(country)) &&
-  //               !isRegionSelected(countries)
-  //             }
-  //             onChange={() => handleRegionSelect(region, countries)}
-  //           />
-  //           {region}
-  //         </MenuItem>
-  //       </ListSubheader>,
-  //       ...countries.map((country) => (
-  //         <MenuItem key={country} value={country}>
-  //           <Checkbox checked={selectedCountries.includes(country)} />
-  //           {country}
-  //         </MenuItem>
-  //       ))
-  //     ])}
-  //   </Select>
-  // );
+  useEffect(() => {
+    console.log(selectedRegions);
+    for (let i = 0; i < selectedRegions.length; i++) {
+      setSelectedOption({
+        ...selectedOption,
+        [selectedRegions[i]]: "Insignificant",
+      });
+      answerStore.dispatch({
+        type: "answer_object",
+        payload: { ...selectedOption, [selectedRegions[i]]: "Insignificant" },
+      });
+    }
+  }, [selectedRegions]);
 
   useEffect(() => {
     setSelectedOption({});
@@ -445,6 +418,8 @@ const GridQuestion = () => {
           selectedCountries={selectedCountries}
           setSelectedCountries={setSelectedCountries}
           placeholder="Select Countries"
+          selectedRegions={selectedRegions}
+          setSelectedRegions={setSelectedRegions}
         />
         <Box sx={{ overflowX: "auto" }}>
           <Table

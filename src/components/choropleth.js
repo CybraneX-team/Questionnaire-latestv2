@@ -99,7 +99,7 @@ function ChoroplethMap() {
                   let option = state["NAC"];
                   if (index !== -1) {
                     if (option == "Insignificant") {
-                      chart.data.datasets[0].data[index].value = 5;
+                      chart.data.datasets[0].data[index].value = 0;
                     } else if (option == "Marginal") {
                       chart.data.datasets[0].data[index].value = 10;
                     } else if (option == "Significant") {
@@ -117,7 +117,7 @@ function ChoroplethMap() {
                   let option = state["WNS"];
                   if (index !== -1) {
                     if (option == "Insignificant") {
-                      chart.data.datasets[0].data[index].value = 5;
+                      chart.data.datasets[0].data[index].value = 0;
                     } else if (option == "Marginal") {
                       chart.data.datasets[0].data[index].value = 10;
                     } else if (option == "Significant") {
@@ -134,7 +134,7 @@ function ChoroplethMap() {
                   let option = state["Oceania"];
                   if (index !== -1) {
                     if (option == "Insignificant") {
-                      chart.data.datasets[0].data[index].value = 5;
+                      chart.data.datasets[0].data[index].value = 0;
                     } else if (option == "Marginal") {
                       chart.data.datasets[0].data[index].value = 10;
                     } else if (option == "Significant") {
@@ -151,7 +151,7 @@ function ChoroplethMap() {
                   let option = state["SSA"];
                   if (index !== -1) {
                     if (option == "Insignificant") {
-                      chart.data.datasets[0].data[index].value = 5;
+                      chart.data.datasets[0].data[index].value = 0;
                     } else if (option == "Marginal") {
                       chart.data.datasets[0].data[index].value = 10;
                     } else if (option == "Significant") {
@@ -168,7 +168,7 @@ function ChoroplethMap() {
                   let option = state["LAC"];
                   if (index !== -1) {
                     if (option == "Insignificant") {
-                      chart.data.datasets[0].data[index].value = 5;
+                      chart.data.datasets[0].data[index].value = 0;
                     } else if (option == "Marginal") {
                       chart.data.datasets[0].data[index].value = 10;
                     } else if (option == "Significant") {
@@ -185,7 +185,7 @@ function ChoroplethMap() {
                   let option = state["SA"];
                   if (index !== -1) {
                     if (option == "Insignificant") {
-                      chart.data.datasets[0].data[index].value = 5;
+                      chart.data.datasets[0].data[index].value = 0;
                     } else if (option == "Marginal") {
                       chart.data.datasets[0].data[index].value = 10;
                     } else if (option == "Significant") {
@@ -202,7 +202,7 @@ function ChoroplethMap() {
                   let option = state["ESE"];
                   if (index !== -1) {
                     if (option == "Insignificant") {
-                      chart.data.datasets[0].data[index].value = 5;
+                      chart.data.datasets[0].data[index].value = 0;
                     } else if (option == "Marginal") {
                       chart.data.datasets[0].data[index].value = 10;
                     } else if (option == "Significant") {
@@ -219,7 +219,7 @@ function ChoroplethMap() {
                   let option = state["MENA"];
                   if (index !== -1) {
                     if (option == "Insignificant") {
-                      chart.data.datasets[0].data[index].value = 5;
+                      chart.data.datasets[0].data[index].value = 0;
                     } else if (option == "Marginal") {
                       chart.data.datasets[0].data[index].value = 10;
                     } else if (option == "Significant") {
@@ -236,7 +236,7 @@ function ChoroplethMap() {
                   let option = state["EEC"];
                   if (index !== -1) {
                     if (option == "Insignificant") {
-                      chart.data.datasets[0].data[index].value = 5;
+                      chart.data.datasets[0].data[index].value = 0;
                     } else if (option == "Marginal") {
                       chart.data.datasets[0].data[index].value = 10;
                     } else if (option == "Significant") {

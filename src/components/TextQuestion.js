@@ -14,7 +14,12 @@ const TextQuestion = ({ question }) => {
   };
 
   solnStore.subscribe(() => {
-    setData(solnStore.getState());
+    let soln = solnStore.getState();
+    setData(soln);
+    answerStore.dispatch({
+      type: "answer_object",
+      payload: soln,
+    });
   });
 
   return (
@@ -51,16 +56,17 @@ const TextQuestion = ({ question }) => {
             backgroundColor: "#e5fffc",
           },
           classes: {
-            notchedOutline: 'custom-notched-outline'
-          }
+            notchedOutline: "custom-notched-outline",
+          },
         }}
         inputProps={{
           style: { color: "#4D4556" },
         }}
         sx={{
-          "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#449082",
-          },
+          "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+            {
+              borderColor: "#449082",
+            },
           "& .MuiInputLabel-root.Mui-focused": {
             color: "#449082",
           },

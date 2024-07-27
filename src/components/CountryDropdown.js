@@ -8,16 +8,22 @@ import {
   ListSubheader,
   Typography,
 } from "@mui/material";
-import * as CountryData from "./countries"; 
+import * as CountryData from "./countries";
 
 const formatCountryData = () => {
   return Object.entries(CountryData).map(([region, countries]) => ({
     region,
-    countries
+    countries,
   }));
 };
 
-const CountryDropdown = ({ selectedCountries, setSelectedCountries, placeholder }) => {
+const CountryDropdown = ({
+  selectedCountries,
+  setSelectedCountries,
+  placeholder,
+  selectedRegions,
+  setSelectedRegions,
+}) => {
   const [open, setOpen] = useState(false);
 
   const handleCountrySelect = (event, child) => {
@@ -33,10 +39,13 @@ const CountryDropdown = ({ selectedCountries, setSelectedCountries, placeholder 
   };
 
   const handleRegionSelect = (region, countries) => {
+    setSelectedRegions([...selectedRegions, region]);
     setSelectedCountries((prev) => {
-      const isRegionFullySelected = countries.every(country => prev.includes(country));
+      const isRegionFullySelected = countries.every((country) =>
+        prev.includes(country)
+      );
       if (isRegionFullySelected) {
-        return prev.filter(country => !countries.includes(country));
+        return prev.filter((country) => !countries.includes(country));
       } else {
         return [...new Set([...prev, ...countries])];
       }
@@ -44,7 +53,7 @@ const CountryDropdown = ({ selectedCountries, setSelectedCountries, placeholder 
   };
 
   const isRegionSelected = (countries) => {
-    return countries.every(country => selectedCountries.includes(country));
+    return countries.every((country) => selectedCountries.includes(country));
   };
 
   return (
@@ -62,31 +71,41 @@ const CountryDropdown = ({ selectedCountries, setSelectedCountries, placeholder 
         }
         const maxDisplay = 7;
         return (
-          <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: 0.5, overflow: 'hidden' }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "nowrap",
+              gap: 0.5,
+              overflow: "hidden",
+            }}
+          >
             {selected.slice(0, maxDisplay).map((value) => (
               <Chip key={value} label={value} size="small" />
             ))}
             {selected.length > maxDisplay && (
-              <Typography variant="body2" sx={{ alignSelf: 'center' }}>
+              <Typography variant="body2" sx={{ alignSelf: "center" }}>
                 +{selected.length - maxDisplay} more
               </Typography>
             )}
           </Box>
         );
       }}
-      sx={{ width: '100%', marginBottom: 2 }}
+      sx={{ width: "100%", marginBottom: 2 }}
     >
       {formatCountryData().map(({ region, countries }) => [
         <ListSubheader key={region}>
-          <MenuItem onClick={(event) => {
-            event.preventDefault();
-            handleRegionSelect(region, countries);
-          }}>
+          <MenuItem
+            onClick={(event) => {
+              event.preventDefault();
+              handleRegionSelect(region, countries);
+            }}
+          >
             <Checkbox
               checked={isRegionSelected(countries)}
               indeterminate={
-                selectedCountries.some(country => countries.includes(country)) &&
-                !isRegionSelected(countries)
+                selectedCountries.some((country) =>
+                  countries.includes(country)
+                ) && !isRegionSelected(countries)
               }
             />
             {region}
@@ -97,7 +116,7 @@ const CountryDropdown = ({ selectedCountries, setSelectedCountries, placeholder 
             <Checkbox checked={selectedCountries.includes(country)} />
             {country}
           </MenuItem>
-        ))
+        )),
       ])}
     </Select>
   );
