@@ -102,12 +102,9 @@ const Questionnaire = () => {
   const API_KEY = "AIzaSyCtqidSRsI2NhNP-vQrx1Ixq0gQHcH_eUM";
   const CX = "60cbe814015d24004";
   const [showCommonComponent, setShowCommonComponent] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [direction, setDirection] = useState('next');
+
   const [isReferenceTableInView, setIsReferenceTableInView] = useState(true);
   const referenceTableRef = useRef(null);
-  const [fadeState, setFadeState] = useState('in');
-  const [displayedQuestion, setDisplayedQuestion] = useState(0);
 
   //Debugging
   useEffect(() => {
@@ -161,16 +158,14 @@ const Questionnaire = () => {
     setErrorMessage("");
   }
 
-  // const handleNext = () => {
-  //   saveCurrentReferences();
-  //   save({
-  //     answer_id: currentQID,
-  //     answer_object: answerObject,
-  //     position: currentQuestion + 1,
-  //   });
-  // };
-
-
+  const handleNext = () => {
+    saveCurrentReferences();
+    save({
+      answer_id: currentQID,
+      answer_object: answerObject,
+      position: currentQuestion + 1,
+    });
+  };
 
   const handleCommonNext = () => {
     setShowCommonComponent(false);
@@ -181,14 +176,14 @@ const Questionnaire = () => {
     }
   };
 
-  // const handleBack = () => {
-  //   saveCurrentReferences();
-  //   if (currentQuestion > 0) {
-  //     setcurrentQuestion(currentQuestion - 1);
-  //     loadReferencesForQuestion(currentQuestion - 1);
-  //     //    setCurrentSection(currentSection - 1);
-  //   }
-  // };
+  const handleBack = () => {
+    saveCurrentReferences();
+    if (currentQuestion > 0) {
+      setcurrentQuestion(currentQuestion - 1);
+      loadReferencesForQuestion(currentQuestion - 1);
+      //    setCurrentSection(currentSection - 1);
+    }
+  };
 
   const handleSubmit = () => {
     saveCurrentReferences();
@@ -416,31 +411,6 @@ const Questionnaire = () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
-  const handleNext = () => {
-    setFadeState('out');
-    setTimeout(() => {
-      saveCurrentReferences();
-      save({
-        answer_id: currentQID,
-        answer_object: answerObject,
-        position: currentQuestion + 1,
-      });
-      setDisplayedQuestion(currentQuestion + 1);
-      setFadeState('in');
-    }, 700); // Match this duration with your CSS transition duration
-  };
-
-  const handleBack = () => {
-    if (currentQuestion > 0) {
-      setFadeState('out');
-      setTimeout(() => {
-        saveCurrentReferences();
-        setDisplayedQuestion(currentQuestion - 1);
-        loadReferencesForQuestion(currentQuestion - 1);
-        setFadeState('in');
-      }, 300);
-    }
-  };
 
   const questionStyles = {
     backgroundColor: "white",
@@ -451,9 +421,7 @@ const Questionnaire = () => {
     marginTop: "10px",
     marginBottom: "20px",
     fontFamily: "DM Sans, sans-serif",
-    transition: "opacity 0.7s ease-in-out, transform 0.7s ease-in-out",
-    opacity: 1,
-    transform: "translateX(0)",
+    transition: "all 10s ease",
   };
 
   const optionStyles = {
@@ -1145,50 +1113,47 @@ const Questionnaire = () => {
             >
               {currentSection}
             </Typography>
-            <div style={{
-              ...questionStyles,
-              opacity: fadeState === 'in' ? 1 : 0,
-              transition: 'opacity 0.3s ease-in-out',
-            }}>
+            <div style={questionStyles}>
               <Typography variant="h6" style={{ ...questionTextStyles }}>
                 {questions.length === 0
                   ? ""
-                  : questions[displayedQuestion].itemTitle}
+                  : questions[currentQuestion].itemTitle}
               </Typography>
               <Typography variant="h6" style={{ ...descStyles }}>
                 {questions.length === 0
                   ? ""
-                  : questions[displayedQuestion].description}
+                  : questions[currentQuestion].description}
               </Typography>
               <div
                 style={{
+                  transition: "all 1s ease",
                   maxWidth:
                     questions.length !== 0 &&
-                      (questions[displayedQuestion].type === "GRID" ||
-                        questions[displayedQuestion].type === "CHECKBOX_GRID")
+                      (questions[currentQuestion].type === "GRID" ||
+                        questions[currentQuestion].type === "CHECKBOX_GRID")
                       ? "90vw"
                       : "100%",
                 }}
               >
                 {questions.length !== 0 &&
                   React.createElement(
-                    typemap[questions[displayedQuestion].type],
+                    typemap[questions[currentQuestion].type],
                     {
                       options:
-                        questions[displayedQuestion].type === "MULTIPLE_CHOICE" ||
-                          questions[displayedQuestion].type === "CHECKBOX"
+                        questions[currentQuestion].type === "MULTIPLE_CHOICE" ||
+                          questions[currentQuestion].type === "CHECKBOX"
                           ? Object.keys(
-                            JSON.parse(questions[displayedQuestion].choices)
+                            JSON.parse(questions[currentQuestion].choices)
                           )
                           : [],
                       minLabel:
-                        questions[displayedQuestion].type === "SCALE"
-                          ? JSON.parse(questions[displayedQuestion].bounds)[0]
+                        questions[currentQuestion].type === "SCALE"
+                          ? JSON.parse(questions[currentQuestion].bounds)[0]
                             .label
                           : "",
                       maxLabel:
-                        questions[displayedQuestion].type === "SCALE"
-                          ? JSON.parse(questions[displayedQuestion].bounds)[1]
+                        questions[currentQuestion].type === "SCALE"
+                          ? JSON.parse(questions[currentQuestion].bounds)[1]
                             .label
                           : "",
                       optionStyles: optionStyles,
@@ -1405,7 +1370,6 @@ const Questionnaire = () => {
                   className="next-button"
                   variant="contained"
                   onClick={handleNext}
-                  disabled={fadeState === 'out'}
                   style={{
                     marginBottom: "30px",
                   }}
@@ -1547,7 +1511,7 @@ const Questionnaire = () => {
             <button
               type="button"
               onClick={handleBack}
-              disabled={currentQuestion === 0 || fadeState === "out"}
+              disabled={currentQuestion === 0}
               className="bg-white text-center w-48 rounded-2xl h-14 relative font-sans text-black text-xl font-semibold group"
             >
               <div className="bg-[#e5fffc] rounded-xl h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[184px] z-10 duration-500">
