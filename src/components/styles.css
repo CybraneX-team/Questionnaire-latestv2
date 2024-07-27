@@ -412,3 +412,38 @@ input:valid~.btn-box-x {
 .cssbuttons-io-button:active .icon {
   transform: scale(0.95);
 }
+.question-enter-left {
+  transform: translateX(100%);
+}
+
+.question-enter-left-active {
+  transform: translateX(0);
+  transition: transform 300ms ease-in-out;
+}
+
+.question-exit-left {
+  transform: translateX(0);
+}
+
+.question-exit-left-active {
+  transform: translateX(-100%);
+  transition: transform 300ms ease-in-out;
+}
+
+.question-enter-right {
+  transform: translateX(-100%);
+}
+
+.question-enter-right-active {
+  transform: translateX(0);
+  transition: transform 300ms ease-in-out;
+}
+
+.question-exit-right {
+  transform: translateX(0);
+}
+
+.question-exit-right-active {
+  transform: translateX(100%);
+  transition: transform 300ms ease-in-out;
+}

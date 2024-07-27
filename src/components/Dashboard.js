@@ -28,10 +28,11 @@ const Dashboard = () => {
     const savedCollapse = localStorage.getItem("collapse");
     return savedCollapse === "true" || false;
   });
+  const [isFirstLogin, setIsFirstLogin] = useState(false);
+  // const [collapseOpen, setCollapseOpen] = useState(false);
 
   const handleToggleCollapse = () => {
     setCollapseOpen(!collapseOpen);
-    localStorage.setItem("collapse", !collapseOpen);
   };
 
   useEffect(() => {
@@ -42,11 +43,12 @@ const Dashboard = () => {
     }
   }, [collapseOpen]);
 
-  // useEffect(() => {
-  //   if (localStorage.getItem("collapse") && !collapseOpen) {
-  //     localStorage.setItem("collapse", 0);
-  //   }
-  // }, [collapseOpen]);
+
+  useEffect(() => {
+    if (localStorage.getItem("collapse") && !collapseOpen) {
+      localStorage.setItem("collapse", 0);
+    }
+  }, [collapseOpen]);
 
   const CustomCard = styled(Card)(({ theme }) => ({
     borderRadius: "2rem",
@@ -248,10 +250,11 @@ const Dashboard = () => {
     }
   }, []);
 
+
   return (
     <div style={{ padding: "32px", fontFamily: "DM Sans" }}>
       <button
-        className=" top-8 left-10 bg-dashred text-white p-2 rounded-lg mb-2 ml-2"
+        className="closeInfo-btn top-8 left-10 bg-dashred text-white p-2 rounded-lg mb-2 ml-2"
         style={{
           backgroundColor: "#4D6F74",
           color: "#FFF",
@@ -259,11 +262,45 @@ const Dashboard = () => {
         }}
         onClick={handleToggleCollapse}
       >
-        {collapseOpen ? "Close" : "Info"}
+        {collapseOpen ? (
+          <>
+            <span className="span-mother">
+              <span>I</span>
+              <span>N</span>
+              <span>F</span>
+              <span>O</span>
+            </span>
+            <span className="span-mother2">
+              <span>C</span>
+              <span>L</span>
+              <span>O</span>
+              <span>S</span>
+              <span>E</span>
+            </span>
+
+          </>
+        ) : (
+          <>
+            <span className="span-mother">
+              <span>C</span>
+              <span>L</span>
+              <span>O</span>
+              <span>S</span>
+              <span>E</span>
+            </span>
+            <span className="span-mother2">
+              <span>I</span>
+              <span>N</span>
+              <span>F</span>
+              <span>O</span>
+            </span>
+          </>
+        )}
+        {/* {collapseOpen ? "Close" : "Info"} */}
       </button>
       <Collapse in={collapseOpen} className=" ">
         <DashboardTitle
-          variant="h5"
+          variant="h3"
           style={{
             color: "#4D4556",
             fontWeight: "bold",

@@ -30,6 +30,7 @@ import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
 import ScaleQuestion from "./ScaleQuestion";
 import TextQuestion from "./TextQuestion";
 import GridQuestion from "./GridQuestion";
+import AssistantIcon from '@mui/icons-material/Assistant';
 import { getQByQID, saveAndNext, saveAnswer } from "../api";
 import {
   jwtStore,
@@ -57,6 +58,7 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
+import ChatBot from "./ChatBot";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -100,9 +102,12 @@ const Questionnaire = () => {
   const API_KEY = "AIzaSyCtqidSRsI2NhNP-vQrx1Ixq0gQHcH_eUM";
   const CX = "60cbe814015d24004";
   const [showCommonComponent, setShowCommonComponent] = useState(false);
-
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [direction, setDirection] = useState('next');
   const [isReferenceTableInView, setIsReferenceTableInView] = useState(true);
   const referenceTableRef = useRef(null);
+  const [fadeState, setFadeState] = useState('in');
+  const [displayedQuestion, setDisplayedQuestion] = useState(0);
 
   //Debugging
   useEffect(() => {
@@ -156,14 +161,16 @@ const Questionnaire = () => {
     setErrorMessage("");
   }
 
-  const handleNext = () => {
-    saveCurrentReferences();
-    save({
-      answer_id: currentQID,
-      answer_object: answerObject,
-      position: currentQuestion + 1,
-    });
-  };
+  // const handleNext = () => {
+  //   saveCurrentReferences();
+  //   save({
+  //     answer_id: currentQID,
+  //     answer_object: answerObject,
+  //     position: currentQuestion + 1,
+  //   });
+  // };
+
+
 
   const handleCommonNext = () => {
     setShowCommonComponent(false);
@@ -174,14 +181,14 @@ const Questionnaire = () => {
     }
   };
 
-  const handleBack = () => {
-    saveCurrentReferences();
-    if (currentQuestion > 0) {
-      setcurrentQuestion(currentQuestion - 1);
-      loadReferencesForQuestion(currentQuestion - 1);
-      //    setCurrentSection(currentSection - 1);
-    }
-  };
+  // const handleBack = () => {
+  //   saveCurrentReferences();
+  //   if (currentQuestion > 0) {
+  //     setcurrentQuestion(currentQuestion - 1);
+  //     loadReferencesForQuestion(currentQuestion - 1);
+  //     //    setCurrentSection(currentSection - 1);
+  //   }
+  // };
 
   const handleSubmit = () => {
     saveCurrentReferences();
@@ -409,6 +416,31 @@ const Questionnaire = () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
+  const handleNext = () => {
+    setFadeState('out');
+    setTimeout(() => {
+      saveCurrentReferences();
+      save({
+        answer_id: currentQID,
+        answer_object: answerObject,
+        position: currentQuestion + 1,
+      });
+      setDisplayedQuestion(currentQuestion + 1);
+      setFadeState('in');
+    }, 700); // Match this duration with your CSS transition duration
+  };
+
+  const handleBack = () => {
+    if (currentQuestion > 0) {
+      setFadeState('out');
+      setTimeout(() => {
+        saveCurrentReferences();
+        setDisplayedQuestion(currentQuestion - 1);
+        loadReferencesForQuestion(currentQuestion - 1);
+        setFadeState('in');
+      }, 300);
+    }
+  };
 
   const questionStyles = {
     backgroundColor: "white",
@@ -419,7 +451,9 @@ const Questionnaire = () => {
     marginTop: "10px",
     marginBottom: "20px",
     fontFamily: "DM Sans, sans-serif",
-    transition: "all 10s ease",
+    transition: "opacity 0.7s ease-in-out, transform 0.7s ease-in-out",
+    opacity: 1,
+    transform: "translateX(0)",
   };
 
   const optionStyles = {
@@ -1111,47 +1145,51 @@ const Questionnaire = () => {
             >
               {currentSection}
             </Typography>
-            <div style={questionStyles}>
+            <div style={{
+              ...questionStyles,
+              opacity: fadeState === 'in' ? 1 : 0,
+              transition: 'opacity 0.3s ease-in-out',
+            }}>
               <Typography variant="h6" style={{ ...questionTextStyles }}>
                 {questions.length === 0
                   ? ""
-                  : questions[currentQuestion].itemTitle}
+                  : questions[displayedQuestion].itemTitle}
               </Typography>
               <Typography variant="h6" style={{ ...descStyles }}>
                 {questions.length === 0
                   ? ""
-                  : questions[currentQuestion].description}
+                  : questions[displayedQuestion].description}
               </Typography>
               <div
                 style={{
                   maxWidth:
                     questions.length !== 0 &&
-                    (questions[currentQuestion].type === "GRID" ||
-                      questions[currentQuestion].type === "CHECKBOX_GRID")
+                      (questions[displayedQuestion].type === "GRID" ||
+                        questions[displayedQuestion].type === "CHECKBOX_GRID")
                       ? "90vw"
                       : "100%",
                 }}
               >
                 {questions.length !== 0 &&
                   React.createElement(
-                    typemap[questions[currentQuestion].type],
+                    typemap[questions[displayedQuestion].type],
                     {
                       options:
-                        questions[currentQuestion].type === "MULTIPLE_CHOICE" ||
-                        questions[currentQuestion].type === "CHECKBOX"
+                        questions[displayedQuestion].type === "MULTIPLE_CHOICE" ||
+                          questions[displayedQuestion].type === "CHECKBOX"
                           ? Object.keys(
-                              JSON.parse(questions[currentQuestion].choices)
-                            )
+                            JSON.parse(questions[displayedQuestion].choices)
+                          )
                           : [],
                       minLabel:
-                        questions[currentQuestion].type === "SCALE"
-                          ? JSON.parse(questions[currentQuestion].bounds)[0]
-                              .label
+                        questions[displayedQuestion].type === "SCALE"
+                          ? JSON.parse(questions[displayedQuestion].bounds)[0]
+                            .label
                           : "",
                       maxLabel:
-                        questions[currentQuestion].type === "SCALE"
-                          ? JSON.parse(questions[currentQuestion].bounds)[1]
-                              .label
+                        questions[displayedQuestion].type === "SCALE"
+                          ? JSON.parse(questions[displayedQuestion].bounds)[1]
+                            .label
                           : "",
                       optionStyles: optionStyles,
                     }
@@ -1367,6 +1405,7 @@ const Questionnaire = () => {
                   className="next-button"
                   variant="contained"
                   onClick={handleNext}
+                  disabled={fadeState === 'out'}
                   style={{
                     marginBottom: "30px",
                   }}
@@ -1508,7 +1547,7 @@ const Questionnaire = () => {
             <button
               type="button"
               onClick={handleBack}
-              disabled={currentQuestion === 0}
+              disabled={currentQuestion === 0 || fadeState === "out"}
               className="bg-white text-center w-48 rounded-2xl h-14 relative font-sans text-black text-xl font-semibold group"
             >
               <div className="bg-[#e5fffc] rounded-xl h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[184px] z-10 duration-500">
@@ -1534,7 +1573,7 @@ const Questionnaire = () => {
               <div className="dark:shadow-buttons-box-dark rounded-2xl w-full px-1.5 py-1.5 md:px-3 md:py-3">
                 <Tooltip title="Open Search">
                   <a
-                    className="text-light-blue-light hover:text-black dark:text-gray-400 border-2 inline-flex items-center mr-4 last-of-type:mr-0 p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed  hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:border-2 active:shadow-button-flat-pressed font-medium rounded-full text-sm text-center dark:bg-button-curved-default-dark dark:shadow-button-curved-default-dark dark:hover:bg-button-curved-pressed-dark dark:hover:shadow-button-curved-pressed-dark dark:active:bg-button-curved-pressed-dark dark:active:shadow-button-curved-pressed-dark dark:focus:bg-button-curved-pressed-dark dark:focus:shadow-button-curved-pressed-dark dark:border-0"
+                    className="cursor-pointer text-light-blue-light hover:text-black dark:text-gray-400 border-2 inline-flex items-center mr-4 last-of-type:mr-0 p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed  hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:border-2 active:shadow-button-flat-pressed font-medium rounded-full text-sm text-center dark:bg-button-curved-default-dark dark:shadow-button-curved-default-dark dark:hover:bg-button-curved-pressed-dark dark:hover:shadow-button-curved-pressed-dark dark:active:bg-button-curved-pressed-dark dark:active:shadow-button-curved-pressed-dark dark:focus:bg-button-curved-pressed-dark dark:focus:shadow-button-curved-pressed-dark dark:border-0"
                     onClick={toggleSearchBar}
                   >
                     <SearchIcon className="w-5 h-5" />
@@ -1542,13 +1581,12 @@ const Questionnaire = () => {
                 </Tooltip>
                 <Tooltip title="Upload PDF">
                   <a
-                    className="text-light-blue-light hover:text-black dark:text-gray-400 border-2 inline-flex items-center mr-4 last-of-type:mr-0 p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:border-2 active:shadow-button-flat-pressed font-medium rounded-full text-sm text-center dark:bg-button-curved-default-dark dark:shadow-button-curved-default-dark dark:hover:bg-button-curved-pressed-dark dark:hover:shadow-button-curved-pressed-dark dark:active:bg-button-curved-pressed-dark dark:active:shadow-button-curved-pressed-dark dark:focus:bg-button-curved-pressed-dark dark:focus:shadow-button-curved-pressed-dark dark:border-0"
+                    className="cursor-pointer text-light-blue-light hover:text-black dark:text-gray-400 border-2 inline-flex items-center mr-4 last-of-type:mr-0 p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:border-2 active:shadow-button-flat-pressed font-medium rounded-full text-sm text-center dark:bg-button-curved-default-dark dark:shadow-button-curved-default-dark dark:hover:bg-button-curved-pressed-dark dark:hover:shadow-button-curved-pressed-dark dark:active:bg-button-curved-pressed-dark dark:active:shadow-button-curved-pressed-dark dark:focus:bg-button-curved-pressed-dark dark:focus:shadow-button-curved-pressed-dark dark:border-0"
                     onClick={() => {
-                      fileInputRef.current.click();
                       togglePdfUpload();
                     }}
                   >
-                    <UploadFileIcon className="w-5 h-5" />
+                    <AssistantIcon className="w-5 h-5" />
                   </a>
                 </Tooltip>
               </div>
