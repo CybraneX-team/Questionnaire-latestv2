@@ -113,8 +113,8 @@
   height: 45px;
   border: none;
   border-radius: 50%;
-  top: 25px;
-  right: 30px;
+  top: 32px;
+  right: 32px;
   cursor: pointer;
   position: absolute;
   overflow: hidden;
@@ -156,6 +156,7 @@
 .Btn:hover {
   width: 125px;
   border-radius: 40px;
+  font-family: "Montserrat", sans-serif;
   transition-duration: .3s;
 }
 

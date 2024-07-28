@@ -30,7 +30,7 @@ const ChatBot = ({ isPdfOpen }) => {
   const handleFileUpload = (event) => {
     const files = Array.from(event.target.files);
     const validFiles = files.filter(file => file.type === 'application/pdf' || file.type === 'text/csv');
-    
+
     if (validFiles.length !== files.length) {
       setMessages(prev => [...prev, { text: "Only PDF and CSV files are allowed.", sender: 'system' }]);
     } else {
@@ -44,25 +44,25 @@ const ChatBot = ({ isPdfOpen }) => {
 
   return (
     <Paper elevation={3} style={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column', padding: '16px', backgroundColor: 'white' }}>
-      <Typography variant="h6" gutterBottom style={{ color: '#333', borderBottom: '1px solid #e5fffc', paddingBottom: '8px', alignItems: 'center', justifyContent: 'center', }}>
+      <Typography variant="h5" gutterBottom style={{ color: '#333', borderBottom: '1px solid #e5fffc', paddingBottom: '8px', alignItems: 'center', justifyContent: 'center', fontFamily: "Montserrat" }}>
         ChatBot Assistant
       </Typography>
       <List style={{ flexGrow: 1, overflow: 'auto', marginBottom: '16px', padding: '0px' }}>
         {messages.map((message, index) => (
-          <ListItem key={index} style={{ 
+          <ListItem key={index} style={{
             justifyContent: message.sender === 'user' ? 'flex-end' : 'flex-start',
             wordWrap: 'break-word',
             marginBottom: '8px'
           }}>
-            <Paper elevation={1} style={{ 
-              padding: '8px 12px', 
+            <Paper elevation={1} style={{
+              padding: '8px 12px',
               maxWidth: '70%',
               backgroundColor: message.sender === 'user' ? '#e3f2fd' : message.sender === 'bot' ? '#fff' : '#f0f0f0',
               borderRadius: message.sender === 'user' ? '20px 20px 0 20px' : '20px 20px 20px 0'
             }}>
-              <ListItemText 
-                primary={message.text} 
-                style={{ 
+              <ListItemText
+                primary={message.text}
+                style={{
                   color: message.sender === 'system' ? '#666' : '#333',
                   fontStyle: message.sender === 'system' ? 'italic' : 'normal'
                 }}
@@ -81,7 +81,7 @@ const ChatBot = ({ isPdfOpen }) => {
           onChange={(e) => setInputMessage(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
           InputProps={{ disableUnderline: true }}
-          style={{ marginLeft: '8px',  }}
+          style={{ marginLeft: '8px', }}
         />
         <Button
           color="primary"
@@ -101,7 +101,7 @@ const ChatBot = ({ isPdfOpen }) => {
         <Button
           color="secondary"
           onClick={() => fileInputRef.current.click()}
-          style={{ minWidth: '40px', height: '40px', borderRadius: '50%', marginLeft: '8px', color:"#295b52" }}
+          style={{ minWidth: '40px', height: '40px', borderRadius: '50%', marginLeft: '8px', color: "#295b52" }}
         >
           <AttachFileIcon />
         </Button>

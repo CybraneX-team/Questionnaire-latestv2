@@ -1,0 +1,125 @@
+import React, { useState } from "react";
+import {
+  Select,
+  MenuItem,
+  Chip,
+  Box,
+  Checkbox,
+  ListSubheader,
+  Typography,
+} from "@mui/material";
+import * as CountryData from "./countries";
+
+const formatCountryData = () => {
+  return Object.entries(CountryData).map(([region, countries]) => ({
+    region,
+    countries,
+  }));
+};
+
+const CountryDropdown = ({
+  selectedCountries,
+  setSelectedCountries,
+  placeholder,
+  selectedRegions,
+  setSelectedRegions,
+}) => {
+  const [open, setOpen] = useState(false);
+
+  const handleCountrySelect = (event, child) => {
+    event.preventDefault();
+    const value = child.props.value;
+    setSelectedCountries((prev) => {
+      if (prev.includes(value)) {
+        return prev.filter((country) => country !== value);
+      } else {
+        return [...prev, value];
+      }
+    });
+  };
+
+  const handleRegionSelect = (region, countries) => {
+    setSelectedRegions([...selectedRegions, region]);
+    setSelectedCountries((prev) => {
+      const isRegionFullySelected = countries.every((country) =>
+        prev.includes(country)
+      );
+      if (isRegionFullySelected) {
+        return prev.filter((country) => !countries.includes(country));
+      } else {
+        return [...new Set([...prev, ...countries])];
+      }
+    });
+  };
+
+  const isRegionSelected = (countries) => {
+    return countries.every((country) => selectedCountries.includes(country));
+  };
+
+  return (
+    <Select
+      multiple
+      open={open}
+      onOpen={() => setOpen(true)}
+      onClose={() => setOpen(false)}
+      value={selectedCountries}
+      onChange={handleCountrySelect}
+      displayEmpty
+      renderValue={(selected) => {
+        if (selected.length === 0) {
+          return <em>{placeholder}</em>;
+        }
+        const maxDisplay = 7;
+        return (
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "nowrap",
+              gap: 0.5,
+              overflow: "hidden",
+            }}
+          >
+            {selected.slice(0, maxDisplay).map((value) => (
+              <Chip key={value} label={value} size="small" />
+            ))}
+            {selected.length > maxDisplay && (
+              <Typography variant="body2" sx={{ alignSelf: "center" }}>
+                +{selected.length - maxDisplay} more
+              </Typography>
+            )}
+          </Box>
+        );
+      }}
+      sx={{ width: "100%", marginBottom: 2 }}
+    >
+      {formatCountryData().map(({ region, countries }) => [
+        <ListSubheader key={region}>
+          <MenuItem
+            onClick={(event) => {
+              event.preventDefault();
+              handleRegionSelect(region, countries);
+            }}
+          >
+            <Checkbox
+              checked={isRegionSelected(countries)}
+              indeterminate={
+                selectedCountries.some((country) =>
+                  countries.includes(country)
+                ) && !isRegionSelected(countries)
+              }
+            />
+            {region}
+          </MenuItem>
+        </ListSubheader>,
+        ...countries.map((country) => (
+          <MenuItem key={country} value={country}>
+            <Checkbox checked={selectedCountries.includes(country)} />
+            {country}
+          </MenuItem>
+        )),
+      ])}
+    </Select>
+  );
+};
+
+export default CountryDropdown;

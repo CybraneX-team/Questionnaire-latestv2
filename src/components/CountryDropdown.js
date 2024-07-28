@@ -8,10 +8,13 @@ import {
   ListSubheader,
   Typography,
   Collapse,
-  IconButton,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
 } from "@mui/material";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
 import * as CountryData from "./countries";
 
 const formatCountryData = () => {
@@ -42,29 +45,8 @@ const CountryDropdown = ({
     });
   };
 
-  // const handleRegionSelect = (region, countries) => {
-  //   setSelectedRegions([...selectedRegions, region]);
-  //   setSelectedCountries((prev) => {
-  //     const isRegionFullySelected = countries.every((country) =>
-  //       prev.includes(country)
-  //     );
-  //     if (isRegionFullySelected) {
-  //       return prev.filter((country) => !countries.includes(country));
-  //     } else {
-  //       return [...new Set([...prev, ...countries])];
-  //     }
-  //   });
-  // };
-
-  const handleRegionSelect = (event, region, countries) => {
-    event.stopPropagation();
-    setSelectedRegions((prev) => {
-      if (prev.includes(region)) {
-        return prev.filter((r) => r !== region);
-      } else {
-        return [...prev, region];
-      }
-    });
+  const handleRegionSelect = (region, countries) => {
+    setSelectedRegions([...selectedRegions, region]);
     setSelectedCountries((prev) => {
       const isRegionFullySelected = countries.every((country) =>
         prev.includes(country)
@@ -81,11 +63,10 @@ const CountryDropdown = ({
     return countries.every((country) => selectedCountries.includes(country));
   };
 
-  const toggleRegion = (event, region) => {
-    event.stopPropagation();
-    setExpandedRegions(prev => ({
+  const toggleRegion = (region) => {
+    setExpandedRegions((prev) => ({
       ...prev,
-      [region]: !prev[region]
+      [region]: !prev[region],
     }));
   };
 
@@ -96,7 +77,6 @@ const CountryDropdown = ({
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
       value={selectedCountries}
-      onChange={() => { }}
       displayEmpty
       renderValue={(selected) => {
         if (selected.length === 0) {
@@ -125,69 +105,48 @@ const CountryDropdown = ({
       }}
       sx={{ width: "100%", marginBottom: 2 }}
     >
-      {/* {formatCountryData().map(({ region, countries }) => [
-        <ListSubheader key={region}>
-          <MenuItem
-            onClick={(event) => {
-              event.preventDefault();
-              handleRegionSelect(region, countries);
-            }}
-          >
-            <Checkbox
-              checked={isRegionSelected(countries)}
-              indeterminate={
-                selectedCountries.some((country) =>
-                  countries.includes(country)
-                ) && !isRegionSelected(countries)
-              }
-            />
-            {region}
-          </MenuItem>
-        </ListSubheader>,
-        ...countries.map((country) => (
-          <MenuItem key={country} value={country}>
-            <Checkbox checked={selectedCountries.includes(country)} />
-            {country}
-          </MenuItem>
-        )),
-      ])} */}
-
-      {formatCountryData().map(({ region, countries }) => [
-        <ListSubheader key={region}>
-          <MenuItem
-            onClick={(event) => handleRegionSelect(event, region, countries)}
-          >
-            <Checkbox
-              checked={isRegionSelected(countries)}
-              indeterminate={
-                selectedCountries.some((country) =>
-                  countries.includes(country)
-                ) && !isRegionSelected(countries)
-              }
-            />
-            {region}
-            <IconButton
-              onClick={(event) => toggleRegion(event, region)}
-              size="small"
-            >
-              {expandedRegions[region] ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-            </IconButton>
-          </MenuItem>
-        </ListSubheader>,
-        <Collapse in={expandedRegions[region]} key={`collapse-${region}`}>
-          {countries.map((country) => (
-            <MenuItem
-              key={country}
-              value={country}
-              style={{ paddingLeft: 32 }}
-              onClick={(event) => handleCountrySelect(event, country)}
-            >
-              <Checkbox checked={selectedCountries.includes(country)} />
-              {country}
-            </MenuItem>
-          ))}
-        </Collapse>
-      ])}
+      {formatCountryData().map(({ region, countries }) => (
+        <React.Fragment key={region}>
+          <ListItemButton onClick={() => toggleRegion(region)}>
+            <ListItemIcon>
+              <Checkbox
+                edge="start"
+                checked={isRegionSelected(countries)}
+                indeterminate={
+                  selectedCountries.some((country) =>
+                    countries.includes(country)
+                  ) && !isRegionSelected(countries)
+                }
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleRegionSelect(region, countries);
+                }}
+              />
+            </ListItemIcon>
+            <ListItemText primary={region} />
+            {expandedRegions[region] ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={expandedRegions[region]} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              {countries.map((country) => (
+                <ListItemButton
+                  key={country}
+                  sx={{ pl: 4 }}
+                  onClick={(event) => handleCountrySelect(event, country)}
+                >
+                  <ListItemIcon>
+                    <Checkbox
+                      edge="start"
+                      checked={selectedCountries.includes(country)}
+                    />
+                  </ListItemIcon>
+                  <ListItemText primary={country} />
+                </ListItemButton>
+              ))}
+            </List>
+          </Collapse>
+        </React.Fragment>
+      ))}
     </Select>
   );
 };

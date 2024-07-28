@@ -252,13 +252,13 @@ const Dashboard = () => {
 
 
   return (
-    <div style={{ padding: "32px", fontFamily: "DM Sans" }}>
+    <div style={{ padding: "32px", fontFamily: "Montserrat" }}>
       <button
         className="closeInfo-btn top-8 left-10 bg-dashred text-white p-2 rounded-lg mb-2 ml-2"
         style={{
           backgroundColor: "#4D6F74",
           color: "#FFF",
-          fontFamily: "DM Sans",
+          fontFamily: "Montserrat",
         }}
         onClick={handleToggleCollapse}
       >
@@ -304,13 +304,14 @@ const Dashboard = () => {
           style={{
             color: "#4D4556",
             fontWeight: "bold",
+            fontFamily: "Montserrat",
             marginBottom: "20px",
             marginLeft: "10px",
           }}
         >
           Introduction to SIMs
         </DashboardTitle>
-        <Typography variant="subtitle1" className=" pl-2 pr-48 pb-5">
+        <Typography variant="subtitle1" className=" pl-2 pr-48 pb-5" style={{ fontFamily: "Hind" }}>
           The questions here are tuned for larger organisations in the private
           sector, or a significant project run within a for-profit environment.
           Depending on your answers, you will typically be asked 50-80
@@ -328,6 +329,7 @@ const Dashboard = () => {
         variant="h5"
         style={{
           color: "#4D4556",
+          fontFamily: "Montserrat",
           fontWeight: "bold",
           marginBottom: "20px",
           marginLeft: "10px",
@@ -437,7 +439,7 @@ const Dashboard = () => {
                   style={{
                     marginLeft: "40px",
                     bottom: "-25px",
-                    fontFamily: "DM Sans",
+                    fontFamily: "Montserrat",
                   }}
                   onClick={() => {
                     qStore.dispatch({
@@ -494,9 +496,10 @@ const Dashboard = () => {
                 variant="h6"
                 color="primary"
                 style={{
+                  fontFamily: "Montserrat",
                   color: "#35483F",
-                  marginRight: "10px",
-                  marginLeft: "10px",
+                  marginRight: "12px",
+                  fontWeight: "bold",
                 }}
               >
                 Create New
@@ -538,7 +541,9 @@ const Dashboard = () => {
               style={{
                 // marginTop: "10px",
                 color: "#35483F",
-                marginLeft: "30px",
+                fontFamily: "Hind",
+                fontSize: "18px",
+                marginLeft: "10px",
               }}
             >
               Start a new Questionnaire

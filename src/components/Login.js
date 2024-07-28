@@ -49,7 +49,7 @@ const WelcomeText = styled(Typography)({
   top: "60px",
   left: "50%",
   transform: "translateX(-50%)",
-  fontFamily: "Space Grotesk, sans-serif",
+  fontFamily: "Montserrat",
   fontWeight: 600,
   fontSize: "60px",
   lineHeight: "51.04px",
@@ -96,7 +96,7 @@ const CustomTextField = styled(TextField)({
     },
   },
   "& .MuiInputBase-input": {
-    color: "#fff",
+    color: "#000",
   },
   "& .MuiInputLabel-root": {
     color: "#6d7199",
@@ -216,7 +216,9 @@ const Login = () => {
       <RightPane>
         <WelcomeText>Welcome back!</WelcomeText>
         <LoginForm>
-          <Typography variant="h5" color="#000" marginBottom={"30px"} gutterBottom>
+          <Typography style={{
+            fontFamily: "Hind",
+          }} variant="h4" color="#000" marginBottom={"15px"} gutterBottom>
             Login
           </Typography>
           <form onSubmit={handleSubmit}>

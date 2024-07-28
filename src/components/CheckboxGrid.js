@@ -111,7 +111,7 @@ const CheckboxGridQuestion = () => {
   };
 
   const getCellBackgroundColor = (item, option) => {
-    return selectedOption[item.name]?.[option]?.selected ? "#B1FFE8" : "white";
+    return selectedOption[item.name]?.[option]?.selected ? "#e5fffc" : "white";
   };
 
   useEffect(() => {

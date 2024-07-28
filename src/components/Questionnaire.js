@@ -440,7 +440,7 @@ const Questionnaire = () => {
     justifyContent: "center",
     alignItems: "center",
     height: "100%",
-    fontFamily: "DM Sans, sans-serif",
+    fontFamily: "Montserrat, sans-serif",
   };
   const descStyles = {
     color: "#4D4556",
@@ -509,7 +509,7 @@ const Questionnaire = () => {
     marginBottom: "10px",
     marginTop: "30px",
     textAlign: "center",
-    fontFamily: "DM Sans, sans-serif",
+    fontFamily: "Montserrat, sans-serif",
   };
 
   const menuIconStyles = {
@@ -1114,12 +1114,12 @@ const Questionnaire = () => {
               {currentSection}
             </Typography>
             <div style={questionStyles}>
-              <Typography variant="h6" style={{ ...questionTextStyles }}>
+              <Typography variant="h4" style={{ ...questionTextStyles }}>
                 {questions.length === 0
                   ? ""
                   : questions[currentQuestion].itemTitle}
               </Typography>
-              <Typography variant="h6" style={{ ...descStyles }}>
+              <Typography variant="h4" style={{ ...descStyles }}>
                 {questions.length === 0
                   ? ""
                   : questions[currentQuestion].description}
@@ -1160,89 +1160,6 @@ const Questionnaire = () => {
                     }
                   )}
               </div>
-              {/* {isReferenceTableOpen && (
-                <div style={referenceTableStyles}>
-                  <Typography variant="h6" style={referenceTableHeaderStyles}>
-                    References for this question
-                  </Typography>
-                  <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                    <thead>
-                      <tr>
-                        <th
-                          style={{
-                            borderBottom: "1px solid #A6A4A3",
-                            paddingBottom: "10px",
-                            color: "#4D4556",
-                          }}
-                        >
-                          Select
-                        </th>
-                        <th
-                          style={{
-                            borderBottom: "1px solid #A6A4A3",
-                            paddingBottom: "10px",
-                            color: "#4D4556",
-                          }}
-                        >
-                          Search Result Title
-                        </th>
-                        <th
-                          style={{
-                            borderBottom: "1px solid #A6A4A3",
-                            paddingBottom: "10px",
-                            color: "#4D4556",
-                          }}
-                        >
-                          Preview Text
-                        </th>
-                        <th
-                          style={{
-                            borderBottom: "1px solid #A6A4A3",
-                            paddingBottom: "10px",
-                            color: "#4D4556",
-                          }}
-                        >
-                          Link
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {references.map((reference, index) => (
-                        <tr key={index}>
-                          <td
-                            style={{
-                              padding: "10px",
-                              textAlign: "center",
-                              color: "#4D4556",
-                            }}
-                          >
-                            <Checkbox checked />
-                          </td>
-                          <td style={{ padding: "10px", color: "#4D4556" }}>
-                            {reference.title}
-                          </td>
-                          <td style={{ padding: "10px", color: "#4D4556" }}>
-                            {reference.snippet}
-                          </td>
-                          <td style={{ padding: "10px", color: "#4D4556" }}>
-                            <a
-                              href={reference.link}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              style={{
-                                color: "blue",
-                                textDecoration: "none",
-                              }}
-                            >
-                              {reference.link}
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )} */}
 
               {isReferenceTableOpen && (
                 <Box sx={{ width: "100%" }} ref={referenceTableRef}>
@@ -1320,27 +1237,16 @@ const Questionnaire = () => {
 
               {!isReferenceTableInView && isReferenceTableOpen && (
                 <button
-                  className="scroll-to-reference-button"
+                  className="button-scroll"
                   onClick={() =>
                     referenceTableRef.current.scrollIntoView({
                       behavior: "smooth",
                     })
                   }
                 >
-                  <div className="text">
-                    <span>Back</span>
-                    <span>to</span>
-                    <span>Reference</span>
-                  </div>
-                  <div className="clone">
-                    <span>Back</span>
-                    <span>to</span>
-                    <span>Reference</span>
-                  </div>
-                  <svg width="20px" height="20px" viewBox="0 0 20 20">
+                  <svg className="svgIcon" viewBox="0 0 384 512">
                     <path
-                      fill="#000"
-                      d="M14.989,9.491L6.071,0.537C5.725,0.189,5.133,0.187,4.783,0.534c-0.348,0.344-0.349,0.894-0.002,1.247l8.17,8.208L4.781,18.209c-0.347,0.349-0.346,0.897,0.002,1.242c0.181,0.178,0.416,0.267,0.652,0.267c0.235,0,0.472-0.089,0.654-0.267l8.927-8.971C15.342,10.153,15.342,9.817,14.989,9.491z"
+                      d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"
                     ></path>
                   </svg>
                 </button>
@@ -1512,7 +1418,7 @@ const Questionnaire = () => {
               type="button"
               onClick={handleBack}
               disabled={currentQuestion === 0}
-              className="bg-white text-center w-48 rounded-2xl h-14 relative font-sans text-black text-xl font-semibold group"
+              className="bg-white text-center w-48 rounded-2xl h-14 relative text-black text-xl font-semibold group"
             >
               <div className="bg-[#e5fffc] rounded-xl h-12 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[184px] z-10 duration-500">
                 <svg
@@ -1531,7 +1437,7 @@ const Questionnaire = () => {
                   ></path>
                 </svg>
               </div>
-              <p className="translate-x-2">Go Back</p>
+              <p className="translate-x-2" style={{ fontFamily: "Montserrat" }}>Go Back</p>
             </button>
             <div className="flex bg-[#e5fffc] w-fit px-0 py-0 shadow-box-up rounded-2xl dark:bg-box-dark dark:shadow-box-dark-out">
               <div className="dark:shadow-buttons-box-dark rounded-2xl w-full px-1.5 py-1.5 md:px-3 md:py-3">
@@ -1631,8 +1537,12 @@ const Questionnaire = () => {
               ></span>
             </button> */}
             <button
-              className="cssbuttons-io-button"
+              className="cssbuttons-io-button text-black text-xl font-semibold"
               onClick={handleSaveAndExit}
+              style={{
+                fontFamily: "Montserrat",
+                fontWeight: "600",
+              }}
             >
               Close
               <div className="icon">X</div>

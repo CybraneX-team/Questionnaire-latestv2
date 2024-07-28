@@ -62,7 +62,7 @@ const CheckboxQuestion = ({ question, options }) => {
             <Box
               key={option}
               sx={{
-                backgroundColor: "#B1FFE8",
+                backgroundColor: "#e5fffc",
                 borderRadius: "0.5rem",
                 padding: "1rem",
                 marginBottom: "0.5rem",
