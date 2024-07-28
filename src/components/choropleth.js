@@ -31,6 +31,7 @@ function ChoroplethMap() {
   }, []);
 
   const updateState = (id, data) => {
+    console.log("Chart data:", data);
     mapStore.dispatch({
       type: "UPDATE",
       payload: {
@@ -128,6 +129,7 @@ function ChoroplethMap() {
                   }
                 }
                 chart.update();
+                updateState(question, chart.data);
               } else if (obj === "Oceania") {
                 for (let i = 0; i < Oceania.length; i++) {
                   let index = chart.data.labels.indexOf(Oceania[i]);
@@ -145,6 +147,7 @@ function ChoroplethMap() {
                   }
                 }
                 chart.update();
+                updateState(question, chart.data);
               } else if (obj === "SSA") {
                 for (let i = 0; i < SSA.length; i++) {
                   let index = chart.data.labels.indexOf(SSA[i]);
@@ -162,6 +165,7 @@ function ChoroplethMap() {
                   }
                 }
                 chart.update();
+                updateState(question, chart.data);
               } else if (obj === "LAC") {
                 for (let i = 0; i < LAC.length; i++) {
                   let index = chart.data.labels.indexOf(LAC[i]);
@@ -179,6 +183,7 @@ function ChoroplethMap() {
                   }
                 }
                 chart.update();
+                updateState(question, chart.data);
               } else if (obj === "SA") {
                 for (let i = 0; i < SA.length; i++) {
                   let index = chart.data.labels.indexOf(SA[i]);
@@ -196,6 +201,7 @@ function ChoroplethMap() {
                   }
                 }
                 chart.update();
+                updateState(question, chart.data);
               } else if (obj === "ESE") {
                 for (let i = 0; i < ESE.length; i++) {
                   let index = chart.data.labels.indexOf(ESE[i]);
@@ -213,6 +219,7 @@ function ChoroplethMap() {
                   }
                 }
                 chart.update();
+                updateState(question, chart.data);
               } else if (obj === "MENA") {
                 for (let i = 0; i < MENA.length; i++) {
                   let index = chart.data.labels.indexOf(MENA[i]);
@@ -230,6 +237,7 @@ function ChoroplethMap() {
                   }
                 }
                 chart.update();
+                updateState(question, chart.data);
               } else if (obj === "EEC") {
                 for (let i = 0; i < EEC.length; i++) {
                   let index = chart.data.labels.indexOf(EEC[i]);
@@ -247,6 +255,7 @@ function ChoroplethMap() {
                   }
                 }
                 chart.update();
+                updateState(question, chart.data);
               }
             }
           }
@@ -266,9 +275,6 @@ function ChoroplethMap() {
 }
 
 export default ChoroplethMap;
-
-
-
 
 // import React, { useRef, useEffect, useState } from "react";
 // import { Chart, registerables } from "chart.js";

@@ -47,7 +47,7 @@ const mapDataReducer = (state = [], action) => {
 
     case "UPDATE":
       return state.map((item) =>
-        item.id === action.payload.data.id ? action.payload.data : item
+        item.id === action.payload.id ? action.payload : item
       );
 
     default:
