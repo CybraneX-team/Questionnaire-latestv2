@@ -286,7 +286,7 @@ const formStyles = {
     backgroundColor: "#E5FFFC",
     flexGrow: 1,
     width: "100%",
-    maxWidth: "90%",
+    maxWidth: "100%",
     margin: "0 auto",
   },
 };
@@ -377,10 +377,12 @@ const GridQuestion = () => {
     });
 
     const unsubscribe = qTitleStore.subscribe(() => {
-      if (mapQuestions.includes(qTitleStore.getState())) {
-        setShowMap(true);
-      }
+      const currentQuestion = qTitleStore.getState();
+      setShowMap(mapQuestions.includes(currentQuestion));
     });
+
+    return () => unsubscribe();
+
   });
 
   useEffect(() => {
@@ -414,13 +416,15 @@ const GridQuestion = () => {
         {title}
       </Typography>
       <Paper style={{ ...formStyles.paper, fontFamily: "" }}>
-        <CountryDropdown
-          selectedCountries={selectedCountries}
-          setSelectedCountries={setSelectedCountries}
-          placeholder="Select Countries"
-          selectedRegions={selectedRegions}
-          setSelectedRegions={setSelectedRegions}
-        />
+        {showMap && (
+          <CountryDropdown
+            selectedCountries={selectedCountries}
+            setSelectedCountries={setSelectedCountries}
+            placeholder="Select Countries"
+            selectedRegions={selectedRegions}
+            setSelectedRegions={setSelectedRegions}
+          />
+        )}
         <Box sx={{ overflowX: "auto" }}>
           <Table
             style={{
@@ -435,14 +439,13 @@ const GridQuestion = () => {
               <TableRow>
                 <TableCell
                   style={{
-                    fontFamily: "",
+                    fontFamily: "montserrat",
                     color: "#444444",
-                    fontSize: "12px",
-                    fontWeight: "bold",
+                    fontSize: "13px",
                     border: "1px solid #ccc",
                     textAlign: "center",
                     padding: "15px",
-                    wordWrap: "break-word",
+                    // wordWrap: "break-word",
                   }}
                 ></TableCell>
                 {options.map((option, i) => (
@@ -450,13 +453,12 @@ const GridQuestion = () => {
                     key={i}
                     align="center"
                     style={{
-                      fontFamily: "",
+                      fontFamily: "montserrat",
                       color: "#444444",
-                      fontSize: "12px",
-                      fontWeight: "bold",
+                      fontSize: "13px",
+                      lineHeight: "18px",
                       border: "1px solid #ccc",
                       textAlign: "center",
-                      padding: "15px",
                       wordWrap: "break-word",
                     }}
                   >
@@ -473,8 +475,7 @@ const GridQuestion = () => {
                       fontFamily: "",
                       borderBottom: "1px solid #ccc",
                       color: "#444444",
-                      fontWeight: "bold",
-                      fontSize: "12px",
+                      fontSize: "14px",
                       borderRight: "1px solid #ccc",
                       borderLeft: "1px solid #ccc",
                       textAlign: "center",
@@ -532,7 +533,7 @@ const GridQuestion = () => {
           </Table>
         </Box>
       </Paper>
-      {showMap ? <ChoroplethMap /> : <></>}
+      {showMap && <ChoroplethMap />}
     </Box>
   );
 };

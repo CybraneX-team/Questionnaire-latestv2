@@ -267,3 +267,166 @@
 .closeInfo-btn .span-mother2 span:nth-child(6) {
   transition: 0.7s;
 }
+
+
+.printer {
+  --border: #4d6f74;
+  --background: #fff;
+  cursor: pointer;
+  width: 32px;
+  top: 40px;
+  height: 18px;
+  position: relative;
+}
+
+.printer:before,
+.printer:after {
+  content: "";
+  position: absolute;
+  box-shadow: inset 0 0 0 2px var(--border);
+  background: var(--background);
+}
+
+.printer:before {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 14px;
+  border-radius: 3px;
+  z-index: 2;
+}
+
+.printer:after {
+  width: 26px;
+  height: 6px;
+  top: 0;
+  left: 3px;
+  border-radius: 3px 3px 0 0;
+}
+
+.printer .dot {
+  width: 24px;
+  height: 2px;
+  border-radius: 1px;
+  left: 4px;
+  bottom: 4px;
+  z-index: 4;
+  position: absolute;
+  background: var(--border);
+}
+
+.printer .dot:before,
+.printer .dot:after {
+  content: "";
+  position: absolute;
+  background: var(--border);
+  border-radius: 1px;
+  height: 2px;
+}
+
+.printer .dot:before {
+  width: 2px;
+  right: 0;
+  top: -5px;
+}
+
+.printer .dot:after {
+  width: 4px;
+  right: 3px;
+  top: -5px;
+}
+
+.printer .paper {
+  position: absolute;
+  z-index: 1;
+  width: 18px;
+  height: 20px;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 2px var(--border);
+  background: var(--background);
+  left: 7px;
+  bottom: 10px;
+  display: flex;
+  justify-content: center;
+  transform: perspective(40px) translateY(0) rotateX(4deg) translateZ(0);
+  -webkit-animation: paper 1.2s ease infinite;
+  animation: paper 1.2s ease infinite;
+  -webkit-animation-play-state: var(--state, running);
+  animation-play-state: var(--state, running);
+}
+
+.printer .paper .svg {
+  display: block;
+  width: 8px;
+  height: 8px;
+  margin-top: 4px;
+}
+
+.printer .output {
+  width: 32px;
+  height: 24px;
+  pointer-events: none;
+  top: 13px;
+  left: 0;
+  z-index: 3;
+  overflow: hidden;
+  position: absolute;
+}
+
+.printer .output .paper-out {
+  position: absolute;
+  z-index: 1;
+  width: 18px;
+  height: 20px;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 2px var(--border);
+  background: var(--background);
+  left: 7px;
+  bottom: 0;
+  transform: perspective(40px) rotateX(40deg) translateY(-12px) translateZ(6px);
+  -webkit-animation: paper-out 1.2s ease infinite;
+  animation: paper-out 1.2s ease infinite;
+  -webkit-animation-play-state: var(--state, running);
+  animation-play-state: var(--state, running);
+}
+
+.printer .output .paper-out:before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 4px;
+  right: 3px;
+  height: 2px;
+  border-radius: 1px;
+  opacity: 0.5;
+  background: var(--border);
+  box-shadow: 0 3px 0 var(--border), 0 6px 0 var(--border);
+}
+
+.printer:not(:hover) {
+  --state: paused;
+}
+
+@-webkit-keyframes paper {
+  50% {
+    transform: translateY(10px) translateZ(0);
+  }
+}
+
+@keyframes paper {
+  50% {
+    transform: translateY(10px) translateZ(0);
+  }
+}
+
+@-webkit-keyframes paper-out {
+  50% {
+    transform: perspective(40px) rotateX(30deg) translateY(-4px) translateZ(6px);
+  }
+}
+
+@keyframes paper-out {
+  50% {
+    transform: perspective(40px) rotateX(30deg) translateY(-4px) translateZ(6px);
+  }
+}

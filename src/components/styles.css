@@ -90,8 +90,8 @@
   border-radius: 80px;
   background: none;
   padding: 1rem;
-  margin-left: 10px;
-  padding-right: 3rem;
+  margin-left: 25px;
+  margin-top: 10px;
   font-size: 1rem;
   color: var(--color-active-input);
   transition: border var(--transition);
@@ -99,6 +99,8 @@
 
 .enter-label {
   position: absolute;
+  margin-left: 30px;
+  margin-top: 10px;
   left: 25px;
   color: var(--default-color);
   pointer-events: none;
@@ -133,6 +135,8 @@ input:valid~label {
   position: absolute;
   top: -1em;
   right: 80%;
+  margin-left: 30px;
+  margin-top: 10px;
   border-radius: 100%;
   transition: 300ms cubic-bezier(0.4, 0, 0.2, 1);
   transition-delay: 100ms;
@@ -206,6 +210,8 @@ input:valid~.btn-box:hover #svg-circle {
   position: absolute;
   top: 1em;
   right: 7%;
+  margin-left: 30px;
+  margin-top: 10px;
   opacity: 0;
   transform: rotate(-90deg) scale(.1);
   transition: var(--transition);
@@ -366,7 +372,7 @@ input:valid~.btn-box-x {
 .cssbuttons-io-button {
   padding: 0 3em;
   border-radius: 5px;
-  background: #fff;
+  background: transparent;
   color: #000;
   font-size: 1.25rem;
   font-weight: 500;
