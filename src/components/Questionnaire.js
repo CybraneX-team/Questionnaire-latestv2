@@ -440,17 +440,18 @@ const Questionnaire = () => {
     alignItems: "center",
     height: "100%",
     fontFamily: "Montserrat, sans-serif",
+    fontSize: "1.25vw",
   };
   const descStyles = {
     color: "#4D4556",
     fontWeight: "normal",
-    fontSize: "15px",
+    fontSize: "18px",
     marginBottom: "10px",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     height: "100%",
-    fontFamily: "DM Sans, sans-serif",
+    fontFamily: "Montserrat, sans-serif",
   };
 
   const progressBarContainerStyles = {
@@ -1102,14 +1103,13 @@ const Questionnaire = () => {
             }}
           >
             <Typography
-              variant="h4"
+              variant="h6"
               className="text-white text-center mb-8"
               style={{
                 fontFamily: "DM Sans, sans-serif",
                 marginTop: "50px",
                 color: "#2A2A2A",
                 fontWeight: "bold",
-                fontSize: "30px",
               }}
             >
               {currentSection}
@@ -1120,7 +1120,7 @@ const Questionnaire = () => {
                   ? ""
                   : questions[currentQuestion].itemTitle}
               </Typography>
-              <Typography variant="h4" style={{ ...descStyles }}>
+              <Typography variant="h1" style={{ ...descStyles }}>
                 {questions.length === 0
                   ? ""
                   : questions[currentQuestion].description}
