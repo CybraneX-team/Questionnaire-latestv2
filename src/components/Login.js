@@ -237,9 +237,6 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            {/* <LoginButton type="submit" variant="contained" fullWidth>
-              Log In
-            </LoginButton> */}
             <button className="login-button">
               <span>Login</span>
             </button>
