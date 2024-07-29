@@ -41,7 +41,7 @@ import {
   qTitleStore,
   mapStore,
 } from "../redux/store";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams,useParams, Link } from "react-router-dom";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "./styles.css";
@@ -200,7 +200,8 @@ const Questionnaire = () => {
   const handleSaveAndExit = () => {
     setOpenDialog(true);
   };
-
+  let [searchParamss] = useSearchParams()
+  
   const handleCloseDialog = () => {
     if (currentQuestion + 1 !== questions.length) {
       navigate("/");
@@ -211,7 +212,7 @@ const Questionnaire = () => {
       //   "_blank",
       //   "rel=noopener noreferrer"
       // );
-      navigate("/report");
+      navigate(`/formAfter?qid=${searchParamss.get("id")}`);
     }
   };
 
@@ -1536,6 +1537,7 @@ const Questionnaire = () => {
                 className="absolute w-full h-full bg-[#b1ffe8] rotate-45 group-hover:bottom-9 duration-500 bottom-12 right-0"
               ></span>
             </button> */}
+            <Link to="/formAfter"><button> go to form </button></Link>
             <button
               className="cssbuttons-io-button text-black text-xl font-semibold"
               onClick={handleSaveAndExit}

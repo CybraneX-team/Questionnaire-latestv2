@@ -118,3 +118,12 @@ export const saveAndNext = async (jwtToken, payload) => {
   });
   console.log(res.data);
 };
+
+export const sendReportData = async (reportData, jwtToken,)=>{
+  let res = await axios.post(`${url}/report`, reportData, {
+    headers: {
+      Authorization: `Bearer ${jwtToken}`
+    }
+  })
+  console.log(res.data)
+}

@@ -1,0 +1,46 @@
+.rSummary{
+    display: flex;
+}
+.textAreaClass{
+    margin: 20px;
+    border: 2px  dashed grey;
+    outline: none;
+    resize: both;
+    padding: 20px;
+}
+.analysisDiv{
+    margin: 20px;
+    border: 2px  dashed grey;
+    outline: none;
+    height:auto ;
+    width :63% ;
+    min-height: 850px;
+}
+.analysistextArea{
+    padding: 20px;
+    margin-top: 30px;
+    margin: 30px;
+    border: 1px solid black;
+}
+.textAreaClass:focus{
+    box-shadow: 1px 1px 20px grey;
+}
+.new{
+    margin-left: 47px;
+    
+}
+.textAreaClass::placeholder{
+    padding: 15px;
+    font-weight: 500 ;
+}
+#AnalysisContinued{
+    margin-left: 57px;
+}
+.flex{
+    display: flex;
+    margin: auto;
+}
+.mapchart{
+    padding: 8px;
+    margin: 5px 15px;
+}
