@@ -404,7 +404,7 @@ const GridQuestion = () => {
         variant="h4"
         gutterBottom
         style={{
-          fontFamily: "",
+          fontFamily: "montserrat",
           fontWeight: 500,
           fontSize: "24px",
           lineHeight: "28px",
@@ -415,7 +415,7 @@ const GridQuestion = () => {
       >
         {title}
       </Typography>
-      <Paper style={{ ...formStyles.paper, fontFamily: "" }}>
+      <Paper style={{ ...formStyles.paper, fontFamily: "montserrat" }}>
         {showMap && (
           <CountryDropdown
             selectedCountries={selectedCountries}
@@ -428,7 +428,7 @@ const GridQuestion = () => {
         <Box sx={{ overflowX: "auto" }}>
           <Table
             style={{
-              fontFamily: "",
+              fontFamily: "montserrat",
               borderCollapse: "collapse",
               width: "100%",
               tableLayout: "fixed",
@@ -472,7 +472,7 @@ const GridQuestion = () => {
                 <TableRow key={index}>
                   <TableCell
                     style={{
-                      fontFamily: "",
+                      fontFamily: "montserrat",
                       borderBottom: "1px solid #ccc",
                       color: "#444444",
                       fontSize: "14px",
@@ -490,7 +490,7 @@ const GridQuestion = () => {
                       key={`${column}-${i}`}
                       align="center"
                       style={{
-                        fontFamily: "",
+                        fontFamily: "montserrat",
                         borderBottom: "1px solid #ccc",
                         color: "#444444",
                         fontWeight: "bold",
