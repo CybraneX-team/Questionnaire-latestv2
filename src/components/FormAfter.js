@@ -162,18 +162,18 @@ const FormAfter = () => {
         datasets: [
           {
             label: "E1",
-            data: [{x : scoreData?.e_perf, y: scoreData?.e_conf, radius: scoreData?.e_weight}],
+            data: [{x : scoreData?.e_perf, y: scoreData?.e_conf, radius: scoreData?.e_weight *2}],
             backgroundColor : 'rgba(54,162,235,0.6)'
           },
           {
             label: "G1",
-            data: [{x : scoreData?.g_perf, y: scoreData?.g_conf, radius: scoreData?.g_weight}],
+            data: [{x : scoreData?.g_perf, y: scoreData?.g_conf, radius: scoreData?.g_weight *2}],
             backgroundColor : 'rgba(75, 192, 192, 0.6)'
           }
           ,
           {
             label: "S1",
-            data: [{x : scoreData?.e_perf, y: scoreData?.e_conf, radius: scoreData?.s_weight}],
+            data: [{x : scoreData?.e_perf, y: scoreData?.e_conf, radius: scoreData?.s_weight *2}],
             backgroundColor : '255, 159, 64, 0.6'
           }
           
@@ -245,9 +245,11 @@ const FormAfter = () => {
           localStorage.removeItem("reportData")
         }
          localStorage.setItem("reportData", JSON.stringify(reportData))
-         const bodyOfRequest = {...reportData, mapData: mapData,qid :searchParamss.get("qid")}
+         const bodyOfRequest = {...reportData, mapData: mapData, qid :searchParamss.get("qid")}
          await sendReportData(bodyOfRequest, localStorage.getItem("jwt"))
-         redirect("/reportpdf")
+        //  redirect("/reportpdf")
+        window.open('/reportpdf', '_blank')
+        window.location.href = "/home"
       }
   return (
     <div>
@@ -279,7 +281,7 @@ const FormAfter = () => {
         </div>
         </div>
 
-        <div className="rSummary">
+        <div  className="rSummary">
         <CustomLabel>Analysis  </CustomLabel>
         <div className='analysisDiv' id='AnalysisContinued' >   
             <textarea onChange={handleChange} type="text" name='Performance Analysis'  className='analysistextArea' rows={5} cols={55} placeholder="Performance Analysis" /><br />
@@ -289,7 +291,19 @@ const FormAfter = () => {
         <div style={{ marginTop: '10px' }}>
 
     </div>
-          <div  style={{ width: "25%", height: "50vh", zIndex: 1, position: "absolute", right: "42%", top: "90%", left: "47%"}}>
+          <div  style={{
+            width: "25%",
+            height: "50vh",
+            zIndex: 1,
+            position: "absolute",
+            top: "140%",
+            left: "55%",
+            transform: "translate(-50%, -90%)", 
+            maxWidth: "400px", 
+            minWidth: "200px", 
+            padding: "20px", 
+            boxSizing: "border-box" 
+           }}>
              <Bubble data={data} options={options} />    
           </div>
         </div>
