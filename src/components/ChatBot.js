@@ -90,7 +90,7 @@ const ChatBot = ({ isPdfOpen }) => {
 
       try {
         // First, clear existing documents
-        await axios.post(`${API_URL}/clear`);
+        //    await axios.post(`${API_URL}/clear`);
 
         // Then, upload new documents (you need to implement this endpoint in your Flask app)
         const response = await axios.post(`${API_URL}/upload`, formData, {
