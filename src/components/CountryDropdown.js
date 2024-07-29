@@ -105,48 +105,46 @@ const CountryDropdown = ({
       }}
       sx={{ width: "100%", marginBottom: 2 }}
     >
-      {formatCountryData().map(({ region, countries }) => (
-        <React.Fragment key={region}>
-          <ListItemButton onClick={() => toggleRegion(region)}>
-            <ListItemIcon>
-              <Checkbox
-                edge="start"
-                checked={isRegionSelected(countries)}
-                indeterminate={
-                  selectedCountries.some((country) =>
-                    countries.includes(country)
-                  ) && !isRegionSelected(countries)
-                }
-                onClick={(event) => {
-                  event.stopPropagation();
-                  handleRegionSelect(region, countries);
-                }}
-              />
-            </ListItemIcon>
-            <ListItemText primary={region} />
-            {expandedRegions[region] ? <ExpandLess /> : <ExpandMore />}
-          </ListItemButton>
-          <Collapse in={expandedRegions[region]} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              {countries.map((country) => (
-                <ListItemButton
-                  key={country}
-                  sx={{ pl: 4 }}
-                  onClick={(event) => handleCountrySelect(event, country)}
-                >
-                  <ListItemIcon>
-                    <Checkbox
-                      edge="start"
-                      checked={selectedCountries.includes(country)}
-                    />
-                  </ListItemIcon>
-                  <ListItemText primary={country} />
-                </ListItemButton>
-              ))}
-            </List>
-          </Collapse>
-        </React.Fragment>
-      ))}
+      {formatCountryData().flatMap(({ region, countries }) => [
+        <ListItemButton key={`${region}-button`} onClick={() => toggleRegion(region)}>
+          <ListItemIcon>
+            <Checkbox
+              edge="start"
+              checked={isRegionSelected(countries)}
+              indeterminate={
+                selectedCountries.some((country) =>
+                  countries.includes(country)
+                ) && !isRegionSelected(countries)
+              }
+              onClick={(event) => {
+                event.stopPropagation();
+                handleRegionSelect(region, countries);
+              }}
+            />
+          </ListItemIcon>
+          <ListItemText primary={region} />
+          {expandedRegions[region] ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton>,
+        <Collapse key={`${region}-collapse`} in={expandedRegions[region]} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            {countries.map((country) => (
+              <ListItemButton
+                key={country}
+                sx={{ pl: 4 }}
+                onClick={(event) => handleCountrySelect(event, country)}
+              >
+                <ListItemIcon>
+                  <Checkbox
+                    edge="start"
+                    checked={selectedCountries.includes(country)}
+                  />
+                </ListItemIcon>
+                <ListItemText primary={country} />
+              </ListItemButton>
+            ))}
+          </List>
+        </Collapse>
+      ])}
     </Select>
   );
 };

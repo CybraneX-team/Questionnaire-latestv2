@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import { Chart, registerables } from "chart.js";
 import {
   ChoroplethController,
@@ -21,6 +21,7 @@ Chart.register(
 
 function ChoroplethMap() {
   const chartRef = useRef(null);
+  const chartInstance = useRef(null);
   const [map, setMap] = useState(false);
   const [question, setQuestion] = useState("");
 
@@ -28,9 +29,10 @@ function ChoroplethMap() {
     const unsubscribe = qTitleStore.subscribe(() => {
       setQuestion(qTitleStore.getState());
     });
-  }, []);
+    return () => unsubscribe();
+  }, []); // Empty dependency array if this should only run once
 
-  const updateState = (id, data) => {
+  const updateState = useCallback((id, data) => {
     console.log("Chart data:", data);
     mapStore.dispatch({
       type: "UPDATE",
@@ -39,7 +41,7 @@ function ChoroplethMap() {
         data,
       },
     });
-  };
+  }, []);
 
   // const [chart, setChart] = useState(null);
 
@@ -274,7 +276,7 @@ function ChoroplethMap() {
   return <canvas ref={chartRef} />;
 }
 
-export default ChoroplethMap;
+export default React.memo(ChoroplethMap);
 
 // import React, { useRef, useEffect, useState } from "react";
 // import { Chart, registerables } from "chart.js";
