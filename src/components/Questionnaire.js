@@ -1537,7 +1537,6 @@ const Questionnaire = () => {
                 className="absolute w-full h-full bg-[#b1ffe8] rotate-45 group-hover:bottom-9 duration-500 bottom-12 right-0"
               ></span>
             </button> */}
-            <Link to="/formAfter"><button> go to form </button></Link>
             <button
               className="cssbuttons-io-button text-black text-xl font-semibold"
               onClick={handleSaveAndExit}
