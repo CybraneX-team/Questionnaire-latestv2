@@ -30,7 +30,7 @@ import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
 import ScaleQuestion from "./ScaleQuestion";
 import TextQuestion from "./TextQuestion";
 import GridQuestion from "./GridQuestion";
-import AssistantIcon from '@mui/icons-material/Assistant';
+import AssistantIcon from "@mui/icons-material/Assistant";
 import { getQByQID, saveAndNext, saveAnswer } from "../api";
 import {
   jwtStore,
@@ -41,7 +41,12 @@ import {
   qTitleStore,
   mapStore,
 } from "../redux/store";
-import { useNavigate, useSearchParams,useParams, Link } from "react-router-dom";
+import {
+  useNavigate,
+  useSearchParams,
+  useParams,
+  Link,
+} from "react-router-dom";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "./styles.css";
@@ -105,13 +110,6 @@ const Questionnaire = () => {
 
   const [isReferenceTableInView, setIsReferenceTableInView] = useState(true);
   const referenceTableRef = useRef(null);
-
-  //Debugging
-  useEffect(() => {
-    const unsubscribe = mapStore.subscribe(() => {
-      console.log(mapStore.getState());
-    });
-  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -200,8 +198,8 @@ const Questionnaire = () => {
   const handleSaveAndExit = () => {
     setOpenDialog(true);
   };
-  let [searchParamss] = useSearchParams()
-  
+  let [searchParamss] = useSearchParams();
+
   const handleCloseDialog = () => {
     if (currentQuestion + 1 !== questions.length) {
       navigate("/");
@@ -587,8 +585,10 @@ const Questionnaire = () => {
   }, [jwt]);
 
   useEffect(() => {
-    console.log("Questions: ", questions);
-  }, [questions]);
+    const unsubscribe = mapStore.subscribe(() => {
+      console.log(mapStore.getState());
+    });
+  });
 
   answerStore.subscribe(() => {
     setAnswerObject(answerStore.getState());
@@ -1130,8 +1130,8 @@ const Questionnaire = () => {
                   transition: "all 1s ease",
                   maxWidth:
                     questions.length !== 0 &&
-                      (questions[currentQuestion].type === "GRID" ||
-                        questions[currentQuestion].type === "CHECKBOX_GRID")
+                    (questions[currentQuestion].type === "GRID" ||
+                      questions[currentQuestion].type === "CHECKBOX_GRID")
                       ? "90vw"
                       : "100%",
                 }}
@@ -1142,20 +1142,20 @@ const Questionnaire = () => {
                     {
                       options:
                         questions[currentQuestion].type === "MULTIPLE_CHOICE" ||
-                          questions[currentQuestion].type === "CHECKBOX"
+                        questions[currentQuestion].type === "CHECKBOX"
                           ? Object.keys(
-                            JSON.parse(questions[currentQuestion].choices)
-                          )
+                              JSON.parse(questions[currentQuestion].choices)
+                            )
                           : [],
                       minLabel:
                         questions[currentQuestion].type === "SCALE"
                           ? JSON.parse(questions[currentQuestion].bounds)[0]
-                            .label
+                              .label
                           : "",
                       maxLabel:
                         questions[currentQuestion].type === "SCALE"
                           ? JSON.parse(questions[currentQuestion].bounds)[1]
-                            .label
+                              .label
                           : "",
                       optionStyles: optionStyles,
                     }
@@ -1246,9 +1246,7 @@ const Questionnaire = () => {
                   }
                 >
                   <svg className="svgIcon" viewBox="0 0 384 512">
-                    <path
-                      d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"
-                    ></path>
+                    <path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"></path>
                   </svg>
                 </button>
               )}
@@ -1438,7 +1436,9 @@ const Questionnaire = () => {
                   ></path>
                 </svg>
               </div>
-              <p className="translate-x-2" style={{ fontFamily: "Montserrat" }}>Go Back</p>
+              <p className="translate-x-2" style={{ fontFamily: "Montserrat" }}>
+                Go Back
+              </p>
             </button>
             <div className="flex bg-[#e5fffc] w-fit px-0 py-0 shadow-box-up rounded-2xl dark:bg-box-dark dark:shadow-box-dark-out">
               <div className="dark:shadow-buttons-box-dark rounded-2xl w-full px-1.5 py-1.5 md:px-3 md:py-3">

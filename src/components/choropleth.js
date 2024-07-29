@@ -32,14 +32,25 @@ function ChoroplethMap() {
     return () => unsubscribe();
   }, []); // Empty dependency array if this should only run once
 
-  const updateState = useCallback((id, data) => {
-    console.log("Chart data:", data);
-    mapStore.dispatch({
-      type: "UPDATE",
-      payload: {
-        id: qTitleStore.getState(),
-        data,
-      },
+  const updateState = (id, data) => {
+    // mapStore.dispatch({
+    //   type: "UPDATE",
+    //   payload: {
+    //     id: qTitleStore.getState(),
+    //     data,
+    //   },
+    // });
+  };
+
+  useEffect(() => {
+    const unsubscribe = answerStore.subscribe(() => {
+      mapStore.dispatch({
+        type: "UPDATE",
+        payload: {
+          id: qTitleStore.getState(),
+          data: answerStore.getState(),
+        },
+      });
     });
   }, []);
 
@@ -95,6 +106,7 @@ function ChoroplethMap() {
         const unsubscribe = answerStore.subscribe(() => {
           const state = answerStore.getState();
           if (chart) {
+            console.log(state);
             for (let obj in state) {
               if (obj === "NAC") {
                 for (let i = 0; i < NAC.length; i++) {
@@ -109,6 +121,8 @@ function ChoroplethMap() {
                       chart.data.datasets[0].data[index].value = 15;
                     } else if (option == "Dominant") {
                       chart.data.datasets[0].data[index].value = 20;
+                    } else {
+                      chart.data.datasets[0].data[index].value = 10;
                     }
                   }
                 }
@@ -127,6 +141,8 @@ function ChoroplethMap() {
                       chart.data.datasets[0].data[index].value = 15;
                     } else if (option == "Dominant") {
                       chart.data.datasets[0].data[index].value = 20;
+                    } else {
+                      chart.data.datasets[0].data[index].value = 10;
                     }
                   }
                 }
@@ -145,6 +161,8 @@ function ChoroplethMap() {
                       chart.data.datasets[0].data[index].value = 15;
                     } else if (option == "Dominant") {
                       chart.data.datasets[0].data[index].value = 20;
+                    } else {
+                      chart.data.datasets[0].data[index].value = 10;
                     }
                   }
                 }
@@ -163,6 +181,8 @@ function ChoroplethMap() {
                       chart.data.datasets[0].data[index].value = 15;
                     } else if (option == "Dominant") {
                       chart.data.datasets[0].data[index].value = 20;
+                    } else {
+                      chart.data.datasets[0].data[index].value = 10;
                     }
                   }
                 }
@@ -181,6 +201,8 @@ function ChoroplethMap() {
                       chart.data.datasets[0].data[index].value = 15;
                     } else if (option == "Dominant") {
                       chart.data.datasets[0].data[index].value = 20;
+                    } else {
+                      chart.data.datasets[0].data[index].value = 10;
                     }
                   }
                 }
@@ -199,6 +221,8 @@ function ChoroplethMap() {
                       chart.data.datasets[0].data[index].value = 15;
                     } else if (option == "Dominant") {
                       chart.data.datasets[0].data[index].value = 20;
+                    } else {
+                      chart.data.datasets[0].data[index].value = 10;
                     }
                   }
                 }
@@ -217,6 +241,8 @@ function ChoroplethMap() {
                       chart.data.datasets[0].data[index].value = 15;
                     } else if (option == "Dominant") {
                       chart.data.datasets[0].data[index].value = 20;
+                    } else {
+                      chart.data.datasets[0].data[index].value = 10;
                     }
                   }
                 }
@@ -235,6 +261,8 @@ function ChoroplethMap() {
                       chart.data.datasets[0].data[index].value = 15;
                     } else if (option == "Dominant") {
                       chart.data.datasets[0].data[index].value = 20;
+                    } else {
+                      chart.data.datasets[0].data[index].value = 10;
                     }
                   }
                 }
@@ -253,6 +281,8 @@ function ChoroplethMap() {
                       chart.data.datasets[0].data[index].value = 15;
                     } else if (option == "Dominant") {
                       chart.data.datasets[0].data[index].value = 20;
+                    } else {
+                      chart.data.datasets[0].data[index].value = 10;
                     }
                   }
                 }

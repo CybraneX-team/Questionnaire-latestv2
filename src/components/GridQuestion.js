@@ -396,7 +396,7 @@ const GridQuestion = () => {
         },
       });
     }
-  }, [qTitleStore.getState()]);
+  }, [title]);
 
   return (
     <Box sx={formStyles.container}>

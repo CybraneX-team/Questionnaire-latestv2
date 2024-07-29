@@ -48,4 +48,5 @@ export const formatTimeStamp = (timestamp) => {
 export const mapQuestions = [
   "Issuer's cost breakdown by geography",
   "Issuer's revenue breakdown by geography",
+  "What is the issuer's controlling jurisdiction?",
 ];

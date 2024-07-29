@@ -16,6 +16,7 @@ import {
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import * as CountryData from "./countries";
+import { gridStore } from "../redux/store";
 
 const formatCountryData = () => {
   return Object.entries(CountryData).map(([region, countries]) => ({
@@ -46,6 +47,13 @@ const CountryDropdown = ({
   };
 
   const handleRegionSelect = (region, countries) => {
+    gridStore.dispatch({
+      type: "grid",
+      payload: {
+        options: gridStore.getState().options,
+        columns: [region],
+      },
+    });
     setSelectedRegions([...selectedRegions, region]);
     setSelectedCountries((prev) => {
       const isRegionFullySelected = countries.every((country) =>
@@ -106,7 +114,10 @@ const CountryDropdown = ({
       sx={{ width: "100%", marginBottom: 2 }}
     >
       {formatCountryData().flatMap(({ region, countries }) => [
-        <ListItemButton key={`${region}-button`} onClick={() => toggleRegion(region)}>
+        <ListItemButton
+          key={`${region}-button`}
+          onClick={() => toggleRegion(region)}
+        >
           <ListItemIcon>
             <Checkbox
               edge="start"
@@ -125,7 +136,12 @@ const CountryDropdown = ({
           <ListItemText primary={region} />
           {expandedRegions[region] ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>,
-        <Collapse key={`${region}-collapse`} in={expandedRegions[region]} timeout="auto" unmountOnExit>
+        <Collapse
+          key={`${region}-collapse`}
+          in={expandedRegions[region]}
+          timeout="auto"
+          unmountOnExit
+        >
           <List component="div" disablePadding>
             {countries.map((country) => (
               <ListItemButton
@@ -143,7 +159,7 @@ const CountryDropdown = ({
               </ListItemButton>
             ))}
           </List>
-        </Collapse>
+        </Collapse>,
       ])}
     </Select>
   );

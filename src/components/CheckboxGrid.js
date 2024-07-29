@@ -12,9 +12,11 @@ import {
   Paper,
   Box,
 } from "@mui/material";
-import { answerStore, gridStore, solnStore } from "../redux/store";
+import { answerStore, gridStore, qTitleStore, solnStore } from "../redux/store";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import ChoroplethMap from "./choropleth";
+import { mapQuestions } from "../utils/utils";
 
 const formStyles = {
   container: {
@@ -89,6 +91,15 @@ const CheckboxGridQuestion = () => {
   const [title, setTitle] = useState("");
   const [options, setOptions] = useState([]);
   const [columns, setColumns] = useState([]);
+  const [showMap, setShowMap] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = qTitleStore.subscribe(() => {
+      if (mapQuestions.includes(qTitleStore.getState())) {
+        setShowMap(true);
+      }
+    });
+  });
 
   const handleOptionChange = (item, option) => {
     setSelectedOption((prevSelectedOption) => {
@@ -207,6 +218,7 @@ const CheckboxGridQuestion = () => {
           </Table>
         </Box>
       </Paper>
+      {showMap ? <ChoroplethMap /> : <></>}
     </Box>
   );
 };

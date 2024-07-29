@@ -40,15 +40,16 @@ const qTitleReducer = (state, action) => {
   return state;
 };
 
-const mapDataReducer = (state = [], action) => {
+const mapDataReducer = (state = {}, action) => {
   switch (action.type) {
     case "ADD":
-      return [...state, action.payload];
+      return { ...state, [action.payload.id]: action.payload.data };
 
     case "UPDATE":
-      return state.map((item) =>
-        item.id === action.payload.id ? action.payload : item
-      );
+      return {
+        ...state,
+        [action.payload.id]: action.payload.data,
+      };
 
     default:
       return state;
