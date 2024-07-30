@@ -379,11 +379,13 @@ const GridQuestion = () => {
     const unsubscribe = qTitleStore.subscribe(() => {
       const currentQuestion = qTitleStore.getState();
       setShowMap(mapQuestions.includes(currentQuestion));
+      setSelectedCountries([]);
+      setSelectedRegions([]);
     });
 
     return () => unsubscribe();
 
-  });
+  }, []);
 
   useEffect(() => {
     let id = qTitleStore.getState();

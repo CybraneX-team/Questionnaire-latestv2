@@ -29,9 +29,7 @@ os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
 os.makedirs("Docs", exist_ok=True)
 
 app = Flask(__name__, static_folder='build', static_url_path='')
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
-
-# Initialize LLM
+CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "https://csip-eu-pythonanywhere.netlify.app"]}})# Initialize LLM
 llm = ChatGroq(groq_api_key=groq_api_key, model_name="Llama3-8b-8192")
 
 # Initialize global state
