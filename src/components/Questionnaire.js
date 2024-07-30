@@ -444,14 +444,13 @@ const Questionnaire = () => {
   };
   const descStyles = {
     color: "#4D4556",
-    fontWeight: "normal",
     fontSize: "18px",
     marginBottom: "10px",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     height: "100%",
-    fontFamily: "Montserrat, sans-serif",
+    fontFamily: "montserrat, sans-serif",
   };
 
   const progressBarContainerStyles = {
@@ -1130,8 +1129,8 @@ const Questionnaire = () => {
                   transition: "all 1s ease",
                   maxWidth:
                     questions.length !== 0 &&
-                    (questions[currentQuestion].type === "GRID" ||
-                      questions[currentQuestion].type === "CHECKBOX_GRID")
+                      (questions[currentQuestion].type === "GRID" ||
+                        questions[currentQuestion].type === "CHECKBOX_GRID")
                       ? "90vw"
                       : "100%",
                 }}
@@ -1142,20 +1141,20 @@ const Questionnaire = () => {
                     {
                       options:
                         questions[currentQuestion].type === "MULTIPLE_CHOICE" ||
-                        questions[currentQuestion].type === "CHECKBOX"
+                          questions[currentQuestion].type === "CHECKBOX"
                           ? Object.keys(
-                              JSON.parse(questions[currentQuestion].choices)
-                            )
+                            JSON.parse(questions[currentQuestion].choices)
+                          )
                           : [],
                       minLabel:
                         questions[currentQuestion].type === "SCALE"
                           ? JSON.parse(questions[currentQuestion].bounds)[0]
-                              .label
+                            .label
                           : "",
                       maxLabel:
                         questions[currentQuestion].type === "SCALE"
                           ? JSON.parse(questions[currentQuestion].bounds)[1]
-                              .label
+                            .label
                           : "",
                       optionStyles: optionStyles,
                     }
@@ -1440,17 +1439,30 @@ const Questionnaire = () => {
                 Go Back
               </p>
             </button>
-            <div className="flex bg-[#e5fffc] w-fit px-0 py-0 shadow-box-up rounded-2xl dark:bg-box-dark dark:shadow-box-dark-out">
+            <div className="flex flex-row bg-[#e5fffc] w-fit px-0 py-0 shadow-box-up rounded-2xl dark:bg-box-dark dark:shadow-box-dark-out">
               <div className="dark:shadow-buttons-box-dark rounded-2xl w-full px-1.5 py-1.5 md:px-3 md:py-3">
-                <Tooltip title="Open Search">
+                {/* <Tooltip title="Open Search">
                   <a
                     className="cursor-pointer text-light-blue-light hover:text-black dark:text-gray-400 border-2 inline-flex items-center mr-4 last-of-type:mr-0 p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed  hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:border-2 active:shadow-button-flat-pressed font-medium rounded-full text-sm text-center dark:bg-button-curved-default-dark dark:shadow-button-curved-default-dark dark:hover:bg-button-curved-pressed-dark dark:hover:shadow-button-curved-pressed-dark dark:active:bg-button-curved-pressed-dark dark:active:shadow-button-curved-pressed-dark dark:focus:bg-button-curved-pressed-dark dark:focus:shadow-button-curved-pressed-dark dark:border-0"
                     onClick={toggleSearchBar}
                   >
                     <SearchIcon className="w-5 h-5" />
                   </a>
-                </Tooltip>
-                <Tooltip title="Upload PDF">
+                </Tooltip> */}
+                <section className=" inline-flex justify-center items-center">
+                  <button
+                    onClick={toggleSearchBar}
+                    className="flex group justify-center p-2 rounded-md drop-shadow-xl bg-gradient-to-r  text-black font-semibold hover:translate-y-3 hover:rounded-[50%] transition-all duration-500"
+                  >
+                    <SearchIcon className="w-5 h-5" />
+                    <span
+                      className="absolute text-xs opacity-0 group-hover:opacity-100 group-hover:text-gray-400 group-hover:text-xs group-hover:-translate-y-6 duration-700"
+                    >
+                      Search
+                    </span>
+                  </button>
+                </section>
+                {/* <Tooltip title="AI Assistant">
                   <a
                     className="cursor-pointer text-light-blue-light hover:text-black dark:text-gray-400 border-2 inline-flex items-center mr-4 last-of-type:mr-0 p-2.5 border-transparent bg-light-secondary shadow-button-flat-nopressed hover:shadow-button-flat-pressed focus:opacity-100 focus:outline-none active:border-2 active:shadow-button-flat-pressed font-medium rounded-full text-sm text-center dark:bg-button-curved-default-dark dark:shadow-button-curved-default-dark dark:hover:bg-button-curved-pressed-dark dark:hover:shadow-button-curved-pressed-dark dark:active:bg-button-curved-pressed-dark dark:active:shadow-button-curved-pressed-dark dark:focus:bg-button-curved-pressed-dark dark:focus:shadow-button-curved-pressed-dark dark:border-0"
                     onClick={() => {
@@ -1459,7 +1471,22 @@ const Questionnaire = () => {
                   >
                     <AssistantIcon className="w-5 h-5" />
                   </a>
-                </Tooltip>
+                </Tooltip> */}
+                <section className=" inline-flex justify-center items-center">
+                  <button
+                    onClick={() => {
+                      togglePdfUpload();
+                    }}
+                    className="flex group justify-center p-2 rounded-md drop-shadow-xl bg-gradient-to-r  text-black font-semibold hover:translate-y-3 hover:rounded-[50%] transition-all duration-500"
+                  >
+                    <AssistantIcon className="w-5 h-5" />
+                    <span
+                      className="absolute text-xs opacity-0 group-hover:opacity-100 group-hover:text-gray-400 group-hover:text-xs group-hover:-translate-y-6 duration-700"
+                    >
+                      Assistant
+                    </span>
+                  </button>
+                </section>
               </div>
             </div>
           </div>
