@@ -50,6 +50,7 @@ const MultipleChoiceQuestion = ({ question, options }) => {
                 backgroundColor: "#B1FFE8",
                 borderRadius: "0.5rem",
                 padding: "1rem",
+                fontFamily: "Montserrat",
                 marginBottom: "0.5rem",
                 display: "flex",
                 alignItems: "center",
