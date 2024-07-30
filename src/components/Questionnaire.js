@@ -107,7 +107,7 @@ const Questionnaire = () => {
   const API_KEY = "AIzaSyCtqidSRsI2NhNP-vQrx1Ixq0gQHcH_eUM";
   const CX = "60cbe814015d24004";
   const [showCommonComponent, setShowCommonComponent] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [isReferenceTableInView, setIsReferenceTableInView] = useState(true);
   const referenceTableRef = useRef(null);
 
@@ -157,6 +157,7 @@ const Questionnaire = () => {
   }
 
   const handleNext = () => {
+    setIsLoading(true);
     saveCurrentReferences();
     save({
       answer_id: currentQID,
@@ -595,12 +596,6 @@ const Questionnaire = () => {
 
   const save = async (payload) => {
     let res = await saveAnswer(searchParams.get("id"), jwt, payload);
-    // let res2 = await saveAndNext(jwt, {
-    //   position: currentQuestion,
-    //   qid: searchParams.get("id"),
-    //   data: answerObject,
-    // });
-    // console.log(res2);
     if (res.status === "ok") {
       gridStore.dispatch({
         type: "grid",
@@ -626,8 +621,10 @@ const Questionnaire = () => {
         setCompletedSections(completedSections + 1);
         setOpenDialog(true);
       }
+      setIsLoading(false);
     } else {
       handleError("This field is required");
+      setIsLoading(false);
     }
   };
 
@@ -1277,22 +1274,27 @@ const Questionnaire = () => {
                   style={{
                     marginBottom: "30px",
                   }}
+                  disabled={isLoading}
                 >
                   <span className="label">Next</span>
-                  <span className="icon">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      width="24"
-                      height="24"
-                    >
-                      <path fill="none" d="M0 0h24v24H0z"></path>
-                      <path
-                        fill="currentColor"
-                        d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
-                      ></path>
-                    </svg>
-                  </span>
+                  {isLoading ? (
+                    <span className="loader"></span>
+                  ) : (
+                    <span className="icon">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        width="24"
+                        height="24"
+                      >
+                        <path fill="none" d="M0 0h24v24H0z"></path>
+                        <path
+                          fill="currentColor"
+                          d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+                        ></path>
+                      </svg>
+                    </span>
+                  )}
                 </button>
               ) : (
                 <Button
