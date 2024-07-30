@@ -17,6 +17,7 @@ import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import ChoroplethMap from "./choropleth";
 import { mapQuestions } from "../utils/utils";
+import { fontFamily } from "@mui/system";
 
 const formStyles = {
   container: {
@@ -47,8 +48,8 @@ const formStyles = {
   tableHeader: {
     fontFamily: "DM Sans",
     color: "#444444",
-    fontSize: "12px",
-    fontWeight: "bold",
+    fontSize: "14px",
+    fontFamily: "Montserrat",
     border: "1px solid #ccc",
     textAlign: "center",
     padding: "15px",
@@ -57,9 +58,9 @@ const formStyles = {
   tableCell: {
     borderBottom: "1px solid #ccc",
     color: "#444444",
-    fontWeight: "bold",
     fontFamily: "DM Sans",
-    fontSize: "12px",
+    fontSize: "13px",
+    fontFamily: "Montserrat",
     borderRight: "1px solid #ccc",
     borderLeft: "1px solid #ccc",
     textAlign: "center",
