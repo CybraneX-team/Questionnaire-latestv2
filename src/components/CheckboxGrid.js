@@ -12,7 +12,13 @@ import {
   Paper,
   Box,
 } from "@mui/material";
-import { answerStore, gridStore, qTitleStore, solnStore } from "../redux/store";
+import {
+  answerStore,
+  gridStore,
+  mapStore,
+  qTitleStore,
+  solnStore,
+} from "../redux/store";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import ChoroplethMap from "./choropleth";
@@ -150,6 +156,20 @@ const CheckboxGridQuestion = () => {
       unsubscribeGrid();
     };
   }, []);
+
+  useEffect(() => {
+    if (showMap) {
+      const unsubscribe = answerStore.subscribe(() => {
+        mapStore.dispatch({
+          type: "UPDATE",
+          payload: {
+            id: mapQuestions[2],
+            data: answerStore.getState(),
+          },
+        });
+      });
+    }
+  }, [showMap]);
 
   return (
     <Box sx={formStyles.container}>

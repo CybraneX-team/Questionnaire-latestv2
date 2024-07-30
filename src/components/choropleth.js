@@ -23,7 +23,7 @@ function ChoroplethMap() {
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
   const [map, setMap] = useState(false);
-  const [question, setQuestion] = useState("");
+  const [question, setQuestion] = useState();
 
   useEffect(() => {
     const unsubscribe = qTitleStore.subscribe(() => {
@@ -41,18 +41,6 @@ function ChoroplethMap() {
     //   },
     // });
   };
-
-  useEffect(() => {
-    const unsubscribe = answerStore.subscribe(() => {
-      mapStore.dispatch({
-        type: "UPDATE",
-        payload: {
-          id: qTitleStore.getState(),
-          data: answerStore.getState(),
-        },
-      });
-    });
-  }, []);
 
   // const [chart, setChart] = useState(null);
 

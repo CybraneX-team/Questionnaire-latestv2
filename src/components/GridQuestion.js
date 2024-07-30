@@ -315,6 +315,18 @@ const GridQuestion = () => {
     }));
   };
 
+  useEffect(() => {
+    if (showMap) {
+      mapStore.dispatch({
+        type: "UPDATE",
+        payload: {
+          id: qTitleStore.getState(),
+          data: answerStore.getState(),
+        },
+      });
+    }
+  }, [showMap, selectedOption]);
+
   const handleOptionChange = (item, selected) => {
     setSelectedOption({ ...selectedOption, [item.name]: selected });
     answerStore.dispatch({
@@ -371,11 +383,6 @@ const GridQuestion = () => {
   }, [options]);
 
   useEffect(() => {
-    solnStore.subscribe(() => {
-      let state = solnStore.getState();
-      setSelectedOption({ ...selectedOption, ...state });
-    });
-
     const unsubscribe = qTitleStore.subscribe(() => {
       const currentQuestion = qTitleStore.getState();
       setShowMap(mapQuestions.includes(currentQuestion));
@@ -384,21 +391,7 @@ const GridQuestion = () => {
     });
 
     return () => unsubscribe();
-
   }, []);
-
-  useEffect(() => {
-    let id = qTitleStore.getState();
-    if (id != "Geographical footprint") {
-      mapStore.dispatch({
-        type: "ADD",
-        payload: {
-          id,
-          data: {},
-        },
-      });
-    }
-  }, [title]);
 
   return (
     <Box sx={formStyles.container}>
