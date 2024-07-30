@@ -18,7 +18,8 @@ import { useNavigate } from "react-router-dom";
 import { getQList, getNewQ } from "../api";
 import { qStore, jwtStore } from "../redux/store";
 import { formatTimeStamp } from "../utils/utils";
-import PrintIcon from '@mui/icons-material/Print';
+import axios from "axios";
+import PrintIcon from "@mui/icons-material/Print";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -42,7 +43,6 @@ const Dashboard = () => {
       localStorage.setItem("collapse", "true");
     }
   }, [collapseOpen]);
-
 
   useEffect(() => {
     if (localStorage.getItem("collapse") && !collapseOpen) {
@@ -250,6 +250,24 @@ const Dashboard = () => {
     }
   }, []);
 
+  const fetchReport = (qid) => {
+    try {
+      const res = axios.get(
+        "https://csip.eu.pythonanywhere.com/report",
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        },
+        {
+          qid,
+        }
+      );
+      console.log(res);
+    } catch (e) {
+      console.log("Error:", e);
+    }
+  };
 
   return (
     <div style={{ padding: "32px", fontFamily: "Montserrat" }}>
@@ -277,7 +295,6 @@ const Dashboard = () => {
               <span>S</span>
               <span>E</span>
             </span>
-
           </>
         ) : (
           <>
@@ -311,7 +328,11 @@ const Dashboard = () => {
         >
           Introduction to SIMs
         </DashboardTitle>
-        <Typography variant="subtitle1" className=" pl-2 pr-48 pb-5" style={{ fontFamily: "Hind" }}>
+        <Typography
+          variant="subtitle1"
+          className=" pl-2 pr-48 pb-5"
+          style={{ fontFamily: "Hind" }}
+        >
           The questions here are tuned for larger organisations in the private
           sector, or a significant project run within a for-profit environment.
           Depending on your answers, you will typically be asked 50-80
@@ -371,48 +392,51 @@ const Dashboard = () => {
             gap: "20px",
           }}
         >
-          {questionnare.map((card, index) => (
-            <CustomCard key={index}>
-              <CardContent style={{ flex: "1 0 auto" }}>
-                <Typography
-                  variant="h6"
-                  gutterBottom
-                  style={{ color: "#35483F" }}
-                >
-                  {card.data[0].answers}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  style={{ color: "#35483F" }}
-                >
-                  {formatTimeStamp(card.utctimestamp)}
-                </Typography>
-                <Typography
-                  variant="body2"
+          {questionnare.map((card, index) => {
+            console.log("Card position", card.position);
+            console.log("Card length", card.data.length);
+            return (
+              <CustomCard key={index}>
+                <CardContent style={{ flex: "1 0 auto" }}>
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    style={{ color: "#35483F" }}
+                  >
+                    {card.data[0].answers}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    style={{ color: "#35483F" }}
+                  >
+                    {formatTimeStamp(card.utctimestamp)}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    style={{
+                      marginTop: "8px",
+                      marginBottom: "8px",
+                      color: "#35483F",
+                    }}
+                  >
+                    {(card.position / card.data.length).toFixed(1) * 100}%
+                    Completed
+                  </Typography>
+                  <CustomLinearProgress
+                    variant="determinate"
+                    value={(card.position / card.data.length).toFixed(1) * 100}
+                    style={{ marginBottom: "16px" }}
+                  />
+                </CardContent>
+                <CardContent
                   style={{
-                    marginTop: "8px",
-                    marginBottom: "8px",
-                    color: "#35483F",
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    gap: "8px",
                   }}
                 >
-                  {(card.position / card.data.length).toFixed(1) * 100}%
-                  Completed
-                </Typography>
-                <CustomLinearProgress
-                  variant="determinate"
-                  value={(card.position / card.data.length).toFixed(1) * 100}
-                  style={{ marginBottom: "16px" }}
-                />
-              </CardContent>
-              <CardContent
-                style={{
-                  display: "flex",
-                  justifyContent: "flex-start",
-                  gap: "8px",
-                }}
-              >
-                {/* <CustomButton
+                  {/* <CustomButton
                   size="small"
                   style={{
                     marginLeft: "40px",
@@ -434,41 +458,45 @@ const Dashboard = () => {
                     style={{ marginLeft: "5px", width: "15px", height: "15px" }}
                   />
                 </CustomButton> */}
-                <CustomButton
-                  size="small"
-                  style={{
-                    marginLeft: "40px",
-                    bottom: "-25px",
-                    fontFamily: "Montserrat",
-                  }}
-                  onClick={() => {
-                    qStore.dispatch({
-                      type: "questionnaire",
-                      payload: card,
-                    });
-                    navigate(`/questionnare?id=${card.qid}`);
-                  }}
-                >
-                  Continue
-                  <div className="icon">
-                    <svg
-                      height="24"
-                      width="24"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path d="M0 0h24v24H0z" fill="none"></path>
-                      <path
-                        d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
-                        fill="currentColor"
-                      ></path>
-                    </svg>
-                  </div>
-                </CustomButton>
-                <CustomIconButton size="small" style={{ bottom: "-25px" }}>
-                  <PrintIcon />
-                </CustomIconButton>
-                {/* <div className="printer">
+                  <CustomButton
+                    size="small"
+                    style={{
+                      marginLeft: "40px",
+                      bottom: "-25px",
+                      fontFamily: "Montserrat",
+                    }}
+                    onClick={() => {
+                      qStore.dispatch({
+                        type: "questionnaire",
+                        payload: card,
+                      });
+                      navigate(`/questionnare?id=${card.qid}`);
+                    }}
+                  >
+                    Continue
+                    <div className="icon">
+                      <svg
+                        height="24"
+                        width="24"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M0 0h24v24H0z" fill="none"></path>
+                        <path
+                          d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+                          fill="currentColor"
+                        ></path>
+                      </svg>
+                    </div>
+                  </CustomButton>
+                  <CustomIconButton size="small" style={{ bottom: "-25px" }}>
+                    <img
+                      src={PrintIcon}
+                      alt="Print"
+                      style={{ width: "20px", height: "20px" }}
+                    />
+                  </CustomIconButton>
+                  {/* <div className="printer">
                   <div className="paper">
                     <svg viewBox="0 0 8 8" className="svg">
                       <path fill="#4d6f74" d="M6.28951 1.3867C6.91292 0.809799 7.00842 0 7.00842 0C7.00842 0 6.45246 0.602112 5.54326 0.602112C4.82505 0.602112 4.27655 0.596787 4.07703 0.595012L3.99644 0.594302C1.94904 0.594302 0.290039 2.25224 0.290039 4.29715C0.290039 6.34206 1.94975 8 3.99644 8C6.04312 8 7.70284 6.34206 7.70284 4.29715C7.70347 3.73662 7.57647 3.18331 7.33147 2.67916C7.08647 2.17502 6.7299 1.73327 6.2888 1.38741L6.28951 1.3867ZM3.99679 6.532C2.76133 6.532 1.75875 5.53084 1.75875 4.29609C1.75875 3.06133 2.76097 2.06018 3.99679 2.06018C4.06423 2.06014 4.13163 2.06311 4.1988 2.06905L4.2414 2.07367C4.25028 2.07438 4.26057 2.0758 4.27406 2.07651C4.81533 2.1436 5.31342 2.40616 5.67465 2.81479C6.03589 3.22342 6.23536 3.74997 6.23554 4.29538C6.23554 5.53084 5.23439 6.532 3.9975 6.532H3.99679Z"></path>
@@ -480,9 +508,10 @@ const Dashboard = () => {
                     <div className="paper-out"></div>
                   </div>
                 </div> */}
-              </CardContent>
-            </CustomCard>
-          ))}
+                </CardContent>
+              </CustomCard>
+            );
+          })}
         </div>
         <div
           style={{

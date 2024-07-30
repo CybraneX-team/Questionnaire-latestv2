@@ -210,7 +210,7 @@ const Questionnaire = () => {
       //   "_blank",
       //   "rel=noopener noreferrer"
       // );
-      navigate(`/formAfter?qid=${searchParamss.get("id")}`);
+      navigate(`/report?qid=${searchParamss.get("id")}`);
     }
   };
 
