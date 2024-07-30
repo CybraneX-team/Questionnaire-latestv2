@@ -64,6 +64,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import ChatBot from "./ChatBot";
+import { mapQuestions } from "../utils/utils";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -630,10 +631,17 @@ const Questionnaire = () => {
 
   useEffect(() => {
     if (questions.length !== 0) {
-      solnStore.dispatch({
-        type: "solution",
-        payload: questions[currentQuestion].answers,
-      });
+      if (!mapQuestions.includes(questions[currentQuestion].itemTitle)) {
+        solnStore.dispatch({
+          type: "solution",
+          payload: questions[currentQuestion].answers,
+        });
+      } else {
+        answerStore.dispatch({
+          type: "answer_object",
+          payload: {},
+        });
+      }
       qTitleStore.dispatch({
         type: "Section",
         payload: questions[currentQuestion].itemTitle,
@@ -1126,8 +1134,8 @@ const Questionnaire = () => {
                   transition: "all 1s ease",
                   maxWidth:
                     questions.length !== 0 &&
-                      (questions[currentQuestion].type === "GRID" ||
-                        questions[currentQuestion].type === "CHECKBOX_GRID")
+                    (questions[currentQuestion].type === "GRID" ||
+                      questions[currentQuestion].type === "CHECKBOX_GRID")
                       ? "90vw"
                       : "100%",
                 }}
@@ -1138,20 +1146,20 @@ const Questionnaire = () => {
                     {
                       options:
                         questions[currentQuestion].type === "MULTIPLE_CHOICE" ||
-                          questions[currentQuestion].type === "CHECKBOX"
+                        questions[currentQuestion].type === "CHECKBOX"
                           ? Object.keys(
-                            JSON.parse(questions[currentQuestion].choices)
-                          )
+                              JSON.parse(questions[currentQuestion].choices)
+                            )
                           : [],
                       minLabel:
                         questions[currentQuestion].type === "SCALE"
                           ? JSON.parse(questions[currentQuestion].bounds)[0]
-                            .label
+                              .label
                           : "",
                       maxLabel:
                         questions[currentQuestion].type === "SCALE"
                           ? JSON.parse(questions[currentQuestion].bounds)[1]
-                            .label
+                              .label
                           : "",
                       optionStyles: optionStyles,
                     }
@@ -1457,9 +1465,7 @@ const Questionnaire = () => {
                     className="flex group justify-center p-2 rounded-md drop-shadow-xl bg-gradient-to-r  text-black font-semibold hover:translate-y-3 hover:rounded-[50%] transition-all duration-500"
                   >
                     <SearchIcon className="w-5 h-5" />
-                    <span
-                      className="absolute text-xs opacity-0 group-hover:opacity-100 group-hover:text-gray-400 group-hover:text-xs group-hover:-translate-y-6 duration-700"
-                    >
+                    <span className="absolute text-xs opacity-0 group-hover:opacity-100 group-hover:text-gray-400 group-hover:text-xs group-hover:-translate-y-6 duration-700">
                       Search
                     </span>
                   </button>
@@ -1482,9 +1488,7 @@ const Questionnaire = () => {
                     className="flex group justify-center p-2 rounded-md drop-shadow-xl bg-gradient-to-r  text-black font-semibold hover:translate-y-3 hover:rounded-[50%] transition-all duration-500"
                   >
                     <AssistantIcon className="w-5 h-5" />
-                    <span
-                      className="absolute text-xs opacity-0 group-hover:opacity-100 group-hover:text-gray-400 group-hover:text-xs group-hover:-translate-y-6 duration-700"
-                    >
+                    <span className="absolute text-xs opacity-0 group-hover:opacity-100 group-hover:text-gray-400 group-hover:text-xs group-hover:-translate-y-6 duration-700">
                       Assistant
                     </span>
                   </button>
