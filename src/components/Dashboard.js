@@ -13,12 +13,12 @@ import {
 import "./Dashboard.css";
 import { Add as AddIcon } from "@mui/icons-material";
 import { styled } from "@mui/system";
-import PrintIcon from "./directbox-notif.svg";
 import Design from "./icon.svg";
 import { useNavigate } from "react-router-dom";
 import { getQList, getNewQ } from "../api";
 import { qStore, jwtStore } from "../redux/store";
 import { formatTimeStamp } from "../utils/utils";
+import PrintIcon from '@mui/icons-material/Print';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -466,11 +466,7 @@ const Dashboard = () => {
                   </div>
                 </CustomButton>
                 <CustomIconButton size="small" style={{ bottom: "-25px" }}>
-                  <img
-                    src={PrintIcon}
-                    alt="Print"
-                    style={{ width: "20px", height: "20px" }}
-                  />
+                  <PrintIcon />
                 </CustomIconButton>
                 {/* <div className="printer">
                   <div className="paper">
