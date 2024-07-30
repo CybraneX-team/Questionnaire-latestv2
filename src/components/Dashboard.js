@@ -19,8 +19,7 @@ import { getQList, getNewQ } from "../api";
 import { qStore, jwtStore } from "../redux/store";
 import { formatTimeStamp } from "../utils/utils";
 import axios from "axios";
-import PrintIcon from "@mui/icons-material/Print";
-
+import PrintIcon from '@mui/icons-material/Print';
 const Dashboard = () => {
   const navigate = useNavigate();
   const [jwt, setJwt] = useState(jwtStore.getState());
@@ -490,11 +489,7 @@ const Dashboard = () => {
                     </div>
                   </CustomButton>
                   <CustomIconButton size="small" style={{ bottom: "-25px" }}>
-                    <img
-                      src={PrintIcon}
-                      alt="Print"
-                      style={{ width: "20px", height: "20px" }}
-                    />
+                    <PrintIcon />
                   </CustomIconButton>
                   {/* <div className="printer">
                   <div className="paper">
