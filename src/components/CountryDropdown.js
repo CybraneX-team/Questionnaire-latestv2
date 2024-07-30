@@ -47,11 +47,13 @@ const CountryDropdown = ({
   };
 
   const handleRegionSelect = (region, countries) => {
+    let state = gridStore.getState();
     gridStore.dispatch({
       type: "grid",
       payload: {
-        options: gridStore.getState().options,
-        columns: [region],
+        options: state.options,
+        columns:
+          state.columns.length === 10 ? [region] : [...state.columns, region],
       },
     });
     setSelectedRegions([...selectedRegions, region]);
