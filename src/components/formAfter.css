@@ -44,3 +44,44 @@
     padding: 8px;
     margin: 5px 15px;
 }
+.buttonsDiv{
+    display: flex;
+    margin-left: 30%;
+}
+.maps{
+    display: felx;
+    flex-direction: column;
+    padding: 5px;
+    text-align: center;
+}
+.map-child{
+    height: 750px ;
+    width:  70% ;
+    /* padding: 12px; */
+    position: relative;
+    margin: 20px 0px;
+    left: 8%;
+}
+.map-child-canvas{
+    margin-left: 12%;
+}
+.loader {
+    width: 12px;
+    height: 12px;
+    border: 2px solid #FFF;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    margin-left: 10px;
+  }
+  
+@keyframes rotation {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+}
