@@ -158,18 +158,23 @@ const CheckboxGridQuestion = () => {
     };
   }, []);
 
+  function hasArrayKey(obj, arr) {
+    return arr.some((key) => key in obj);
+  }
+
   useEffect(() => {
-    if (showMap) {
-      const unsubscribe = answerStore.subscribe(() => {
+    const unsubscribe = answerStore.subscribe(() => {
+      let state = answerStore.getState();
+      if (showMap && hasArrayKey(state, columns)) {
         mapStore.dispatch({
           type: "UPDATE",
           payload: {
             id: mapQuestions[2],
-            data: answerStore.getState(),
+            data: state,
           },
         });
-      });
-    }
+      }
+    });
   }, [showMap]);
 
   return (
