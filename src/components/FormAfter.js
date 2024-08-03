@@ -1,16 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
-import BubbleChart from './BubbleChart'
 import { Bubble } from 'react-chartjs-2'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import {Button, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import {styled} from '@mui/system'
 import './formAfter.css'
 import { sendReportData } from '../api'
-import { answerStore, mapStore, scoreStore } from '../redux/store'
+import { mapStore, scoreStore } from '../redux/store'
 import { Chart, registerables } from 'chart.js'
-import { ChoroplethChart, ChoroplethController, ColorScale, GeoFeature, ProjectionScale } from 'chartjs-chart-geo'
+import { ChoroplethController, ColorScale, GeoFeature, ProjectionScale } from 'chartjs-chart-geo'
 import html2canvas from 'html2canvas'
-import jsPDF from 'jspdf'
 import { EEC, ESE, LAC, MENA, NAC, Oceania, SA, SSA, WNS } from "./countries";
 import { feature } from "topojson-client"; 
 import { countriesArr } from './maplogic'
@@ -27,9 +25,13 @@ const FormAfter = () => {
     const reff = useRef()
     const reff2 = useRef()
     const reff3 = useRef()
-    const pdfRef = useRef()
+    const bubble = useRef()
+    const map1 = useRef()
+    const map2 = useRef()
+    const map3 = useRef()
+    const maps = useRef()
     const lastSectionRef = useRef()
-
+    const [img, setimg] = useState([])
    let [searchParamss] = useSearchParams()
    Chart.register(
     ...registerables,
@@ -39,16 +41,13 @@ const FormAfter = () => {
     ColorScale 
   );
   const redirect = useNavigate()
-// console.log(mapData["Issuer's cost breakdown by geography"])
     useEffect(() => {
       const unsubscribeMap = mapStore.subscribe(() => {
         setmapData(mapStore.getState());
-        console.log(mapStore.getState());
       });
       setmapData(mapStore.getState());
       const unsubscribeScore = scoreStore.subscribe(() => {
         setscoreData(scoreStore.getState());
-        console.log(scoreStore.getState());
       });
       setscoreData(scoreStore.getState());
       return () => {
@@ -56,7 +55,6 @@ const FormAfter = () => {
         unsubscribeScore();
       };
     }, []);
-    console.log("mapData",mapData)
     function MapValueLogic (convertedarr, mapDataObject) {
        const updatedArr = JSON.parse(JSON.stringify(convertedarr))
       for (const key in mapDataObject) {
@@ -81,9 +79,7 @@ const FormAfter = () => {
         }else if(key == "NAC"){
           for (let i = 0; i < NAC.length; i++) {
             let index = countriesArr.indexOf(NAC[i])
-            console.log(index)
             let option = mapDataObject["NAC"]
-            console.log(option)
             if(index !== -1){
               if (option == "Insignificant") {
                 updatedArr[index].value = 5;
@@ -101,9 +97,7 @@ const FormAfter = () => {
         }else if(key == "EEC"){
           for (let i = 0; i < EEC.length; i++) {
             let index = countriesArr.indexOf(EEC[i])
-            console.log(index)
             let option = mapDataObject["EEC"]
-            console.log(option)
             if(index !== -1){
               if (option == "Insignificant") {
                 updatedArr[index].value = 5;
@@ -121,9 +115,7 @@ const FormAfter = () => {
         }else if(key == "ESE"){
           for (let i = 0; i < ESE.length; i++) {
             let index = countriesArr.indexOf(ESE[i])
-            console.log(index)
             let option = mapDataObject["ESE"]
-            console.log(option)
             if(index !== -1){
               if (option == "Insignificant") {
                 updatedArr[index].value = 5;
@@ -141,9 +133,7 @@ const FormAfter = () => {
         }else if(key == "LAC"){
           for (let i = 0; i < LAC.length; i++) {
             let index = countriesArr.indexOf(LAC[i])
-            console.log(index)
             let option = mapDataObject["LAC"]
-            console.log(option)
             if(index !== -1){
               if (option == "Insignificant") {
                 updatedArr[index].value = 5;
@@ -161,9 +151,7 @@ const FormAfter = () => {
         }else if(key == "MENA"){
           for (let i = 0; i < MENA.length; i++) {
             let index = countriesArr.indexOf(MENA[i])
-            console.log(index)
             let option = mapDataObject["MENA"]
-            console.log(option)
             if(index !== -1){
               if (option == "Insignificant") {
                 updatedArr[index].value = 5;
@@ -181,9 +169,7 @@ const FormAfter = () => {
         }else if(key == "SA"){
           for (let i = 0; i < SA.length; i++) {
             let index = countriesArr.indexOf(SA[i])
-            console.log(index)
             let option = mapDataObject["SA"]
-            console.log(option)
             if(index !== -1){
               if (option == "Insignificant") {
                 updatedArr[index].value = 5;
@@ -201,9 +187,7 @@ const FormAfter = () => {
         }else if(key == "SSA"){
           for (let i = 0; i < SSA.length; i++) {
             let index = countriesArr.indexOf(SSA[i])
-            console.log(index)
             let option = mapDataObject["SSA"]
-            console.log(option)
             if(index !== -1){
               if (option == "Insignificant") {
                 updatedArr[index].value = 5;
@@ -221,9 +205,7 @@ const FormAfter = () => {
         }else if(key == "WNS"){
           for (let i = 0; i < WNS.length; i++) {
             let index = countriesArr.indexOf(WNS[i])
-            console.log(index)
             let option = mapDataObject["WNS"]
-            console.log(option)
             if(index !== -1){
               if (option == "Insignificant") {
                 updatedArr[index].value = 5;
@@ -248,7 +230,6 @@ const FormAfter = () => {
         const data = await response.json();
         const countries = feature(data, data.objects.countries).features;
         setcontries(countries);
-        console.log("countries",countries);
         const convertedarr = countries.map((e) => { return { feature: e, value: 0 } });
         const arrToUse = MapValueLogic(convertedarr, mapData[`Issuer's cost breakdown by geography`]);
         const arrToUse2 = MapValueLogic(convertedarr, mapData[`Issuer's revenue breakdown by geography`]);
@@ -263,7 +244,6 @@ const FormAfter = () => {
     }, 
     [mapData])
     useEffect(() => {
-      console.log("arrFV:",arrFV)
       const ctx = reff.current.getContext("2d")
       const ctx2 = reff2.current.getContext("2d")
       const ctx3 = reff3.current.getContext("2d")
@@ -508,38 +488,41 @@ const FormAfter = () => {
        function handleChange(e){
         setreportData({...reportData, [e.target.name]: e.target.value})
       }
+      let images 
       async function downloadPDF (){
-        const pdfREF = pdfRef.current;
-        const lastSectionReff  = lastSectionRef.current
-        
-          const canvass = await html2canvas(pdfREF)
-          const imgData = canvass.toDataURL('image/png');
-          const pdf = new jsPDF('p',"px","a4",true);
-          const pdfWidth = pdf.internal.pageSize.getWidth();
-          const pdfHeight = pdf.internal.pageSize.getHeight();
-          const imgWidth = canvass.width;
-          const imgHeight = canvass.height;
-          const ratio = Math.min(0.27);
-          const secondratio = Math.min(0.27);
-          const imgX = 9;
-          const imgY = 9;
-          pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
-          const secondImgData = await html2canvas(lastSectionReff)
-          const secondImage = secondImgData.toDataURL("image/png")
-          pdf.addPage("a4", "p")
-          pdf.addImage(secondImage, "PNG", imgX, imgY, secondImgData.width * secondratio, secondImgData.height*secondratio)
-          pdf.save("report.pdf")
+        const canvas = await html2canvas(map1.current)
+        const canvas2 = await html2canvas(map2.current)
+        const canvas3= await html2canvas(map3.current)
+        const bubbleCanvas= await html2canvas(bubble.current)
+        const imgData = canvas.toDataURL("image/png")
+        const imgData2 = canvas2.toDataURL("image/png")
+        const imgData3 = canvas3.toDataURL("image/png")
+        const bubbleImage = bubbleCanvas.toDataURL("image/png")
+        images = [imgData,imgData2, imgData3,bubbleImage]
+        if(!localStorage.getItem("Images")){
+          localStorage.setItem("Images", JSON.stringify(images))
+        }else{
+          localStorage.removeItem("images")
+          localStorage.setItem("Images", JSON.stringify(images))
+        }
+        redirect("/reportPdf")
     }
     async function handleTheSubmit(e){
        setisLoading(true)
        const bodyOfRequest = {reportData: {...reportData}, qid :searchParamss.get("qid")}
        await sendReportData(bodyOfRequest, localStorage.getItem("jwt"))
        await downloadPDF() 
+        if(!localStorage.getItem("rp")){
+          localStorage.setItem("rp", JSON.stringify(reportData))
+        }else{
+          localStorage.removeItem("rp")
+          localStorage.setItem("rp", JSON.stringify(reportData))
+        }
        setisLoading(false)
-       redirect("/home")
+      //  redirect("/home")
     }
   return (
-    <div ref={pdfRef}>
+    <div >
         <CustomHeading>  Global Company LLC </CustomHeading>
         <Typography
         variant="h4"
@@ -577,7 +560,9 @@ const FormAfter = () => {
         <div style={{ marginTop: '10px' }}>
 
     </div>
-          <div  style={{
+          <div 
+           ref={bubble}
+           style={{
             width: "35%",
             height: "60vh",
             zIndex: 1,
@@ -590,18 +575,19 @@ const FormAfter = () => {
            }}>
              <Bubble data={data} options={options} />    
           </div>
-        </div>
-        <div className="maps">   
-              <div className='map-child' >
+        </div>  
+              <div ref={map1} className='map-child' >
                 <CustomMapHeading>{Object.keys(mapData)[0]}</CustomMapHeading>
+                
                <canvas className='map-child-canvas' ref={reff}/>  
+               
              </div>
         <div ref={lastSectionRef}>
-             <div  className='map-child'  >
+             <div ref={map2} className='map-child'  >
              <CustomMapHeading>{Object.keys(mapData)[1]}</CustomMapHeading>
              <canvas  className='map-child-canvas' ref={reff2}/> 
              </div>
-             <div  className='map-child' >
+             <div ref={map3} className='map-child' >
              <CustomMapHeading>{Object.keys(mapData)[2]}</CustomMapHeading>
              <canvas  className='map-child-canvas'  ref={reff3}/> 
              </div>
@@ -615,12 +601,10 @@ const FormAfter = () => {
         <textarea onChange={handleChange} name="refrences" className='textAreaClass' rows="10" cols="124"> </textarea>
         </div>
         </div>
-      </div>
+     
         <div className="buttonsDiv">
-        <Button
-        variant="contained"
+        <button
         onClick={handleTheSubmit}
-        type='submit'
         style={{
           backgroundColor: "#449082",
           color: "white",
@@ -633,9 +617,10 @@ const FormAfter = () => {
           boxShadow: "none",
         }}
         >
-        Submit Report Data {isLoading && <span className='loader'></span>}
-        </Button>
+        Submit Report Data  {isLoading? <span className='loader'></span> : ""} 
+        </button>
        </div>
+       
     </div>
   )
 }
