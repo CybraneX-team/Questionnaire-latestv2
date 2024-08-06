@@ -505,7 +505,9 @@ const FormAfter = () => {
           localStorage.removeItem("images")
           localStorage.setItem("Images", JSON.stringify(images))
         }
-        redirect("/reportPdf")
+        window.open("reportPdf", "_blank")
+        window.location.href = "/"
+        // redirect("/reportPdf")
     }
     async function handleTheSubmit(e){
        setisLoading(true)
@@ -562,13 +564,14 @@ const FormAfter = () => {
     </div>
           <div 
            ref={bubble}
+           className='bubbleBox'
            style={{
             width: "35%",
             height: "60vh",
             zIndex: 1,
             position: "absolute",
-            top: "150%",
-            left: "58%",
+            top: "180%",
+            left: "68%",
             transform: "translate(-50%, -90%)", 
             padding: "20px", 
             boxSizing: "border-box" 

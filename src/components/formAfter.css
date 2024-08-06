@@ -13,7 +13,7 @@
     border: 2px  dashed grey;
     outline: none;
     height:auto ;
-    width :63% ;
+    width :73% ;
     min-height: 850px;
 }
 .analysistextArea{
@@ -76,7 +76,7 @@
     animation: rotation 1s linear infinite;
     margin-left: 10px;
   }
-  
+
 @keyframes rotation {
     0% {
       transform: rotate(0deg);
