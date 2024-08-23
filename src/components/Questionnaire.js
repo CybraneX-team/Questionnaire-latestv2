@@ -111,6 +111,50 @@ const Questionnaire = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isReferenceTableInView, setIsReferenceTableInView] = useState(true);
   const referenceTableRef = useRef(null);
+  const [dropdownQuestions, setDropdownQuestions] = useState([
+    "What is the capital of France?",
+    "How does photosynthesis work?",
+    "Who invented the telephone?",
+    "What are the symptoms of COVID-19?",
+    "How to bake chocolate chip cookies?",
+  ]);
+
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
+
+  const questionBubbles = [
+    "What is the capital of France?",
+    "How does photosynthesis work?",
+    "Who invented the telephone?",
+    "What are the symptoms of COVID-19?",
+    "How to bake chocolate chip cookies?",
+    "What is the theory of relativity?",
+    "How do vaccines work?",
+    "What are the main causes of climate change?",
+    "Who wrote 'Romeo and Juliet'?",
+    "What is the process of mitosis?",
+    "How does a computer's CPU function?",
+    "What are the major events of World War II?",
+    "How do electric cars work?",
+    "What is the significance of the Mona Lisa?",
+    "How does the human digestive system work?",
+    "What are the key principles of democracy?",
+    "How do earthquakes occur?",
+    "What is artificial intelligence?",
+    "Who was Marie Curie and what did she discover?",
+    "How does the stock market work?",
+  ];
+
+  const handleBubbleSelect = (question) => {
+    setSelectedQuestion(question);
+    setSearchQuery(question); // Set the search query to the selected question
+    handleSearch(1, question);
+  };
+
+  const handleDeselectQuestion = () => {
+    setSelectedQuestion(null);
+    setSearchQuery("");
+    setSearchResults([]);
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -156,6 +200,12 @@ const Questionnaire = () => {
     setError(false);
     setErrorMessage("");
   }
+
+  const handleDropdownSelect = (event) => {
+    const selectedQuestion = event.target.value;
+    setSearchQuery(selectedQuestion);
+    handleSearch(1, selectedQuestion);
+  };
 
   const handleNext = () => {
     setIsLoading(true);
@@ -232,8 +282,8 @@ const Questionnaire = () => {
     setIsPdfOpen(false);
   };
 
-  const handleSearch = async (page = 1) => {
-    if (searchQuery.trim() === "") return;
+  const handleSearch = async (page = 1, query = searchQuery) => {
+    if (query.trim() === "") return;
     try {
       const response = await axios.get(
         `https://www.googleapis.com/customsearch/v1`,
@@ -241,7 +291,7 @@ const Questionnaire = () => {
           params: {
             key: API_KEY,
             cx: CX,
-            q: searchQuery,
+            q: query,
             start: (page - 1) * 10 + 1,
           },
         }
@@ -815,36 +865,6 @@ const Questionnaire = () => {
                     marginTop: "10px",
                   }}
                 >
-                  {/* <Paper
-                    component="form"
-                    sx={{
-                      p: "2px 4px",
-                      display: "flex",
-                      alignItems: "center",
-                      width: "90%",
-                      margin: "0 auto",
-                    }}
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      handleSearch(1);
-                    }}
-                  >
-                    <InputBase
-                      sx={{ ml: 1, flex: 1 }}
-                      placeholder="Search"
-                      inputProps={{ "aria-label": "search" }}
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                    <IconButton
-                      type="button"
-                      sx={{ p: "10px" }}
-                      aria-label="search"
-                      onClick={() => handleSearch(1)}
-                    >
-                      <SearchIcon />
-                    </IconButton>
-                  </Paper> */}
                   <div className="search-panels">
                     <div className="search-group">
                       <input
@@ -897,6 +917,103 @@ const Questionnaire = () => {
                         </button>
                       </div>
                     </div>
+
+                    {selectedQuestion ? (
+                      <div
+                        className="selected-bubble-container"
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          marginTop: "10px",
+                          marginBottom: "20px",
+                          width: "100%",
+                        }}
+                      >
+                        <div
+                          style={{
+                            backgroundColor: "#e5fffc",
+                            borderRadius: "20px",
+                            padding: "10px",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <span style={{ marginRight: "10px" }}>
+                            {selectedQuestion}
+                          </span>
+                          <button
+                            onClick={handleDeselectQuestion}
+                            style={{
+                              background: "none",
+                              border: "none",
+                              cursor: "pointer",
+                              fontSize: "18px",
+                            }}
+                          >
+                            ×
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div
+                        className="bubble-container"
+                        style={{
+                          display: "flex",
+                          flexWrap: "wrap",
+                          justifyContent: "flex-start",
+                          alignItems: "flex-start",
+                          gap: "10px",
+                          marginTop: "10px",
+                          marginBottom: "20px",
+                          width: "100%",
+                          padding: "0 15px",
+                        }}
+                      >
+                        {questionBubbles.map((question, index) => (
+                          <button
+                            key={index}
+                            onClick={() => handleBubbleSelect(question)}
+                            style={{
+                              backgroundColor: "#e5fffc",
+                              border: "none",
+                              borderRadius: "20px",
+                              padding: "10px 15px",
+                              fontSize: "14px",
+                              cursor: "pointer",
+                              transition: "all 0.3s ease",
+                              flex:
+                                question.length < 30
+                                  ? "0 0 calc(50% - 5px)"
+                                  : "0 0 100%",
+                              marginBottom: "10px",
+                              textAlign: "left",
+                            }}
+                          >
+                            {question}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    {/* <select
+                      onChange={handleDropdownSelect}
+                      style={{
+                        width: "90%",
+                        padding: "10px",
+                        marginBottom: "20px",
+                        borderRadius: "5px",
+                        border: "1px solid #ccc",
+                        backgroundColor: "#fff",
+                        fontFamily: "DM Sans, sans-serif",
+                      }}
+                    >
+                      <option value="">Select a question</option>
+                      {dropdownQuestions.map((question, index) => (
+                        <option key={index} value={question}>
+                          {question}
+                        </option>
+                      ))}
+                    </select> */}
                   </div>
                 </div>
                 <div
@@ -1111,11 +1228,28 @@ const Questionnaire = () => {
               className="text-white text-center mb-8"
               style={{
                 fontFamily: "DM Sans, sans-serif",
-                marginTop: "50px",
+                marginTop: "55px",
                 color: "#2A2A2A",
                 fontWeight: "bold",
               }}
             >
+              {currentSection !== "" && (
+              <Tooltip
+                title={
+                  <Typography
+                    variant="body2"
+                    style={{ fontSize: "36", color: "black" }}
+                  >
+                    {sectionDesc}
+                  </Typography>
+                }
+                arrow
+              >
+                <IconButton>
+                  <InfoIcon sx={{ color: "black" }} />
+                </IconButton>
+              </Tooltip>
+            )}
               {currentSection}
             </Typography>
             <div style={questionStyles}>
@@ -1344,14 +1478,17 @@ const Questionnaire = () => {
                 {currentSection !== "" && (
                   <Tooltip
                     title={
-                      <Typography variant="body2" style={{ fontSize: "36" }}>
+                      <Typography
+                        variant="body2"
+                        style={{ fontSize: "36", color: "black" }}
+                      >
                         {sectionDesc}
                       </Typography>
                     }
                     arrow
                   >
                     <IconButton>
-                      <InfoIcon sx={{ color: "white" }} />
+                      <InfoIcon sx={{ color: "black" }} />
                     </IconButton>
                   </Tooltip>
                 )}

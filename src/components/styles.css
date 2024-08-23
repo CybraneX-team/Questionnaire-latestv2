@@ -612,3 +612,45 @@ input:valid~.btn-box-x {
     transform: translateY(-50%) scale(1.7);
   }
 }
+
+
+.question-bubbles-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.question-bubble {
+  background-color: #e5fffc;
+  border-radius: 20px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.question-bubble:hover {
+  background-color: #b1ffe8;
+}
+
+.question-bubble.selected {
+  background-color: #1EC8DF;
+  color: white;
+}
+
+.close-button {
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  background-color: #FF2C5F;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}

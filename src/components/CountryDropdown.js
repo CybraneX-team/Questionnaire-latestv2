@@ -4,167 +4,137 @@ import {
   MenuItem,
   Chip,
   Box,
-  Checkbox,
   ListSubheader,
-  Typography,
-  Collapse,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
+  Tooltip,
+  IconButton,
 } from "@mui/material";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import InfoIcon from '@mui/icons-material/Info';
 import * as CountryData from "./countries";
-import { gridStore } from "../redux/store";
 
 const formatCountryData = () => {
   return Object.entries(CountryData).map(([region, countries]) => ({
     region,
-    countries,
+    countries: countries.map(country => ({ name: country, region })),
   }));
 };
 
-const CountryDropdown = ({
-  selectedCountries,
-  setSelectedCountries,
-  placeholder,
-  selectedRegions,
-  setSelectedRegions,
-}) => {
+const CountryDropdown = () => {
+  const [selectionType, setSelectionType] = useState("");
+  const [selectedItems, setSelectedItems] = useState([]);
   const [open, setOpen] = useState(false);
-  const [expandedRegions, setExpandedRegions] = useState({});
 
-  const handleCountrySelect = (event, country) => {
-    event.stopPropagation();
-    setSelectedCountries((prev) => {
-      if (prev.includes(country)) {
-        return prev.filter((c) => c !== country);
-      } else {
-        return [...prev, country];
-      }
-    });
+  const handleTypeChange = (event) => {
+    setSelectionType(event.target.value);
+    setSelectedItems([]);
+    setOpen(true);
   };
 
-  const handleRegionSelect = (region, countries) => {
-    let state = gridStore.getState();
-    gridStore.dispatch({
-      type: "grid",
-      payload: {
-        options: state.options,
-        columns:
-          state.columns.length === 10 ? [region] : [...state.columns, region],
-      },
-    });
-    setSelectedRegions([...selectedRegions, region]);
-    setSelectedCountries((prev) => {
-      const isRegionFullySelected = countries.every((country) =>
-        prev.includes(country)
+  const handleItemSelect = (event) => {
+    setSelectedItems(event.target.value);
+  };
+
+  const handleBackToSelection = () => {
+    setSelectionType("");
+    setSelectedItems([]);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const renderDropdown = () => {
+    if (selectionType === "") {
+      return (
+        <Select
+          value={selectionType}
+          onChange={handleTypeChange}
+          onClose={handleClose}
+          onOpen={handleOpen}
+          open={open}
+          displayEmpty
+          sx={{ width: "100%", marginBottom: 2 }}
+        >
+          <MenuItem value="" disabled>
+            Choose selection type
+          </MenuItem>
+          <MenuItem value="countries">Countries</MenuItem>
+          <MenuItem value="regions">Regions</MenuItem>
+        </Select>
       );
-      if (isRegionFullySelected) {
-        return prev.filter((country) => !countries.includes(country));
-      } else {
-        return [...new Set([...prev, ...countries])];
-      }
-    });
+    }
+    const formattedData = formatCountryData();
+    const items = selectionType === "countries"
+      ? formatCountryData().flatMap(({ countries }) => countries)
+      : formatCountryData();
+
+    return (
+      <Select
+        multiple
+        value={selectedItems}
+        onChange={handleItemSelect}
+        onClose={handleClose}
+        onOpen={handleOpen}
+        open={open}
+        displayEmpty
+        renderValue={(selected) => {
+          if (selected.length === 0) {
+            return <em>{selectionType === "countries" ? "Select countries" : "Select regions"}</em>;
+          }
+          return (
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+              {selected.map((value) => (
+                <Chip key={value} label={value} />
+              ))}
+            </Box>
+          );
+        }}
+        sx={{ width: "100%", marginBottom: 2 }}
+      >
+         <ListSubheader>
+          <MenuItem onClick={handleBackToSelection} sx={{ color: 'primary.main' }}>
+            <ArrowBackIcon sx={{ mr: 1 }} /> Back to selection type
+          </MenuItem>
+        </ListSubheader>
+        {selectionType === "regions" ? (
+          items.map(({ region, countries }) => (
+            <MenuItem key={region} value={region}>
+              <Box display="flex" alignItems="center" width="100%">
+                <span>{region}</span>
+                <Box flexGrow={1} />
+                <Tooltip title={countries.map(c => c.name).join(", ")} arrow>
+                  <IconButton size="small" sx={{ ml: 1 }}>
+                    <InfoIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+            </MenuItem>
+          ))
+        ) : (
+          items.map(({ name, region }) => (
+            <MenuItem key={name} value={name}>
+              <Box display="flex" alignItems="center" width="100%">
+                <span>{name}</span>
+                <Box flexGrow={1} />
+                <Tooltip title={`Region: ${region}`} arrow>
+                  <IconButton size="small" sx={{ ml: 1 }}>
+                    <InfoIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+            </MenuItem>
+          ))
+        )}
+      </Select>
+    );
   };
 
-  const isRegionSelected = (countries) => {
-    return countries.every((country) => selectedCountries.includes(country));
-  };
-
-  const toggleRegion = (region) => {
-    setExpandedRegions((prev) => ({
-      ...prev,
-      [region]: !prev[region],
-    }));
-  };
-
-  return (
-    <Select
-      multiple
-      open={open}
-      onOpen={() => setOpen(true)}
-      onClose={() => setOpen(false)}
-      value={selectedCountries}
-      displayEmpty
-      renderValue={(selected) => {
-        if (selected.length === 0) {
-          return <em>{placeholder}</em>;
-        }
-        const maxDisplay = 7;
-        return (
-          <Box
-            sx={{
-              display: "flex",
-              flexWrap: "nowrap",
-              gap: 0.5,
-              overflow: "hidden",
-            }}
-          >
-            {selected.slice(0, maxDisplay).map((value) => (
-              <Chip key={value} label={value} size="small" />
-            ))}
-            {selected.length > maxDisplay && (
-              <Typography variant="body2" sx={{ alignSelf: "center" }}>
-                +{selected.length - maxDisplay} more
-              </Typography>
-            )}
-          </Box>
-        );
-      }}
-      sx={{ width: "100%", marginBottom: 2 }}
-    >
-      {formatCountryData().flatMap(({ region, countries }) => [
-        <ListItemButton
-          key={`${region}-button`}
-          onClick={() => toggleRegion(region)}
-        >
-          <ListItemIcon>
-            <Checkbox
-              edge="start"
-              checked={isRegionSelected(countries)}
-              indeterminate={
-                selectedCountries.some((country) =>
-                  countries.includes(country)
-                ) && !isRegionSelected(countries)
-              }
-              onClick={(event) => {
-                event.stopPropagation();
-                handleRegionSelect(region, countries);
-              }}
-            />
-          </ListItemIcon>
-          <ListItemText primary={region} />
-          {expandedRegions[region] ? <ExpandLess /> : <ExpandMore />}
-        </ListItemButton>,
-        <Collapse
-          key={`${region}-collapse`}
-          in={expandedRegions[region]}
-          timeout="auto"
-          unmountOnExit
-        >
-          <List component="div" disablePadding>
-            {countries.map((country) => (
-              <ListItemButton
-                key={country}
-                sx={{ pl: 4 }}
-                onClick={(event) => handleCountrySelect(event, country)}
-              >
-                <ListItemIcon>
-                  <Checkbox
-                    edge="start"
-                    checked={selectedCountries.includes(country)}
-                  />
-                </ListItemIcon>
-                <ListItemText primary={country} />
-              </ListItemButton>
-            ))}
-          </List>
-        </Collapse>,
-      ])}
-    </Select>
-  );
+  return renderDropdown();
 };
 
 export default CountryDropdown;
