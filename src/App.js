@@ -11,6 +11,7 @@ import FormAfter from "./components/FormAfter";
 import Choropleth from "./components/choropleth";
 import ReportPdf from "./components/ReportPdf";
 //<Route path="/report" element={<Report img={img} />} />
+
 const App = () => {
   const [img, setImage] = useState("");
   const handleImage = (imgData) => {
@@ -27,7 +28,7 @@ const App = () => {
         <Route path="/chart" element={<ChartComponent />} />
 
         <Route path="/report" element={<FormAfter />} />
-        <Route path="/reportpdf" element={<ReportPdf />} />
+        <Route path="/reportPdf" element={<ReportPdf />} />
       </Routes>
     </BrowserRouter>
   );
