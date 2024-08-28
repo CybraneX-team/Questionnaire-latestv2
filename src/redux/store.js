@@ -56,6 +56,11 @@ const mapDataReducer = (state = {}, action) => {
   }
 };
 
+const defaultReportReducer = (state, action) => {
+  state = action.payload;
+  return state;
+};
+
 export const jwtStore = createStore(jwtReducer);
 export const qStore = createStore(qReducer);
 export const gridStore = createStore(gridReducer);
@@ -65,3 +70,4 @@ export const scoreStore = createStore(scoreReducer);
 export const bubbleStore = createStore(bubbleReducer);
 export const mapStore = createStore(mapDataReducer);
 export const qTitleStore = createStore(qTitleReducer);
+export const ReportStore = createStore(defaultReportReducer);

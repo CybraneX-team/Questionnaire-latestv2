@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Select,
   MenuItem,
@@ -8,31 +8,54 @@ import {
   Tooltip,
   IconButton,
 } from "@mui/material";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import InfoIcon from '@mui/icons-material/Info';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import InfoIcon from "@mui/icons-material/Info";
 import * as CountryData from "./countries";
 
 const formatCountryData = () => {
   return Object.entries(CountryData).map(([region, countries]) => ({
     region,
-    countries: countries.map(country => ({ name: country, region })),
+    countries: countries.map((country) => ({ name: country, region })),
   }));
 };
 
-const CountryDropdown = () => {
+const CountryDropdown = ({ setSelectionMode, setSelectedPlaces }) => {
   const [selectionType, setSelectionType] = useState("");
   const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedCountries, setSelectedCountries] = useState([]);
+  const [selectedRegions, setSelectedRegions] = useState([]);
   const [open, setOpen] = useState(false);
 
   const handleTypeChange = (event) => {
     setSelectionType(event.target.value);
+    setSelectionMode(event.target.value);
     setSelectedItems([]);
     setOpen(true);
   };
 
   const handleItemSelect = (event) => {
-    setSelectedItems(event.target.value);
+    const value = event.target.value;
+
+    if (selectionType === "region") {
+      setSelectedRegions((prevRegions) => {
+        const updatedRegions = [...prevRegions, ...value]; // Spread the array of values if multiple
+        // setSelectedPlaces(updatedRegions);
+        return updatedRegions;
+      });
+    } else if (selectionType === "countries") {
+      setSelectedCountries((prevCountries) => {
+        const updatedCountries = [...prevCountries, ...value]; // Spread the array of values if multiple
+        // setSelectedPlaces(updatedCountries);
+        return updatedCountries;
+      });
+    }
+
+    setSelectedItems(value); // Ensure this is treated as an array
   };
+
+  useEffect(() => {
+    setSelectedPlaces(selectedItems);
+  }, [selectedItems]);
 
   const handleBackToSelection = () => {
     setSelectionType("");
@@ -69,9 +92,10 @@ const CountryDropdown = () => {
       );
     }
     const formattedData = formatCountryData();
-    const items = selectionType === "countries"
-      ? formatCountryData().flatMap(({ countries }) => countries)
-      : formatCountryData();
+    const items =
+      selectionType === "countries"
+        ? formatCountryData().flatMap(({ countries }) => countries)
+        : formatCountryData();
 
     return (
       <Select
@@ -84,7 +108,13 @@ const CountryDropdown = () => {
         displayEmpty
         renderValue={(selected) => {
           if (selected.length === 0) {
-            return <em>{selectionType === "countries" ? "Select countries" : "Select regions"}</em>;
+            return (
+              <em>
+                {selectionType === "countries"
+                  ? "Select countries"
+                  : "Select regions"}
+              </em>
+            );
           }
           return (
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
@@ -96,40 +126,44 @@ const CountryDropdown = () => {
         }}
         sx={{ width: "100%", marginBottom: 2 }}
       >
-         <ListSubheader>
-          <MenuItem onClick={handleBackToSelection} sx={{ color: 'primary.main' }}>
+        <ListSubheader>
+          <MenuItem
+            onClick={handleBackToSelection}
+            sx={{ color: "primary.main" }}
+          >
             <ArrowBackIcon sx={{ mr: 1 }} /> Back to selection type
           </MenuItem>
         </ListSubheader>
-        {selectionType === "regions" ? (
-          items.map(({ region, countries }) => (
-            <MenuItem key={region} value={region}>
-              <Box display="flex" alignItems="center" width="100%">
-                <span>{region}</span>
-                <Box flexGrow={1} />
-                <Tooltip title={countries.map(c => c.name).join(", ")} arrow>
-                  <IconButton size="small" sx={{ ml: 1 }}>
-                    <InfoIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-              </Box>
-            </MenuItem>
-          ))
-        ) : (
-          items.map(({ name, region }) => (
-            <MenuItem key={name} value={name}>
-              <Box display="flex" alignItems="center" width="100%">
-                <span>{name}</span>
-                <Box flexGrow={1} />
-                <Tooltip title={`Region: ${region}`} arrow>
-                  <IconButton size="small" sx={{ ml: 1 }}>
-                    <InfoIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-              </Box>
-            </MenuItem>
-          ))
-        )}
+        {selectionType === "regions"
+          ? items.map(({ region, countries }) => (
+              <MenuItem key={region} value={region}>
+                <Box display="flex" alignItems="center" width="100%">
+                  <span>{region}</span>
+                  <Box flexGrow={1} />
+                  <Tooltip
+                    title={countries.map((c) => c.name).join(", ")}
+                    arrow
+                  >
+                    <IconButton size="small" sx={{ ml: 1 }}>
+                      <InfoIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+              </MenuItem>
+            ))
+          : items.map(({ name, region }) => (
+              <MenuItem key={name} value={name}>
+                <Box display="flex" alignItems="center" width="100%">
+                  <span>{name}</span>
+                  <Box flexGrow={1} />
+                  <Tooltip title={`Region: ${region}`} arrow>
+                    <IconButton size="small" sx={{ ml: 1 }}>
+                      <InfoIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+              </MenuItem>
+            ))}
       </Select>
     );
   };

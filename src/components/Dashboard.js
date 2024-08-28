@@ -19,7 +19,7 @@ import { getQList, getNewQ } from "../api";
 import { qStore, jwtStore } from "../redux/store";
 import { formatTimeStamp } from "../utils/utils";
 import axios from "axios";
-import PrintIcon from '@mui/icons-material/Print';
+import PrintIcon from "@mui/icons-material/Print";
 const Dashboard = () => {
   const navigate = useNavigate();
   const [jwt, setJwt] = useState(jwtStore.getState());
@@ -267,6 +267,14 @@ const Dashboard = () => {
       console.log("Error:", e);
     }
   };
+
+  useEffect(() => {
+    if (questionnare) {
+      if (questionnare.length > 0) {
+        console.log(questionnare[1]);
+      }
+    }
+  }, [questionnare]);
 
   return (
     <div style={{ padding: "32px", fontFamily: "Montserrat" }}>
@@ -588,5 +596,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-

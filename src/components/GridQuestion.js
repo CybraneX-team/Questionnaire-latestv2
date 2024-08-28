@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import {
   Table,
@@ -66,10 +65,13 @@ const GridQuestion = () => {
   const [selectedOption, setSelectedOption] = useState({});
   const [title, setTitle] = useState("");
   const [options, setOptions] = useState([]);
+  const [regions, setRegions] = useState([]);
   const [columns, setColumns] = useState([]);
   const [selectedCountries, setSelectedCountries] = useState([]);
+  const [selectionMode, setSelectionMode] = useState("regions");
   const [selectedRegions, setSelectedRegions] = useState([]);
   const [showMap, setShowMap] = useState(false);
+  const [selectedPlaces, setSelectedPlaces] = useState([]);
 
   const formatCountryData = () => {
     return Object.entries(CountryData).map(([region, countries]) => ({
@@ -91,11 +93,42 @@ const GridQuestion = () => {
   }, [showMap, selectedOption]);
 
   const handleOptionChange = (item, selected) => {
-    setSelectedOption({ ...selectedOption, [item.name]: selected });
-    answerStore.dispatch({
-      type: "answer_object",
-      payload: { ...selectedOption, [item.name]: selected },
-    });
+    if (selectionMode === "countries") {
+      let region = "";
+      if (item.name in CountryData.NAC) {
+        region = "NAC";
+      } else if (item.name in CountryData.WNS) {
+        region = "WNS";
+      } else if (item.name in CountryData.Oceania) {
+        region = "Oceania";
+      } else if (item.name in CountryData.SSA) {
+        region = "SSA";
+      } else if (item.name in CountryData.LAC) {
+        region = "LAC";
+      } else if (item.name in CountryData.SA) {
+        region = "SA";
+      } else if (item.name in CountryData.ESE) {
+        region = "ESE";
+      } else if (item.name in CountryData.MENA) {
+        region = "MENA";
+      } else if (item.name in CountryData.EEC) {
+        region = "EEC";
+      }
+      setSelectedOption({
+        ...selectedOption,
+        [item.name]: selected,
+      });
+      answerStore.dispatch({
+        type: "answer_object",
+        payload: { ...selectedOption, [item.name]: { region: selected } },
+      });
+    } else {
+      setSelectedOption({ ...selectedOption, [item.name]: selected });
+      answerStore.dispatch({
+        type: "answer_object",
+        payload: { ...selectedOption, [item.name]: selected },
+      });
+    }
   };
 
   const getCellBackgroundColor = (item, option) => {
@@ -141,6 +174,7 @@ const GridQuestion = () => {
       setTitle(state.itemTitle);
       setOptions(state.options);
       setColumns(state.columns);
+      setRegions(state.columns);
     });
     return () => unsubscribe();
   }, [options]);
@@ -155,6 +189,18 @@ const GridQuestion = () => {
 
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (selectionMode === "countries") {
+      setColumns([]);
+    } else if (selectionMode === "regions") {
+      setColumns(regions);
+    }
+
+    if (selectedPlaces) {
+      setColumns(selectedPlaces);
+    }
+  }, [selectionMode, selectedPlaces]);
 
   return (
     <Box sx={formStyles.container}>
@@ -176,11 +222,13 @@ const GridQuestion = () => {
       <Paper style={{ ...formStyles.paper, fontFamily: "montserrat" }}>
         {showMap && (
           <CountryDropdown
-            selectedCountries={selectedCountries}
-            setSelectedCountries={setSelectedCountries}
-            placeholder="Select Countries"
-            selectedRegions={selectedRegions}
-            setSelectedRegions={setSelectedRegions}
+            // selectedCountries={selectedCountries}
+            // setSelectedCountries={setSelectedCountries}
+            // placeholder="Select Countries"
+            // selectedRegions={selectedRegions}
+            // setSelectedRegions={setSelectedRegions}
+            setSelectionMode={setSelectionMode}
+            setSelectedPlaces={setSelectedPlaces}
           />
         )}
         <Box sx={{ overflowX: "auto" }}>
