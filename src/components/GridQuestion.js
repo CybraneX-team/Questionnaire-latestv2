@@ -95,24 +95,87 @@ const GridQuestion = () => {
   const handleOptionChange = (item, selected) => {
     if (selectionMode === "countries") {
       let region = "";
-      if (item.name in CountryData.NAC) {
+      if (CountryData.NAC.includes(item.name)) {
         region = "NAC";
-      } else if (item.name in CountryData.WNS) {
+        answerStore.dispatch({
+          type: "answer_object",
+          payload: {
+            ...answerStore.getState(),
+            [item.name]: { NAC: selected },
+          },
+        });
+      } else if (CountryData.WNS.includes(item.name)) {
         region = "WNS";
-      } else if (item.name in CountryData.Oceania) {
+        answerStore.dispatch({
+          type: "answer_object",
+          payload: {
+            ...answerStore.getState(),
+            [item.name]: { WNS: selected },
+          },
+        });
+      } else if (CountryData.Oceania.includes(item.name)) {
         region = "Oceania";
-      } else if (item.name in CountryData.SSA) {
+        answerStore.dispatch({
+          type: "answer_object",
+          payload: {
+            ...answerStore.getState(),
+            [item.name]: { Oceania: selected },
+          },
+        });
+      } else if (CountryData.SSA.includes(item.name)) {
         region = "SSA";
-      } else if (item.name in CountryData.LAC) {
+        answerStore.dispatch({
+          type: "answer_object",
+          payload: {
+            ...answerStore.getState(),
+            [item.name]: { SSA: selected },
+          },
+        });
+      } else if (CountryData.LAC.includes(item.name)) {
         region = "LAC";
-      } else if (item.name in CountryData.SA) {
+        answerStore.dispatch({
+          type: "answer_object",
+          payload: {
+            ...answerStore.getState(),
+            [item.name]: { LAC: selected },
+          },
+        });
+      } else if (CountryData.SA.includes(item.name)) {
         region = "SA";
-      } else if (item.name in CountryData.ESE) {
+        answerStore.dispatch({
+          type: "answer_object",
+          payload: {
+            ...answerStore.getState(),
+            [item.name]: { SA: selected },
+          },
+        });
+      } else if (CountryData.ESE.includes(item.name)) {
         region = "ESE";
-      } else if (item.name in CountryData.MENA) {
+        answerStore.dispatch({
+          type: "answer_object",
+          payload: {
+            ...answerStore.getState(),
+            [item.name]: { ESE: selected },
+          },
+        });
+      } else if (CountryData.MENA.includes(item.name)) {
         region = "MENA";
-      } else if (item.name in CountryData.EEC) {
+        answerStore.dispatch({
+          type: "answer_object",
+          payload: {
+            ...answerStore.getState(),
+            [item.name]: { MENA: selected },
+          },
+        });
+      } else if (CountryData.EEC.includes(item.name)) {
         region = "EEC";
+        answerStore.dispatch({
+          type: "answer_object",
+          payload: {
+            ...answerStore.getState(),
+            [item.name]: { EEC: selected },
+          },
+        });
       }
       setSelectedOption({
         ...selectedOption,
@@ -120,14 +183,13 @@ const GridQuestion = () => {
       });
       answerStore.dispatch({
         type: "answer_object",
-        payload: { ...selectedOption, [item.name]: { region: selected } },
+        payload: {
+          ...answerStore.getState(),
+          [item.name]: { [region]: selected },
+        },
       });
     } else {
       setSelectedOption({ ...selectedOption, [item.name]: selected });
-      answerStore.dispatch({
-        type: "answer_object",
-        payload: { ...selectedOption, [item.name]: selected },
-      });
     }
   };
 

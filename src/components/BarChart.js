@@ -17,7 +17,7 @@ const BarChart = () => {
     let state = scoreStore.getState();
     console.log(state.e_perf);
     setBarData([
-      { name: "E Perf", value: state.e_perf },
+      { name: "E1 Perf", value: state.e1_perf },
       { name: "E Conf", value: state.e_conf },
       { name: "E Weight", value: state.e_weight },
       { name: "G Perf", value: state.g_perf },
@@ -32,9 +32,15 @@ const BarChart = () => {
   useEffect(() => {
     let state = scoreStore.getState();
     setBarData([
-      { name: "E Perf", value: state.e_perf },
-      { name: "E Conf", value: state.e_conf },
-      { name: "E Weight", value: state.e_weight },
+      { name: "E1 Perf", value: state.e1_perf },
+      { name: "E1 Conf", value: state.e1_conf },
+      { name: "E1 Weight", value: state.e1_weight },
+      { name: "E2 Perf", value: state.e2_perf },
+      { name: "E2 Conf", value: state.e2_conf },
+      { name: "E2 Weight", value: state.e2_weight },
+      { name: "E1 Perf", value: state.e1_perf },
+      { name: "E1 Conf", value: state.e1_conf },
+      { name: "E1 Weight", value: state.e1_weight },
       { name: "G Perf", value: state.g_perf },
       { name: "G Conf", value: state.g_conf },
       { name: "G Weight", value: state.g_weight },

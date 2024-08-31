@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Radar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -9,6 +9,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { scoreStore } from "../redux/store";
+import { Dataset } from "@mui/icons-material";
 ChartJS.register(
   RadialLinearScale,
   PointElement,
@@ -18,30 +20,71 @@ ChartJS.register(
   Legend
 );
 const RadarChart = () => {
+  const [dataSet, setDataSet] = useState([]);
+
+  useEffect(() => {
+    let state = scoreStore.getState();
+    setDataSet(state);
+  }, []);
+
   const data = {
-    labels: [
-      "conf",
-      "e_conf",
-      "e_perf",
-      "e_weight",
-      "g_conf",
-      "g_perf",
-      "g_weight",
-      "perf",
-      "s_conf",
-      "s_perf",
-      "s_weight",
-    ],
+    labels: ["E1", "E2", "E3", "G1", "G2", "G3", "S1", "S2", "S3"],
     datasets: [
       {
-        label: "Dataset",
+        label: "Confidence",
         data: [
-          0.05724296911018902, 0, 2.499, 0.867, 0.17777777777777778,
-          2.2964444444444445, 0.776, 2.258737298294145, 0, 1.9490000000000003,
-          0.767,
+          dataSet.e1_conf,
+          dataSet.e2_conf,
+          dataSet.e3_conf,
+          dataSet.g1_conf,
+          dataSet.g2_conf,
+          dataSet.g3_conf,
+          dataSet.s1_conf,
+          dataSet.s2_conf,
+          dataSet.s3_conf,
         ],
         backgroundColor: "#FEECD2",
         borderColor: "#FFBC58",
+        pointBackgroundColor: "#FFBC58",
+        pointBorderColor: "#fff",
+        pointHoverBackgroundColor: "#fff",
+        pointHoverBorderColor: "#FFBC58",
+      },
+      {
+        label: "Performance",
+        data: [
+          dataSet.e1_perf,
+          dataSet.e2_perf,
+          dataSet.e3_perf,
+          dataSet.g1_perf,
+          dataSet.g2_perf,
+          dataSet.g3_perf,
+          dataSet.s1_perf,
+          dataSet.s2_perf,
+          dataSet.s3_perf,
+        ],
+        backgroundColor: "#008080",
+        borderColor: "#D99E72",
+        pointBackgroundColor: "#FFBC58",
+        pointBorderColor: "#fff",
+        pointHoverBackgroundColor: "#fff",
+        pointHoverBorderColor: "#FFBC58",
+      },
+      {
+        label: "Weight",
+        data: [
+          dataSet.e1_weight,
+          dataSet.e2_weight,
+          dataSet.e3_weight,
+          dataSet.g1_weight,
+          dataSet.g2_weight,
+          dataSet.g3_weight,
+          dataSet.s1_weight,
+          dataSet.s2_weight,
+          dataSet.s3_weight,
+        ],
+        backgroundColor: "#93C572",
+        borderColor: "#E7B08C",
         pointBackgroundColor: "#FFBC58",
         pointBorderColor: "#fff",
         pointHoverBackgroundColor: "#fff",
@@ -54,6 +97,6 @@ const RadarChart = () => {
       ticks: { beginAtZero: true },
     },
   };
-  return <Radar data={data} options={options} />;
+  return dataSet["conf"] ? <Radar data={data} options={options} /> : <></>;
 };
 export default RadarChart;

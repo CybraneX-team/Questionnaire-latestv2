@@ -42,9 +42,9 @@ const ScoreGrid = () => {
         <div>
           <strong>Confidence</strong>
         </div>
-        <div>{data.e_conf.toFixed(2)}</div>
-        <div>{data.s_conf.toFixed(2)}</div>
-        <div>{data.g_conf.toFixed(2)}</div>
+        <div>{data.e1_conf.toFixed(2)}</div>
+        <div>{data.s1_conf.toFixed(2)}</div>
+        <div>{data.g1_conf.toFixed(2)}</div>
 
         {/* Performance row */}
         <div>

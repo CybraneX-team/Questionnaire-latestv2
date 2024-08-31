@@ -159,13 +159,14 @@ const CheckboxGridQuestion = () => {
   }, []);
 
   function hasArrayKey(obj, arr) {
+    console.log(obj);
     return arr.some((key) => key in obj);
   }
 
   useEffect(() => {
     const unsubscribe = answerStore.subscribe(() => {
       let state = answerStore.getState();
-      if (showMap && hasArrayKey(state, columns)) {
+      if (showMap) {
         mapStore.dispatch({
           type: "UPDATE",
           payload: {

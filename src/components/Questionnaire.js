@@ -1234,22 +1234,22 @@ const Questionnaire = () => {
               }}
             >
               {currentSection !== "" && (
-              <Tooltip
-                title={
-                  <Typography
-                    variant="body2"
-                    style={{ fontSize: "36", color: "black" }}
-                  >
-                    {sectionDesc}
-                  </Typography>
-                }
-                arrow
-              >
-                <IconButton>
-                  <InfoIcon sx={{ color: "black" }} />
-                </IconButton>
-              </Tooltip>
-            )}
+                <Tooltip
+                  title={
+                    <Typography
+                      variant="body2"
+                      style={{ fontSize: "36", color: "black" }}
+                    >
+                      {sectionDesc}
+                    </Typography>
+                  }
+                  arrow
+                >
+                  <IconButton>
+                    <InfoIcon sx={{ color: "black" }} />
+                  </IconButton>
+                </Tooltip>
+              )}
               {currentSection}
             </Typography>
             <div style={questionStyles}>
