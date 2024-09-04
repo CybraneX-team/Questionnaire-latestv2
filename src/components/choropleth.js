@@ -44,6 +44,10 @@ function ChoroplethMap() {
 
   // const [chart, setChart] = useState(null);
 
+  function getIntensity(country) {
+    return Object.values(country)[0];
+  }
+
   useEffect(() => {
     const ctx = chartRef.current.getContext("2d");
 
@@ -276,6 +280,23 @@ function ChoroplethMap() {
                 }
                 chart.update();
                 updateState(question, chart.data);
+              } else {
+                let index = chart.data.labels.indexOf(obj);
+                let option = getIntensity(state[obj]);
+                if (index !== -1) {
+                  if (option == "Insignificant") {
+                    chart.data.datasets[0].data[index].value = 5;
+                  } else if (option == "Marginal") {
+                    chart.data.datasets[0].data[index].value = 10;
+                  } else if (option == "Significant") {
+                    chart.data.datasets[0].data[index].value = 15;
+                  } else if (option == "Dominant") {
+                    chart.data.datasets[0].data[index].value = 20;
+                  } else {
+                    chart.data.datasets[0].data[index].value = 10;
+                  }
+                }
+                chart.update();
               }
             }
           }

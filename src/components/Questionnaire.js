@@ -635,12 +635,6 @@ const Questionnaire = () => {
     }
   }, [jwt]);
 
-  useEffect(() => {
-    const unsubscribe = mapStore.subscribe(() => {
-      console.log(mapStore.getState());
-    });
-  });
-
   answerStore.subscribe(() => {
     setAnswerObject(answerStore.getState());
   });
